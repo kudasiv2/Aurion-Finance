@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="https://files.catbox.moe/3o41t1.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* CSS styles tetap sama seperti sebelumnya */
         :root {
             --primary-black: #0A0A0A;
             --secondary-black: #1A1A1A;
@@ -2064,13 +2065,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
-        // Contract Configuration - REAL CONTRACT ADDRESS
+        // Contract Configuration - REAL CONTRACT
         const CONTRACT_ADDRESS = '0xaDb78631123CD4B4686365423B80C344E438b7d6';
         
         // USDT Token Address on BSC
         const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955';
         
-        // USDT ABI (simplified for transfer and approval)
+        // USDT ABI (simplified)
         const USDT_ABI = [
             {
                 "constant": false,
@@ -2087,16 +2088,6 @@
                 "inputs": [{"name": "_owner", "type": "address"}],
                 "name": "balanceOf",
                 "outputs": [{"name": "balance", "type": "uint256"}],
-                "type": "function"
-            },
-            {
-                "constant": false,
-                "inputs": [
-                    {"name": "_to", "type": "address"},
-                    {"name": "_value", "type": "uint256"}
-                ],
-                "name": "transfer",
-                "outputs": [{"name": "", "type": "bool"}],
                 "type": "function"
             },
             {
@@ -2118,10 +2109,12 @@
             }
         ];
 
-        // Main Contract ABI
+        // Main Contract ABI - DIPERBAIKI
         const CONTRACT_ABI = [
             {
-                "inputs": [{"internalType": "address", "name": "_usdtToken", "type": "address"}],
+                "inputs": [
+                    {"internalType": "address", "name": "_usdtToken", "type": "address"}
+                ],
                 "stateMutability": "nonpayable",
                 "type": "constructor"
             },
@@ -2139,26 +2132,6 @@
             {
                 "anonymous": false,
                 "inputs": [
-                    {"indexed": true, "internalType": "address", "name": "previousOwner", "type": "address"},
-                    {"indexed": true, "internalType": "address", "name": "newOwner", "type": "address"}
-                ],
-                "name": "OwnershipTransferred",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
-                    {"indexed": true, "internalType": "address", "name": "referral", "type": "address"},
-                    {"indexed": false, "internalType": "uint256", "name": "level", "type": "uint256"},
-                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
-                ],
-                "name": "ReferralBonus",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
                     {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
                     {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
                     {"indexed": false, "internalType": "uint256", "name": "fee", "type": "uint256"}
@@ -2167,85 +2140,21 @@
                 "type": "event"
             },
             {
-                "inputs": [],
-                "name": "MIN_DEPOSIT",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "MIN_WITHDRAWAL",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "OWNER_FEE_PERCENT",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "TIME_STEP",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "WITHDRAWAL_FEE_PERCENT",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-                "name": "calculateAvailableEarnings",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [{"internalType": "uint256", "name": "_amount", "type": "uint256"}, {"internalType": "uint256", "name": "_planId", "type": "uint256"}, {"internalType": "address", "name": "_upline", "type": "address"}],
+                "inputs": [
+                    {"internalType": "uint256", "name": "_amount", "type": "uint256"},
+                    {"internalType": "uint256", "name": "_planId", "type": "uint256"},
+                    {"internalType": "address", "name": "_upline", "type": "address"}
+                ],
                 "name": "deposit",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
-                "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-                "name": "getActiveInvestmentStatus",
-                "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
                 "inputs": [],
-                "name": "getContractBalance",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "getContractStats",
-                "outputs": [
-                    {"internalType": "uint256", "name": "totalExpiredBonuses", "type": "uint256"},
-                    {"internalType": "uint256", "name": "totalWithdrawalFeesCollected", "type": "uint256"},
-                    {"internalType": "uint256", "name": "totalReferralBonusesPaid", "type": "uint256"},
-                    {"internalType": "uint256", "name": "currentContractBalance", "type": "uint256"}
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "getPlansCount",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
+                "name": "withdraw",
+                "outputs": [],
+                "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
@@ -2265,110 +2174,23 @@
             },
             {
                 "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-                "name": "getUserInvestments",
-                "outputs": [
-                    {
-                        "components": [
-                            {"internalType": "uint256", "name": "amount", "type": "uint256"},
-                            {"internalType": "uint256", "name": "planId", "type": "uint256"},
-                            {"internalType": "uint256", "name": "startTime", "type": "uint256"},
-                            {"internalType": "uint256", "name": "lastWithdrawalTime", "type": "uint256"},
-                            {"internalType": "uint256", "name": "totalWithdrawn", "type": "uint256"},
-                            {"internalType": "bool", "name": "active", "type": "bool"}
-                        ],
-                        "internalType": "struct Aurion.UserInvestment[]",
-                        "name": "",
-                        "type": "tuple[]"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "name": "investmentPlans",
-                "outputs": [
-                    {"internalType": "uint256", "name": "minAmount", "type": "uint256"},
-                    {"internalType": "uint256", "name": "maxAmount", "type": "uint256"},
-                    {"internalType": "uint256", "name": "dailyROI", "type": "uint256"},
-                    {"internalType": "uint256", "name": "duration", "type": "uint256"},
-                    {"internalType": "uint256", "name": "totalROI", "type": "uint256"}
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "owner",
-                "outputs": [{"internalType": "address", "name": "", "type": "address"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "name": "referralLevels",
-                "outputs": [
-                    {"internalType": "uint256", "name": "percentage", "type": "uint256"},
-                    {"internalType": "uint256", "name": "minDirectReferrals", "type": "uint256"}
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "totalExpiredReferralBonuses",
+                "name": "calculateAvailableEarnings",
                 "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                 "stateMutability": "view",
                 "type": "function"
             },
             {
                 "inputs": [],
-                "name": "totalReferralBonuses",
+                "name": "getContractBalance",
                 "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                 "stateMutability": "view",
                 "type": "function"
             },
             {
                 "inputs": [],
-                "name": "totalWithdrawalFees",
+                "name": "MIN_DEPOSIT",
                 "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                 "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "usdtToken",
-                "outputs": [{"internalType": "contract IERC20", "name": "", "type": "address"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [{"internalType": "address", "name": "", "type": "address"}],
-                "name": "users",
-                "outputs": [
-                    {"internalType": "address", "name": "upline", "type": "address"},
-                    {"internalType": "uint256", "name": "totalDeposits", "type": "uint256"},
-                    {"internalType": "uint256", "name": "totalWithdrawn", "type": "uint256"},
-                    {"internalType": "uint256", "name": "directReferrals", "type": "uint256"},
-                    {"internalType": "uint256", "name": "referralBonus", "type": "uint256"},
-                    {"internalType": "uint256", "name": "lastWithdrawal", "type": "uint256"},
-                    {"internalType": "bool", "name": "exists", "type": "bool"}
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "withdraw",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "withdrawExpiredBonuses",
-                "outputs": [],
-                "stateMutability": "nonpayable",
                 "type": "function"
             }
         ];
@@ -2380,7 +2202,6 @@
         let userAccount;
         let selectedPlan = null;
         let referralAddress = null;
-        let usdtDecimals = 6; // USDT uses 6 decimals on BSC
 
         // DOM Elements
         const preloader = document.querySelector('.preloader');
@@ -2411,7 +2232,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const refAddress = urlParams.get('ref');
             
-            if (refAddress && web3 && web3.utils.isAddress(refAddress)) {
+            if (refAddress) {
                 referralAddress = refAddress;
                 document.getElementById('referrerAddress').value = refAddress;
                 showNotification('Referral address detected from URL!', 'success');
@@ -2437,27 +2258,12 @@
                         updateWalletUI();
                         loadContractData();
                     }
-
-                    // Test contract connection
-                    await testContractConnection();
                 } catch (error) {
                     console.error('Error initializing Web3:', error);
-                    showNotification('Error connecting to blockchain: ' + error.message, 'error');
+                    showNotification('Error connecting to blockchain', 'error');
                 }
             } else {
                 showNotification('Please install MetaMask to use this dApp', 'error');
-            }
-        }
-
-        // Test contract connection
-        async function testContractConnection() {
-            try {
-                console.log('Testing contract connection...');
-                const minDeposit = await contract.methods.MIN_DEPOSIT().call();
-                console.log('Contract connection successful. Min deposit:', formatUSDT(minDeposit));
-            } catch (error) {
-                console.error('Contract connection test failed:', error);
-                showNotification('Contract connection failed. Please check contract address.', 'error');
             }
         }
 
@@ -2575,11 +2381,11 @@
             try {
                 // Check if we're on BSC
                 const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                if (chainId !== '0x38' && chainId !== '0x61') { // BSC Mainnet and Testnet
+                if (chainId !== '0x38') { // BSC Mainnet
                     try {
                         await window.ethereum.request({
                             method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: '0x38' }], // BSC Mainnet
+                            params: [{ chainId: '0x38' }],
                         });
                     } catch (switchError) {
                         // If BSC is not added, add it
@@ -2614,11 +2420,7 @@
                 }
             } catch (error) {
                 console.error('Error connecting wallet:', error);
-                if (error.code === 4001) {
-                    showNotification('Wallet connection rejected', 'error');
-                } else {
-                    showNotification('Failed to connect wallet: ' + error.message, 'error');
-                }
+                showNotification('Failed to connect wallet', 'error');
             }
         }
 
@@ -2669,15 +2471,11 @@
             try {
                 // Load contract stats
                 const contractBalance = await contract.methods.getContractBalance().call();
-                const contractStats = await contract.methods.getContractStats().call();
                 
                 // Update home stats
-                const contractBalanceFormatted = formatUSDT(contractBalance);
-                document.getElementById('contractBalance').textContent = `${contractBalanceFormatted} USDT`;
-                document.getElementById('totalTVL').textContent = `$${contractBalanceFormatted}`;
-                
-                const totalPaidFormatted = formatUSDT(contractStats.totalWithdrawalFeesCollected);
-                document.getElementById('totalPaid').textContent = `$${totalPaidFormatted}`;
+                const contractBalanceFormatted = web3.utils.fromWei(contractBalance, 'ether');
+                document.getElementById('contractBalance').textContent = `${parseFloat(contractBalanceFormatted).toFixed(2)} USDT`;
+                document.getElementById('totalTVL').textContent = `$${parseFloat(contractBalanceFormatted).toLocaleString()}`;
 
                 // Load user-specific data if wallet is connected
                 if (userAccount) {
@@ -2697,23 +2495,19 @@
                 const availableEarnings = await contract.methods.calculateAvailableEarnings(userAccount).call();
 
                 // Update dashboard
-                document.getElementById('totalDeposits').textContent = `${formatUSDT(userInfo.totalDeposits)} USDT`;
-                document.getElementById('availableEarnings').textContent = `${formatUSDT(availableEarnings)} USDT`;
-                document.getElementById('referralBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
+                document.getElementById('totalDeposits').textContent = `${web3.utils.fromWei(userInfo.totalDeposits, 'ether')} USDT`;
+                document.getElementById('availableEarnings').textContent = `${web3.utils.fromWei(availableEarnings, 'ether')} USDT`;
+                document.getElementById('referralBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
                 document.getElementById('directReferrals').textContent = userInfo.directReferrals;
 
                 // Update referral section
                 document.getElementById('totalTeam').textContent = userInfo.directReferrals;
                 document.getElementById('referralDirectReferrals').textContent = userInfo.directReferrals;
-                document.getElementById('totalBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
-                document.getElementById('availableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
-                document.getElementById('claimableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
+                document.getElementById('availableBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
+                document.getElementById('claimableBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
 
                 // Update level counts
                 updateLevelCounts(userInfo.directReferrals);
-
-                // Load investments
-                await loadUserInvestments();
 
                 // Generate referral link
                 generateReferralLink();
@@ -2721,53 +2515,6 @@
             } catch (error) {
                 console.error('Error loading user data:', error);
             }
-        }
-
-        async function loadUserInvestments() {
-            if (!contract || !userAccount) return;
-
-            try {
-                const investments = await contract.methods.getUserInvestments(userAccount).call();
-                displayInvestments(investments);
-            } catch (error) {
-                console.error('Error loading investments:', error);
-            }
-        }
-
-        function displayInvestments(investments) {
-            const tableBody = document.getElementById('investmentsTableBody');
-            const investmentsSection = document.getElementById('investmentsSection');
-            const noInvestmentsMessage = document.getElementById('noInvestmentsMessage');
-
-            if (!tableBody) return;
-
-            // Filter active investments
-            const activeInvestments = investments.filter(inv => inv.active);
-
-            if (activeInvestments.length === 0) {
-                investmentsSection.style.display = 'none';
-                noInvestmentsMessage.style.display = 'block';
-                return;
-            }
-
-            investmentsSection.style.display = 'block';
-            noInvestmentsMessage.style.display = 'none';
-
-            tableBody.innerHTML = activeInvestments.map(investment => {
-                const planId = parseInt(investment.planId);
-                const dailyROI = [1.00, 1.20, 1.50, 1.80, 2.00][planId];
-                
-                return `
-                    <tr>
-                        <td>Plan ${planId + 1}</td>
-                        <td><strong>${formatUSDT(investment.amount)} USDT</strong></td>
-                        <td>${new Date(parseInt(investment.startTime) * 1000).toLocaleDateString()}</td>
-                        <td>${dailyROI}% Daily</td>
-                        <td>${formatUSDT(investment.totalWithdrawn)} USDT</td>
-                        <td><span class="status-badge status-active">Active</span></td>
-                    </tr>
-                `;
-            }).join('');
         }
 
         function updateLevelCounts(directReferrals) {
@@ -2976,8 +2723,8 @@
             if (!amountInput || !selectedPlan) return;
 
             const amount = parseFloat(amountInput.value) || 0;
-            const platformFee = amount * 0.10; // 10% platform fee
-            const totalToPay = amount; // User pays the full amount, fee is deducted from it
+            const platformFee = amount * 0.10;
+            const totalToPay = amount;
 
             document.getElementById('summaryAmount').textContent = `${amount.toFixed(2)} USDT`;
             document.getElementById('summaryFee').textContent = `${platformFee.toFixed(2)} USDT`;
@@ -3009,100 +2756,79 @@
                 return;
             }
 
-            // Get referrer address from input or use the one from URL
+            // Get referrer address
             let referrerAddress = document.getElementById('referrerAddress').value;
-            if (!referrerAddress || referrerAddress === '' || !web3.utils.isAddress(referrerAddress)) {
-                referrerAddress = '0x0000000000000000000000000000000000000000';
+            if (!referrerAddress || referrerAddress === '') {
+                referrerAddress = referralAddress || '0x0000000000000000000000000000000000000000';
+            }
+
+            // Validate referrer address
+            if (referrerAddress !== '0x0000000000000000000000000000000000000000' && !web3.utils.isAddress(referrerAddress)) {
+                showNotification('Invalid referrer address', 'error');
+                return;
             }
 
             try {
                 const confirmBtn = document.getElementById('confirmInvestment');
-                const originalText = confirmBtn.innerHTML;
-
-                // Show loading state
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 confirmBtn.disabled = true;
 
-                // Convert amount considering USDT decimals (6)
-                const amountWei = parseUSDT(amount.toString());
+                // Convert amount to wei
+                const amountWei = web3.utils.toWei(amount.toString(), 'ether');
 
-                // Check USDT balance first
+                // Check USDT balance
                 const usdtBalance = await usdtContract.methods.balanceOf(userAccount).call();
-                const balanceFormatted = formatUSDT(usdtBalance);
+                const balanceFormatted = parseFloat(web3.utils.fromWei(usdtBalance, 'ether'));
                 
-                if (parseFloat(balanceFormatted) < amount) {
-                    showNotification(`Insufficient USDT balance. You have ${balanceFormatted} USDT`, 'error');
-                    confirmBtn.innerHTML = originalText;
+                if (balanceFormatted < amount) {
+                    showNotification(`Insufficient USDT balance. You have ${balanceFormatted.toFixed(2)} USDT`, 'error');
+                    confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm Investment';
                     confirmBtn.disabled = false;
                     return;
                 }
 
-                // Check allowance and approve if needed
+                // Check allowance
                 const allowance = await usdtContract.methods.allowance(userAccount, CONTRACT_ADDRESS).call();
-                const allowanceFormatted = formatUSDT(allowance);
-                
-                if (parseFloat(allowanceFormatted) < amount) {
-                    showNotification('Approving USDT transfer...', 'info');
-                    
-                    try {
-                        await usdtContract.methods.approve(CONTRACT_ADDRESS, amountWei).send({
-                            from: userAccount,
-                            gas: 100000
-                        });
-                        showNotification('USDT approved successfully', 'success');
-                        
-                        // Wait a moment for the approval to be confirmed
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                    } catch (approveError) {
-                        console.error('Approve error:', approveError);
-                        throw new Error('Failed to approve USDT: ' + (approveError.message || 'Unknown error'));
-                    }
-                }
+                const allowanceFormatted = parseFloat(web3.utils.fromWei(allowance, 'ether'));
 
-                // Execute the investment
-                showNotification('Processing investment...', 'info');
-                
-                try {
-                    await contract.methods.deposit(
-                        amountWei, 
-                        selectedPlan.id, 
-                        referrerAddress
-                    ).send({
+                if (allowanceFormatted < amount) {
+                    showNotification('Approving USDT...', 'info');
+                    await usdtContract.methods.approve(CONTRACT_ADDRESS, amountWei).send({
                         from: userAccount,
-                        gas: 300000, // Increased gas limit
-                        gasPrice: web3.utils.toWei('5', 'gwei') // Explicit gas price
+                        gas: 100000
                     });
-                    
-                    showNotification('Investment successful!', 'success');
-                    showSuccess();
-                    
-                    // Reload user data
-                    await loadUserData();
-
-                } catch (depositError) {
-                    console.error('Deposit error:', depositError);
-                    throw new Error('Investment failed: ' + (depositError.message || 'Unknown error'));
+                    showNotification('USDT approved successfully!', 'success');
                 }
+
+                // Execute deposit
+                showNotification('Processing investment...', 'info');
+                await contract.methods.deposit(amountWei, selectedPlan.id, referrerAddress).send({
+                    from: userAccount,
+                    gas: 300000
+                });
+
+                showNotification('Investment successful!', 'success');
+                showSuccess();
+                
+                // Reload user data
+                await loadUserData();
 
             } catch (error) {
-                console.error('Error making investment:', error);
-                
+                console.error('Investment error:', error);
                 let errorMessage = 'Investment failed';
+                
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
                 } else if (error.message.includes('insufficient funds')) {
                     errorMessage = 'Insufficient balance for transaction';
-                } else if (error.message.includes('transfer failed')) {
-                    errorMessage = 'Token transfer failed';
-                } else if (error.message.includes('user rejected')) {
-                    errorMessage = 'Transaction was rejected';
-                } else {
-                    errorMessage = error.message || 'Unknown error occurred';
+                } else if (error.message.includes('User denied')) {
+                    errorMessage = 'Transaction was cancelled';
+                } else if (error.message) {
+                    errorMessage = error.message;
                 }
 
                 showNotification(errorMessage, 'error');
             } finally {
-                // Reset button state
                 const confirmBtn = document.getElementById('confirmInvestment');
                 confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm Investment';
                 confirmBtn.disabled = false;
@@ -3117,9 +2843,6 @@
 
             try {
                 const withdrawBtn = document.getElementById('withdrawEarnings');
-                const originalText = withdrawBtn.innerHTML;
-
-                // Show loading state
                 withdrawBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 withdrawBtn.disabled = true;
 
@@ -3128,28 +2851,23 @@
                     gas: 300000
                 });
 
-                showNotification('Earnings withdrawn successfully!', 'success');
-                
-                // Reload user data
+                showNotification('Withdrawal successful!', 'success');
                 await loadUserData();
 
             } catch (error) {
-                console.error('Error withdrawing earnings:', error);
-                
+                console.error('Withdrawal error:', error);
                 let errorMessage = 'Withdrawal failed';
+                
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
-                } else if (error.message.includes('Below minimum withdrawal')) {
-                    errorMessage = 'Available earnings below minimum withdrawal amount';
-                } else if (error.message.includes('Withdrawal too soon')) {
-                    errorMessage = 'You can only withdraw once per day';
-                } else if (error.message) {
+                } else if (error.message.includes('insufficient funds')) {
+                    errorMessage = 'Insufficient balance for transaction';
+                } else {
                     errorMessage = error.message;
                 }
 
                 showNotification(errorMessage, 'error');
             } finally {
-                // Reset button state
                 const withdrawBtn = document.getElementById('withdrawEarnings');
                 withdrawBtn.innerHTML = '<i class="fas fa-download"></i> Withdraw Earnings';
                 withdrawBtn.disabled = false;
@@ -3157,49 +2875,8 @@
         }
 
         async function claimReferralBonus() {
-            if (!contract || !userAccount) {
-                showNotification('Please connect your wallet first', 'error');
-                return;
-            }
-
-            try {
-                const claimBtn = document.getElementById('claimBonus');
-                const originalText = claimBtn.innerHTML;
-
-                // Show loading state
-                claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                claimBtn.disabled = true;
-
-                // Referral bonuses are automatically included in available earnings
-                await contract.methods.withdraw().send({
-                    from: userAccount,
-                    gas: 300000
-                });
-
-                showNotification('Bonus claimed successfully!', 'success');
-                
-                // Reload user data
-                await loadUserData();
-
-            } catch (error) {
-                console.error('Error claiming bonus:', error);
-                
-                let errorMessage = 'Failed to claim bonus';
-                if (error.code === 4001) {
-                    errorMessage = 'Transaction rejected by user';
-                } else if (error.message.includes('Below minimum withdrawal')) {
-                    errorMessage = 'Available bonus below minimum withdrawal amount';
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-
-                showNotification(errorMessage, 'error');
-            } finally {
-                // Reset button state
-                const claimBtn = document.getElementById('claimBonus');
-                claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim Bonus';
-                claimBtn.disabled = false;
-            }
+            // For now, use the same withdraw function since bonuses are included in available earnings
+            await withdrawEarnings();
         }
 
         // Referral Functions
@@ -3209,7 +2886,7 @@
                 referralLink.select();
                 referralLink.setSelectionRange(0, 99999);
                 navigator.clipboard.writeText(referralLink.value);
-                showNotification('Referral link copied to clipboard!', 'success');
+                showNotification('Referral link copied!', 'success');
             }
         }
 
@@ -3218,7 +2895,7 @@
             if (!referralLink) return;
 
             const link = referralLink.value;
-            const text = 'Join Aurion Finance and start earning daily returns with secure USDT investments! Use my referral link to get started.';
+            const text = 'Join Aurion Finance and start earning daily returns with secure USDT investments!';
             
             let url = '';
             
@@ -3253,19 +2930,6 @@
         }
 
         // Utility Functions
-        function formatUSDT(amount) {
-            if (!amount || !web3) return '0.00';
-            // USDT uses 6 decimals on BSC
-            const formatted = web3.utils.fromWei(amount.toString(), 'mwei');
-            return parseFloat(formatted).toFixed(2);
-        }
-
-        function parseUSDT(amount) {
-            if (!web3) return '0';
-            // Convert to wei considering USDT decimals (6)
-            return web3.utils.toWei(amount.toString(), 'mwei');
-        }
-
         function showNotification(message, type = 'info') {
             notification.textContent = message;
             notification.className = `notification ${type} show`;
@@ -3286,7 +2950,7 @@
             });
         }
 
-        // Make functions available globally for onclick events
+        // Make functions available globally
         window.selectPlan = selectPlan;
         window.showSection = showSection;
     </script>
