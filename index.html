@@ -1580,6 +1580,79 @@
             font-weight: 600;
             margin-top: var(--spacing-md);
         }
+
+        /* New styles for enhanced functionality */
+        .transaction-status {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-lg);
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+        }
+
+        .status-pending {
+            border-color: #F59E0B;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .status-success {
+            border-color: #10B981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .status-error {
+            border-color: #EF4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .usdt-approval-section {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            margin: var(--spacing-lg) 0;
+            text-align: center;
+        }
+
+        .gas-options {
+            display: flex;
+            gap: var(--spacing-md);
+            margin: var(--spacing-lg) 0;
+            flex-wrap: wrap;
+        }
+
+        .gas-option {
+            flex: 1;
+            min-width: 120px;
+            padding: var(--spacing-md);
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid var(--gray-600);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .gas-option:hover {
+            border-color: var(--primary-gold);
+        }
+
+        .gas-option.selected {
+            border-color: var(--primary-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .gas-option .speed {
+            font-weight: 600;
+            color: var(--primary-gold);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .gas-option .price {
+            font-size: var(--font-size-sm);
+            color: var(--gray-400);
+        }
     </style>
 </head>
 <body>
@@ -1828,6 +1901,17 @@
                     <span>Please connect your wallet to start investing</span>
                 </div>
 
+                <!-- USDT Approval Section -->
+                <div class="usdt-approval-section" id="usdtApprovalSection" style="display: none;">
+                    <h3>USDT Approval Required</h3>
+                    <p>Before investing, you need to approve USDT spending for our smart contract</p>
+                    <button class="btn btn--primary" id="approveUSDT">
+                        <i class="fas fa-check-circle"></i>
+                        Approve USDT
+                    </button>
+                    <div class="transaction-status" id="approvalStatus" style="display: none;"></div>
+                </div>
+
                 <!-- Investment Plans -->
                 <div class="investment-plans" id="investmentPlans">
                     <!-- Plans will be populated by JavaScript -->
@@ -1841,6 +1925,22 @@
                             <i class="fas fa-arrow-left"></i>
                             Back to Plans
                         </button>
+                    </div>
+
+                    <!-- Gas Options -->
+                    <div class="gas-options" id="gasOptions">
+                        <div class="gas-option selected" data-gas="standard">
+                            <div class="speed">Standard</div>
+                            <div class="price">Normal Speed</div>
+                        </div>
+                        <div class="gas-option" data-gas="fast">
+                            <div class="speed">Fast</div>
+                            <div class="price">Higher Priority</div>
+                        </div>
+                        <div class="gas-option" data-gas="rapid">
+                            <div class="speed">Rapid</div>
+                            <div class="price">Highest Priority</div>
+                        </div>
                     </div>
 
                     <div class="investment-form">
@@ -1882,6 +1982,9 @@
                                 <span id="summaryTotal">0 USDT</span>
                             </div>
                         </div>
+
+                        <!-- Transaction Status -->
+                        <div class="transaction-status" id="transactionStatus" style="display: none;"></div>
 
                         <button class="btn btn--primary btn-lg" id="confirmInvestment">
                             <i class="fas fa-check-circle"></i>
@@ -2188,6 +2291,7 @@
     <script>
         // Enhanced Contract Configuration
         const CONTRACT_ADDRESS = '0xaDb78631123CD4B4686365423B80C344E438b7d6';
+        const USDT_ADDRESS = '0xdAC17F958D2ee523a2206206994597C13D831ec7'; // Mainnet USDT
         const CONTRACT_ABI = [
             {
                 "inputs": [{"internalType": "address", "name": "_usdtToken", "type": "address"}],
@@ -2482,13 +2586,54 @@
             }
         ];
 
+        // USDT ABI for approval
+        const USDT_ABI = [
+            {
+                "constant": false,
+                "inputs": [
+                    {"name": "_spender", "type": "address"},
+                    {"name": "_value", "type": "uint256"}
+                ],
+                "name": "approve",
+                "outputs": [{"name": "", "type": "bool"}],
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {"name": "_owner", "type": "address"},
+                    {"name": "_spender", "type": "address"}
+                ],
+                "name": "allowance",
+                "outputs": [{"name": "", "type": "uint256"}],
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [{"name": "_owner", "type": "address"}],
+                "name": "balanceOf",
+                "outputs": [{"name": "balance", "type": "uint256"}],
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "decimals",
+                "outputs": [{"name": "", "type": "uint8"}],
+                "type": "function"
+            }
+        ];
+
         // Enhanced Global Variables
         let web3;
         let contract;
+        let usdtContract;
         let userAccount;
         let selectedPlan = null;
         let referralAddress = null;
         let isInitialized = false;
+        let selectedGasOption = 'standard';
+        let isUSDTApproved = false;
 
         // DOM Elements
         const preloader = document.querySelector('.preloader');
@@ -2496,7 +2641,6 @@
         const navToggle = document.getElementById('nav-toggle');
         const connectWalletBtn = document.getElementById('connectWallet');
         const notification = document.getElementById('notification');
-        const header = document.querySelector('.header');
 
         // Section Elements
         const sections = {
@@ -2514,16 +2658,32 @@
             checkPreloader();
             checkURLForReferral();
             setupScrollEffects();
+            setupGasOptions();
         });
 
         // Enhanced Scroll Effects
         function setupScrollEffects() {
+            const header = document.querySelector('.header');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 100) {
                     header.classList.add('scrolled');
                 } else {
                     header.classList.remove('scrolled');
                 }
+            });
+        }
+
+        // Setup Gas Options
+        function setupGasOptions() {
+            const gasOptions = document.querySelectorAll('.gas-option');
+            gasOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    gasOptions.forEach(opt => opt.classList.remove('selected'));
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    selectedGasOption = this.getAttribute('data-gas');
+                });
             });
         }
 
@@ -2548,7 +2708,8 @@
                 try {
                     web3 = new Web3(window.ethereum);
                     contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-                    console.log('Web3 and contract initialized successfully');
+                    usdtContract = new web3.eth.Contract(USDT_ABI, USDT_ADDRESS);
+                    console.log('Web3 and contracts initialized successfully');
                     isInitialized = true;
 
                     // Check if wallet is already connected
@@ -2557,6 +2718,7 @@
                         userAccount = accounts[0];
                         updateWalletUI();
                         await loadContractData();
+                        await checkUSDTApproval();
                     }
                 } catch (error) {
                     console.error('Error initializing Web3:', error);
@@ -2567,6 +2729,29 @@
                 // Disable wallet-related functionality
                 connectWalletBtn.disabled = true;
                 connectWalletBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Install MetaMask';
+            }
+        }
+
+        // Check USDT Approval
+        async function checkUSDTApproval() {
+            if (!usdtContract || !userAccount) return;
+
+            try {
+                const allowance = await usdtContract.methods.allowance(userAccount, CONTRACT_ADDRESS).call();
+                const allowanceAmount = web3.utils.fromWei(allowance, 'ether');
+                isUSDTApproved = parseFloat(allowanceAmount) > 0;
+                
+                // Show/hide approval section
+                const approvalSection = document.getElementById('usdtApprovalSection');
+                if (approvalSection) {
+                    if (isUSDTApproved) {
+                        approvalSection.style.display = 'none';
+                    } else {
+                        approvalSection.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking USDT approval:', error);
             }
         }
 
@@ -2606,6 +2791,9 @@
             // Wallet connection
             connectWalletBtn.addEventListener('click', connectWallet);
 
+            // USDT Approval
+            document.getElementById('approveUSDT').addEventListener('click', approveUSDT);
+
             // Investment related
             document.getElementById('backToPlans').addEventListener('click', showPlans);
             document.getElementById('confirmInvestment').addEventListener('click', confirmInvestment);
@@ -2634,6 +2822,7 @@
                         userAccount = accounts[0];
                         updateWalletUI();
                         await loadContractData();
+                        await checkUSDTApproval();
                         showNotification('Wallet account changed', 'success');
                     }
                 });
@@ -2684,6 +2873,8 @@
                     loadDashboardData();
                 } else if (sectionName === 'referral') {
                     loadReferralData();
+                } else if (sectionName === 'invest') {
+                    loadInvestData();
                 }
 
                 // Scroll to top of section
@@ -2708,6 +2899,7 @@
                     userAccount = accounts[0];
                     updateWalletUI();
                     await loadContractData();
+                    await checkUSDTApproval();
                     showNotification('Wallet connected successfully!', 'success');
                 }
             } catch (error) {
@@ -2749,7 +2941,8 @@
                 'investmentsSection',
                 'referralStats',
                 'referralLinkSection',
-                'bonusClaimSection'
+                'bonusClaimSection',
+                'usdtApprovalSection'
             ];
 
             alerts.forEach(alertId => {
@@ -3037,6 +3230,11 @@
                 return;
             }
 
+            if (!isUSDTApproved) {
+                showNotification('Please approve USDT first', 'error');
+                return;
+            }
+
             const plans = [
                 { id: 0, name: 'Starter Plan', roi: '1% Daily', dailyROI: 1.00, minAmount: 20, maxAmount: 499, totalROI: 150 },
                 { id: 1, name: 'Advanced Plan', roi: '1.2% Daily', dailyROI: 1.20, minAmount: 500, maxAmount: 1999, totalROI: 180 },
@@ -3059,20 +3257,26 @@
             const plansElement = document.getElementById('investmentPlans');
             const formElement = document.getElementById('investmentForm');
             const alertElement = document.getElementById('investWalletAlert');
+            const approvalSection = document.getElementById('usdtApprovalSection');
 
             if (plansElement) plansElement.style.display = 'none';
             if (formElement) formElement.classList.add('active');
             if (alertElement) alertElement.style.display = 'none';
+            if (approvalSection) approvalSection.style.display = 'none';
         }
 
         function showPlans() {
             const plansElement = document.getElementById('investmentPlans');
             const formElement = document.getElementById('investmentForm');
             const successElement = document.getElementById('investmentSuccess');
+            const approvalSection = document.getElementById('usdtApprovalSection');
 
             if (plansElement) plansElement.style.display = 'grid';
             if (formElement) formElement.classList.remove('active');
             if (successElement) successElement.classList.remove('active');
+            if (approvalSection && !isUSDTApproved) {
+                approvalSection.style.display = 'block';
+            }
             selectedPlan = null;
         }
 
@@ -3124,9 +3328,86 @@
             updateElementText('summaryTotal', `${totalToPay.toFixed(2)} USDT`);
         }
 
+        // USDT Approval Function
+        async function approveUSDT() {
+            if (!usdtContract || !userAccount) {
+                showNotification('Please connect your wallet first', 'error');
+                return;
+            }
+
+            try {
+                const approveBtn = document.getElementById('approveUSDT');
+                const originalText = approveBtn.innerHTML;
+                const statusElement = document.getElementById('approvalStatus');
+
+                // Show loading state
+                approveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Approving...';
+                approveBtn.disabled = true;
+                showLoadingState(true);
+
+                if (statusElement) {
+                    statusElement.style.display = 'block';
+                    statusElement.className = 'transaction-status status-pending';
+                    statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Waiting for approval confirmation...';
+                }
+
+                // Approve a large amount for multiple investments
+                const approveAmount = web3.utils.toWei('1000000', 'ether'); // 1,000,000 USDT
+
+                const receipt = await usdtContract.methods.approve(CONTRACT_ADDRESS, approveAmount).send({
+                    from: userAccount,
+                    gas: 100000
+                });
+
+                isUSDTApproved = true;
+                
+                if (statusElement) {
+                    statusElement.className = 'transaction-status status-success';
+                    statusElement.innerHTML = '<i class="fas fa-check-circle"></i> USDT approved successfully!';
+                }
+
+                showNotification('USDT approved successfully!', 'success');
+                
+                // Hide approval section
+                const approvalSection = document.getElementById('usdtApprovalSection');
+                if (approvalSection) {
+                    approvalSection.style.display = 'none';
+                }
+
+            } catch (error) {
+                console.error('Error approving USDT:', error);
+                
+                const statusElement = document.getElementById('approvalStatus');
+                if (statusElement) {
+                    statusElement.className = 'transaction-status status-error';
+                    statusElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Approval failed. Please try again.';
+                }
+
+                let errorMessage = 'USDT approval failed';
+                if (error.code === 4001) {
+                    errorMessage = 'Approval rejected by user';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+
+                showNotification(errorMessage, 'error');
+            } finally {
+                // Reset button state
+                const approveBtn = document.getElementById('approveUSDT');
+                approveBtn.innerHTML = '<i class="fas fa-check-circle"></i> Approve USDT';
+                approveBtn.disabled = false;
+                showLoadingState(false);
+            }
+        }
+
         async function confirmInvestment() {
             if (!contract || !userAccount) {
                 showNotification('Please connect your wallet first', 'error');
+                return;
+            }
+
+            if (!isUSDTApproved) {
+                showNotification('Please approve USDT first', 'error');
                 return;
             }
 
@@ -3149,6 +3430,21 @@
                 return;
             }
 
+            // Check USDT balance
+            try {
+                const balance = await usdtContract.methods.balanceOf(userAccount).call();
+                const balanceAmount = parseFloat(web3.utils.fromWei(balance, 'ether'));
+                
+                if (balanceAmount < amount) {
+                    showNotification(`Insufficient USDT balance. You have ${balanceAmount.toFixed(2)} USDT`, 'error');
+                    return;
+                }
+            } catch (error) {
+                console.error('Error checking balance:', error);
+                showNotification('Error checking USDT balance', 'error');
+                return;
+            }
+
             // Get referrer address from input or use the one from URL
             let referrerAddress = document.getElementById('referrerAddress').value;
             if (!referrerAddress || referrerAddress === '') {
@@ -3164,20 +3460,46 @@
             try {
                 const confirmBtn = document.getElementById('confirmInvestment');
                 const originalText = confirmBtn.innerHTML;
+                const statusElement = document.getElementById('transactionStatus');
 
                 // Show loading state
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 confirmBtn.disabled = true;
                 showLoadingState(true);
 
+                if (statusElement) {
+                    statusElement.style.display = 'block';
+                    statusElement.className = 'transaction-status status-pending';
+                    statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Waiting for transaction confirmation...';
+                }
+
                 // Convert amount to wei
                 const amountWei = web3.utils.toWei(amount.toString(), 'ether');
 
-                // Execute the investment
+                // Set gas parameters based on selection
+                let gasMultiplier = 1;
+                switch (selectedGasOption) {
+                    case 'fast':
+                        gasMultiplier = 1.2;
+                        break;
+                    case 'rapid':
+                        gasMultiplier = 1.5;
+                        break;
+                    default:
+                        gasMultiplier = 1;
+                }
+
+                // Execute the investment with enhanced gas settings
                 const receipt = await contract.methods.deposit(amountWei, selectedPlan.id, referrerAddress).send({
                     from: userAccount,
-                    gas: 500000
+                    gas: Math.floor(300000 * gasMultiplier),
+                    gasPrice: await getAdjustedGasPrice()
                 });
+
+                if (statusElement) {
+                    statusElement.className = 'transaction-status status-success';
+                    statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Investment successful!';
+                }
 
                 showNotification('Investment successful!', 'success');
                 showSuccess();
@@ -3188,6 +3510,12 @@
             } catch (error) {
                 console.error('Error making investment:', error);
                 
+                const statusElement = document.getElementById('transactionStatus');
+                if (statusElement) {
+                    statusElement.className = 'transaction-status status-error';
+                    statusElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Investment failed. Please try again.';
+                }
+
                 let errorMessage = 'Investment failed';
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
@@ -3197,6 +3525,8 @@
                     errorMessage = 'Token transfer failed. Please check your USDT balance and approval.';
                 } else if (error.message.includes('Deposit below minimum')) {
                     errorMessage = `Minimum deposit is 20 USDT`;
+                } else if (error.message.includes('execution reverted')) {
+                    errorMessage = 'Smart contract execution failed';
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
@@ -3208,6 +3538,30 @@
                 confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm Investment';
                 confirmBtn.disabled = false;
                 showLoadingState(false);
+            }
+        }
+
+        // Helper function to get adjusted gas price
+        async function getAdjustedGasPrice() {
+            try {
+                const currentGasPrice = await web3.eth.getGasPrice();
+                let multiplier = 1;
+                
+                switch (selectedGasOption) {
+                    case 'fast':
+                        multiplier = 1.2;
+                        break;
+                    case 'rapid':
+                        multiplier = 1.5;
+                        break;
+                    default:
+                        multiplier = 1;
+                }
+                
+                return Math.floor(parseInt(currentGasPrice) * multiplier).toString();
+            } catch (error) {
+                console.error('Error getting gas price:', error);
+                return undefined; // Let MetaMask handle it
             }
         }
 
@@ -3367,6 +3721,12 @@
         function loadReferralData() {
             if (userAccount) {
                 loadUserData();
+            }
+        }
+
+        function loadInvestData() {
+            if (userAccount) {
+                checkUSDTApproval();
             }
         }
 
