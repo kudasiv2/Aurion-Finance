@@ -7,7 +7,6 @@
     <link rel="icon" type="image/png" href="https://files.catbox.moe/3o41t1.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ALL CSS STYLING SAMA SEPERTI SEBELUMNYA */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; }
         
@@ -169,6 +168,15 @@
         .notification.error { border-left: 4px solid #ef4444; }
         .notification.info { border-left: 4px solid #3b82f6; }
         
+        .approval-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 2000; justify-content: center; align-items: center; }
+        .approval-modal.active { display: flex; }
+        .modal-content { background: #1e293b; border-radius: 16px; padding: 2rem; max-width: 500px; width: 90%; border: 1px solid #fbbf24; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .modal-title { font-size: 1.5rem; font-weight: 700; color: #fbbf24; }
+        .modal-close { background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; }
+        .modal-body { margin-bottom: 2rem; }
+        .modal-footer { display: flex; gap: 1rem; justify-content: flex-end; }
+        
         @media (max-width: 768px) {
             .nav__menu { position: fixed; top: 80px; left: -100%; width: 80%; height: calc(100vh - 80px); background: #0f172a; flex-direction: column; padding: 2rem; transition: left 0.3s; }
             .nav__menu.active { left: 0; }
@@ -189,6 +197,32 @@
             <div class="gold-bar"></div>
             <div class="gold-bar"></div>
             <div class="gold-bar"></div>
+        </div>
+    </div>
+
+    <!-- Approval Modal -->
+    <div class="approval-modal" id="approvalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Approve USDT</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>You need to approve USDT spending first before making an investment.</p>
+                <p>This is a two-step process:</p>
+                <ol>
+                    <li><strong>Approve USDT</strong> - Allow the contract to access your USDT</li>
+                    <li><strong>Deposit</strong> - Transfer USDT to the investment contract</li>
+                </ol>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Please confirm both transactions in your wallet</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--outline" id="cancelApproval">Cancel</button>
+                <button class="btn btn--primary" id="confirmApproval">Approve USDT</button>
+            </div>
         </div>
     </div>
 
@@ -407,7 +441,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
-        // Contract Configuration - UPDATED
+        // Contract Configuration
         const CONTRACT_ADDRESS = '0xaDb78631123CD4B4686365423B80C344E438b7d6';
         const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955';
         
@@ -443,12 +477,12 @@
             }
         ];
 
-        // UPDATED CONTRACT ABI - FIXED untuk menghindari EVM revert
+        // CONTRACT ABI - DIPERBAIKI
         const CONTRACT_ABI = [
             {
                 "inputs": [
                     {"internalType": "uint256", "name": "_amount", "type": "uint256"},
-                    {"internalType": "uint256", "name": "_plan", "type": "uint256"},
+                    {"internalType": "uint8", "name": "_plan", "type": "uint8"},
                     {"internalType": "address", "name": "_referrer", "type": "address"}
                 ],
                 "name": "deposit",
@@ -469,11 +503,9 @@
                 "outputs": [
                     {"internalType": "uint256", "name": "totalDeposits", "type": "uint256"},
                     {"internalType": "uint256", "name": "totalWithdrawn", "type": "uint256"},
-                    {"internalType": "uint256", "name": "directReferrals", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalReferrals", "type": "uint256"},
                     {"internalType": "uint256", "name": "referralBonus", "type": "uint256"},
-                    {"internalType": "uint256", "name": "available", "type": "uint256"},
-                    {"internalType": "address", "name": "upline", "type": "address"},
-                    {"internalType": "bool", "name": "hasInvestment", "type": "bool"}
+                    {"internalType": "uint256", "name": "lastWithdraw", "type": "uint256"}
                 ],
                 "stateMutability": "view",
                 "type": "function"
@@ -487,14 +519,7 @@
             },
             {
                 "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-                "name": "calculateAvailableEarnings",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "MIN_DEPOSIT",
+                "name": "getUserEarnings",
                 "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                 "stateMutability": "view",
                 "type": "function"
@@ -529,6 +554,7 @@
         let userAccount;
         let selectedPlan = null;
         let usdtDecimals = 6;
+        let currentInvestmentData = null;
 
         // Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
@@ -597,9 +623,14 @@
 
             // Investment related
             document.getElementById('backToPlans').addEventListener('click', showPlans);
-            document.getElementById('confirmInvestment').addEventListener('click', confirmInvestment);
+            document.getElementById('confirmInvestment').addEventListener('click', startInvestmentProcess);
             document.getElementById('newInvestment').addEventListener('click', showPlans);
             document.getElementById('investmentAmount').addEventListener('input', updateInvestmentSummary);
+
+            // Approval modal
+            document.getElementById('confirmApproval').addEventListener('click', processApproval);
+            document.getElementById('cancelApproval').addEventListener('click', closeApprovalModal);
+            document.getElementById('closeModal').addEventListener('click', closeApprovalModal);
 
             // Withdraw earnings
             document.getElementById('withdrawEarnings').addEventListener('click', withdrawEarnings);
@@ -710,23 +741,23 @@
 
             try {
                 const userInfo = await contract.methods.getUserInfo(userAccount).call();
-                const availableEarnings = await contract.methods.calculateAvailableEarnings(userAccount).call();
+                const availableEarnings = await contract.methods.getUserEarnings(userAccount).call();
 
                 // Update dashboard
                 document.getElementById('totalDeposits').textContent = `${formatUSDT(userInfo.totalDeposits)} USDT`;
                 document.getElementById('availableEarnings').textContent = `${formatUSDT(availableEarnings)} USDT`;
                 document.getElementById('referralBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
-                document.getElementById('directReferrals').textContent = userInfo.directReferrals;
+                document.getElementById('directReferrals').textContent = userInfo.totalReferrals;
 
                 // Update referral section
-                document.getElementById('totalTeam').textContent = userInfo.directReferrals;
-                document.getElementById('referralDirectReferrals').textContent = userInfo.directReferrals;
+                document.getElementById('totalTeam').textContent = userInfo.totalReferrals;
+                document.getElementById('referralDirectReferrals').textContent = userInfo.totalReferrals;
                 document.getElementById('totalBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
                 document.getElementById('availableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
                 document.getElementById('claimableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
 
                 // Show/hide investments table
-                if (userInfo.hasInvestment) {
+                if (userInfo.totalDeposits > 0) {
                     document.getElementById('investmentsSection').style.display = 'block';
                     document.getElementById('noInvestmentsMessage').style.display = 'none';
                 } else {
@@ -846,8 +877,8 @@
             document.getElementById('summaryTotal').textContent = `${amount.toFixed(2)} USDT`;
         }
 
-        // 🔥 **FIXED INVESTMENT FUNCTION - SOLUSI UTAMA**
-        async function confirmInvestment() {
+        // 🔥 **SOLUSI UTAMA - PROSES INVESTASI YANG BENAR**
+        async function startInvestmentProcess() {
             if (!contract || !userAccount) {
                 showNotification('Please connect your wallet first', 'error');
                 return;
@@ -884,78 +915,145 @@
                 return;
             }
 
+            // Check USDT balance
             try {
-                const confirmBtn = document.getElementById('confirmInvestment');
-                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                confirmBtn.disabled = true;
-
-                // Convert amount to wei (USDT uses 6 decimals)
-                const amountWei = web3.utils.toWei(amount.toString(), 'mwei');
-                const amountWithBuffer = web3.utils.toWei((amount * 2).toString(), 'mwei'); // Buffer lebih besar
-
-                // Check USDT balance
                 const balance = await usdtContract.methods.balanceOf(userAccount).call();
                 const balanceFormatted = parseFloat(web3.utils.fromWei(balance, 'mwei'));
                 
                 if (balanceFormatted < amount) {
                     showNotification(`Insufficient USDT balance. You have ${balanceFormatted.toFixed(2)} USDT, required: ${amount} USDT`, 'error');
-                    confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm Investment';
-                    confirmBtn.disabled = false;
                     return;
                 }
+            } catch (error) {
+                showNotification('Error checking balance: ' + error.message, 'error');
+                return;
+            }
 
-                // Check and set allowance
+            // Simpan data investasi untuk proses selanjutnya
+            currentInvestmentData = {
+                amount: amount,
+                planId: selectedPlan.id,
+                referrerAddress: referrerAddress
+            };
+
+            // Tampilkan modal approval
+            showApprovalModal();
+        }
+
+        function showApprovalModal() {
+            document.getElementById('approvalModal').classList.add('active');
+        }
+
+        function closeApprovalModal() {
+            document.getElementById('approvalModal').classList.remove('active');
+            currentInvestmentData = null;
+        }
+
+        async function processApproval() {
+            if (!currentInvestmentData) {
+                showNotification('No investment data found', 'error');
+                return;
+            }
+
+            const confirmBtn = document.getElementById('confirmApproval');
+            confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Approving...';
+            confirmBtn.disabled = true;
+
+            try {
+                const amount = currentInvestmentData.amount;
+                
+                // Convert amount to wei (USDT uses 6 decimals)
+                const amountWei = web3.utils.toWei(amount.toString(), 'mwei');
+                const amountWithBuffer = web3.utils.toWei((amount * 3).toString(), 'mwei'); // Buffer lebih besar
+
+                // Check current allowance
                 const allowance = await usdtContract.methods.allowance(userAccount, CONTRACT_ADDRESS).call();
                 const allowanceFormatted = parseFloat(web3.utils.fromWei(allowance, 'mwei'));
                 
+                console.log('Current allowance:', allowanceFormatted, 'Required:', amount);
+
                 if (allowanceFormatted < amount) {
-                    showNotification('Approving USDT...', 'info');
-                    try {
-                        const approveResult = await usdtContract.methods.approve(CONTRACT_ADDRESS, amountWithBuffer).send({
-                            from: userAccount,
-                            gas: 100000,
-                            gasPrice: web3.utils.toWei('5', 'gwei')
-                        });
-                        console.log('Approve result:', approveResult);
-                        showNotification('USDT approved successfully! Waiting for confirmation...', 'success');
-                        // Tunggu lebih lama untuk konfirmasi blockchain
-                        await new Promise(resolve => setTimeout(resolve, 5000));
-                    } catch (approveError) {
-                        console.error('Approve error:', approveError);
-                        if (approveError.code === 4001) {
-                            showNotification('USDT approval was cancelled', 'error');
-                        } else {
-                            showNotification('USDT approval failed: ' + (approveError.message || 'Unknown error'), 'error');
-                        }
-                        throw approveError;
+                    showNotification('Requesting USDT approval...', 'info');
+                    
+                    // APPROVE USDT - STEP 1
+                    const approveResult = await usdtContract.methods.approve(CONTRACT_ADDRESS, amountWithBuffer).send({
+                        from: userAccount,
+                        gas: 100000,
+                        gasPrice: web3.utils.toWei('5', 'gwei')
+                    });
+                    
+                    console.log('Approve result:', approveResult);
+                    showNotification('✅ USDT approved! Processing investment...', 'success');
+                    
+                    // Tunggu konfirmasi blockchain
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    
+                    // Verifikasi allowance setelah approval
+                    const newAllowance = await usdtContract.methods.allowance(userAccount, CONTRACT_ADDRESS).call();
+                    const newAllowanceFormatted = parseFloat(web3.utils.fromWei(newAllowance, 'mwei'));
+                    console.log('New allowance:', newAllowanceFormatted);
+                    
+                    if (newAllowanceFormatted < amount) {
+                        throw new Error('Allowance still insufficient after approval');
                     }
                 }
 
+                // Tutup modal dan lanjutkan dengan deposit
+                closeApprovalModal();
+                
+                // DEPOSIT - STEP 2
+                await processDeposit();
+                
+            } catch (error) {
+                console.error('APPROVAL ERROR:', error);
+                
+                let errorMsg = 'Approval failed';
+                if (error.code === 4001) {
+                    errorMsg = 'USDT approval was cancelled';
+                } else if (error.message) {
+                    errorMsg = error.message;
+                }
+                
+                showNotification(`❌ ${errorMsg}`, 'error');
+                confirmBtn.innerHTML = 'Approve USDT';
+                confirmBtn.disabled = false;
+            }
+        }
+
+        async function processDeposit() {
+            if (!currentInvestmentData) return;
+
+            const confirmBtn = document.getElementById('confirmInvestment');
+            confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Investing...';
+            confirmBtn.disabled = true;
+
+            try {
+                const amount = currentInvestmentData.amount;
+                const amountWei = web3.utils.toWei(amount.toString(), 'mwei');
+                
                 // Prepare referrer address
                 let finalReferrer = '0x0000000000000000000000000000000000000000';
-                if (referrerAddress && web3.utils.isAddress(referrerAddress)) {
-                    finalReferrer = referrerAddress;
+                if (currentInvestmentData.referrerAddress && web3.utils.isAddress(currentInvestmentData.referrerAddress)) {
+                    finalReferrer = currentInvestmentData.referrerAddress;
                 }
 
                 showNotification('Executing investment transaction...', 'info');
 
-                // Debug parameters
                 console.log('DEPOSIT PARAMETERS:', {
                     amount: amount,
                     amountWei: amountWei,
-                    planId: selectedPlan.id,
-                    referrer: finalReferrer,
-                    user: userAccount
+                    planId: currentInvestmentData.planId,
+                    referrer: finalReferrer
                 });
 
-                // 🔥 **FIXED DEPOSIT CALL - Parameter sesuai contract**
+                // 🔥 **DEPOSIT CALL - Parameter sesuai contract yang benar**
                 const depositResult = await contract.methods.deposit(
-                    amountWei,                    // _amount
-                    selectedPlan.id,              // _plan  
-                    finalReferrer                 // _referrer
+                    amountWei,                           // _amount (uint256)
+                    currentInvestmentData.planId,        // _plan (uint8)  
+                    finalReferrer                        // _referrer (address)
                 ).send({
                     from: userAccount,
-                    gas: 500000,                  // Gas limit lebih tinggi
+                    gas: 300000,                         // Gas limit optimal
                     gasPrice: web3.utils.toWei('10', 'gwei') // Gas price optimal
                 });
 
@@ -968,28 +1066,15 @@
                 await loadUserData();
 
             } catch (error) {
-                console.error('INVESTMENT ERROR DETAILS:', error);
+                console.error('DEPOSIT ERROR DETAILS:', error);
                 
                 let errorMsg = 'Investment failed';
                 if (error.code === 4001) {
                     errorMsg = 'Transaction rejected by user';
                 } else if (error.message?.includes('reverted')) {
-                    // Extract detailed revert reason
-                    const revertReason = extractRevertReason(error);
-                    errorMsg = `Contract reverted: ${revertReason || 'Check contract requirements'}`;
-                    
-                    // Specific error handling
-                    if (revertReason?.includes('Minimum deposit')) {
-                        errorMsg = 'Amount below minimum deposit requirement';
-                    } else if (revertReason?.includes('Invalid plan')) {
-                        errorMsg = 'Selected plan is not available';
-                    } else if (revertReason?.includes('Invalid referrer')) {
-                        errorMsg = 'Referrer address is invalid';
-                    }
+                    errorMsg = 'Contract reverted. Please check: Minimum deposit, valid plan, or try increasing gas limit';
                 } else if (error.message?.includes('insufficient allowance')) {
-                    errorMsg = 'Insufficient USDT allowance. Please try again.';
-                } else if (error.message?.includes('gas')) {
-                    errorMsg = 'Transaction failed: Gas estimation error';
+                    errorMsg = 'Insufficient USDT allowance. Please try the approval process again.';
                 } else {
                     errorMsg = error.message || 'Blockchain transaction failed';
                 }
@@ -999,36 +1084,7 @@
                 const confirmBtn = document.getElementById('confirmInvestment');
                 confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm Investment';
                 confirmBtn.disabled = false;
-            }
-        }
-
-        // Enhanced revert reason extraction
-        function extractRevertReason(error) {
-            try {
-                // Coba berbagai metode extract revert reason
-                if (error.data) {
-                    if (error.data.message) return error.data.message;
-                    if (error.data.reason) return error.data.reason;
-                }
-                
-                if (error.reason) return error.reason;
-                
-                const errorString = JSON.stringify(error).toLowerCase();
-                const patterns = [
-                    /reason":"([^"]*)"/,
-                    /message":"([^"]*)"/, 
-                    /reverted with reason string '([^']*)'/,
-                    /execution reverted: ([^"]*)/
-                ];
-                
-                for (let pattern of patterns) {
-                    const match = errorString.match(pattern);
-                    if (match && match[1]) return match[1];
-                }
-                
-                return null;
-            } catch {
-                return null;
+                currentInvestmentData = null;
             }
         }
 
