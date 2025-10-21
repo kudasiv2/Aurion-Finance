@@ -7,7 +7,6 @@
     <link rel="icon" type="image/png" href="https://files.catbox.moe/3o41t1.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS styles remain exactly the same as in your original code */
         :root {
             --primary-black: #0A0A0A;
             --secondary-black: #1A1A1A;
@@ -2381,7 +2380,7 @@
         let userAccount;
         let selectedPlan = null;
         let referralAddress = null;
-        let usdtDecimals = 18;
+        let usdtDecimals = 6; // USDT uses 6 decimals on BSC
 
         // DOM Elements
         const preloader = document.querySelector('.preloader');
@@ -2431,15 +2430,6 @@
                     
                     console.log('Web3 and contracts initialized successfully');
 
-                    // Get USDT decimals
-                    try {
-                        usdtDecimals = await usdtContract.methods.decimals().call();
-                        console.log('USDT decimals:', usdtDecimals);
-                    } catch (error) {
-                        console.log('Using default USDT decimals: 18');
-                        usdtDecimals = 18;
-                    }
-
                     // Check if wallet is already connected
                     const accounts = await web3.eth.getAccounts();
                     if (accounts.length > 0) {
@@ -2447,12 +2437,27 @@
                         updateWalletUI();
                         loadContractData();
                     }
+
+                    // Test contract connection
+                    await testContractConnection();
                 } catch (error) {
                     console.error('Error initializing Web3:', error);
-                    showNotification('Error connecting to blockchain', 'error');
+                    showNotification('Error connecting to blockchain: ' + error.message, 'error');
                 }
             } else {
                 showNotification('Please install MetaMask to use this dApp', 'error');
+            }
+        }
+
+        // Test contract connection
+        async function testContractConnection() {
+            try {
+                console.log('Testing contract connection...');
+                const minDeposit = await contract.methods.MIN_DEPOSIT().call();
+                console.log('Contract connection successful. Min deposit:', formatUSDT(minDeposit));
+            } catch (error) {
+                console.error('Contract connection test failed:', error);
+                showNotification('Contract connection failed. Please check contract address.', 'error');
             }
         }
 
@@ -2609,7 +2614,11 @@
                 }
             } catch (error) {
                 console.error('Error connecting wallet:', error);
-                showNotification('Failed to connect wallet', 'error');
+                if (error.code === 4001) {
+                    showNotification('Wallet connection rejected', 'error');
+                } else {
+                    showNotification('Failed to connect wallet: ' + error.message, 'error');
+                }
             }
         }
 
@@ -2696,6 +2705,7 @@
                 // Update referral section
                 document.getElementById('totalTeam').textContent = userInfo.directReferrals;
                 document.getElementById('referralDirectReferrals').textContent = userInfo.directReferrals;
+                document.getElementById('totalBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
                 document.getElementById('availableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
                 document.getElementById('claimableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
 
@@ -3001,14 +3011,8 @@
 
             // Get referrer address from input or use the one from URL
             let referrerAddress = document.getElementById('referrerAddress').value;
-            if (!referrerAddress || referrerAddress === '') {
-                referrerAddress = referralAddress || '0x0000000000000000000000000000000000000000';
-            }
-
-            // Validate referrer address
-            if (referrerAddress !== '0x0000000000000000000000000000000000000000' && !web3.utils.isAddress(referrerAddress)) {
-                showNotification('Invalid referrer address', 'error');
-                return;
+            if (!referrerAddress || referrerAddress === '' || !web3.utils.isAddress(referrerAddress)) {
+                referrerAddress = '0x0000000000000000000000000000000000000000';
             }
 
             try {
@@ -3019,13 +3023,15 @@
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 confirmBtn.disabled = true;
 
-                // Convert amount to wei (considering USDT decimals)
-                const amountWei = web3.utils.toWei(amount.toString(), 'ether');
+                // Convert amount considering USDT decimals (6)
+                const amountWei = parseUSDT(amount.toString());
 
                 // Check USDT balance first
                 const usdtBalance = await usdtContract.methods.balanceOf(userAccount).call();
-                if (parseFloat(web3.utils.fromWei(usdtBalance, 'ether')) < amount) {
-                    showNotification('Insufficient USDT balance', 'error');
+                const balanceFormatted = formatUSDT(usdtBalance);
+                
+                if (parseFloat(balanceFormatted) < amount) {
+                    showNotification(`Insufficient USDT balance. You have ${balanceFormatted} USDT`, 'error');
                     confirmBtn.innerHTML = originalText;
                     confirmBtn.disabled = false;
                     return;
@@ -3033,27 +3039,50 @@
 
                 // Check allowance and approve if needed
                 const allowance = await usdtContract.methods.allowance(userAccount, CONTRACT_ADDRESS).call();
-                if (parseFloat(web3.utils.fromWei(allowance, 'ether')) < amount) {
+                const allowanceFormatted = formatUSDT(allowance);
+                
+                if (parseFloat(allowanceFormatted) < amount) {
                     showNotification('Approving USDT transfer...', 'info');
-                    await usdtContract.methods.approve(CONTRACT_ADDRESS, amountWei).send({
-                        from: userAccount,
-                        gas: 100000
-                    });
-                    showNotification('USDT approved successfully', 'success');
+                    
+                    try {
+                        await usdtContract.methods.approve(CONTRACT_ADDRESS, amountWei).send({
+                            from: userAccount,
+                            gas: 100000
+                        });
+                        showNotification('USDT approved successfully', 'success');
+                        
+                        // Wait a moment for the approval to be confirmed
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    } catch (approveError) {
+                        console.error('Approve error:', approveError);
+                        throw new Error('Failed to approve USDT: ' + (approveError.message || 'Unknown error'));
+                    }
                 }
 
                 // Execute the investment
                 showNotification('Processing investment...', 'info');
-                await contract.methods.deposit(amountWei, selectedPlan.id, referrerAddress).send({
-                    from: userAccount,
-                    gas: 500000
-                });
-
-                showNotification('Investment successful!', 'success');
-                showSuccess();
                 
-                // Reload user data
-                await loadUserData();
+                try {
+                    await contract.methods.deposit(
+                        amountWei, 
+                        selectedPlan.id, 
+                        referrerAddress
+                    ).send({
+                        from: userAccount,
+                        gas: 300000, // Increased gas limit
+                        gasPrice: web3.utils.toWei('5', 'gwei') // Explicit gas price
+                    });
+                    
+                    showNotification('Investment successful!', 'success');
+                    showSuccess();
+                    
+                    // Reload user data
+                    await loadUserData();
+
+                } catch (depositError) {
+                    console.error('Deposit error:', depositError);
+                    throw new Error('Investment failed: ' + (depositError.message || 'Unknown error'));
+                }
 
             } catch (error) {
                 console.error('Error making investment:', error);
@@ -3062,13 +3091,13 @@
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
                 } else if (error.message.includes('insufficient funds')) {
-                    errorMessage = 'Insufficient USDT balance';
+                    errorMessage = 'Insufficient balance for transaction';
                 } else if (error.message.includes('transfer failed')) {
-                    errorMessage = 'Token transfer failed. Please check your USDT balance and approval.';
-                } else if (error.message.includes('Deposit below minimum')) {
-                    errorMessage = `Minimum deposit is 20 USDT`;
-                } else if (error.message) {
-                    errorMessage = error.message;
+                    errorMessage = 'Token transfer failed';
+                } else if (error.message.includes('user rejected')) {
+                    errorMessage = 'Transaction was rejected';
+                } else {
+                    errorMessage = error.message || 'Unknown error occurred';
                 }
 
                 showNotification(errorMessage, 'error');
@@ -3096,7 +3125,7 @@
 
                 await contract.methods.withdraw().send({
                     from: userAccount,
-                    gas: 500000
+                    gas: 300000
                 });
 
                 showNotification('Earnings withdrawn successfully!', 'success');
@@ -3111,7 +3140,7 @@
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
                 } else if (error.message.includes('Below minimum withdrawal')) {
-                    errorMessage = 'Available earnings below minimum withdrawal amount (1 USDT)';
+                    errorMessage = 'Available earnings below minimum withdrawal amount';
                 } else if (error.message.includes('Withdrawal too soon')) {
                     errorMessage = 'You can only withdraw once per day';
                 } else if (error.message) {
@@ -3142,10 +3171,9 @@
                 claimBtn.disabled = true;
 
                 // Referral bonuses are automatically included in available earnings
-                // So we use the withdraw function to claim them
                 await contract.methods.withdraw().send({
                     from: userAccount,
-                    gas: 500000
+                    gas: 300000
                 });
 
                 showNotification('Bonus claimed successfully!', 'success');
@@ -3160,7 +3188,7 @@
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
                 } else if (error.message.includes('Below minimum withdrawal')) {
-                    errorMessage = 'Available bonus below minimum withdrawal amount (1 USDT)';
+                    errorMessage = 'Available bonus below minimum withdrawal amount';
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
@@ -3226,7 +3254,16 @@
 
         // Utility Functions
         function formatUSDT(amount) {
-            return parseFloat(web3.utils.fromWei(amount.toString(), 'ether')).toFixed(2);
+            if (!amount || !web3) return '0.00';
+            // USDT uses 6 decimals on BSC
+            const formatted = web3.utils.fromWei(amount.toString(), 'mwei');
+            return parseFloat(formatted).toFixed(2);
+        }
+
+        function parseUSDT(amount) {
+            if (!web3) return '0';
+            // Convert to wei considering USDT decimals (6)
+            return web3.utils.toWei(amount.toString(), 'mwei');
         }
 
         function showNotification(message, type = 'info') {
