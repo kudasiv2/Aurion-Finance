@@ -3046,7 +3046,7 @@
                 showNotification('Processing investment...', 'info');
                 await contract.methods.deposit(amountWei, selectedPlan.id, referrerAddress).send({
                     from: userAccount,
-                    gas: 300000
+                    gas: 500000
                 });
 
                 showNotification('Investment successful!', 'success');
@@ -3096,7 +3096,7 @@
 
                 await contract.methods.withdraw().send({
                     from: userAccount,
-                    gas: 300000
+                    gas: 500000
                 });
 
                 showNotification('Earnings withdrawn successfully!', 'success');
@@ -3145,7 +3145,7 @@
                 // So we use the withdraw function to claim them
                 await contract.methods.withdraw().send({
                     from: userAccount,
-                    gas: 300000
+                    gas: 500000
                 });
 
                 showNotification('Bonus claimed successfully!', 'success');
