@@ -1755,17 +1755,9 @@
                                 <span>Platform Fee (10%):</span>
                                 <span id="summaryFee">0 USDT</span>
                             </div>
-                            <div class="summary-item">
-                                <span>Daily ROI:</span>
-                                <span id="summaryROI">0%</span>
-                            </div>
-                            <div class="summary-item">
-                                <span>Total ROI (150 days):</span>
-                                <span id="summaryTotalROI">0%</span>
-                            </div>
                             <div class="summary-item total">
-                                <span>Net Investment:</span>
-                                <span id="summaryNet">0 USDT</span>
+                                <span>Total to Pay:</span>
+                                <span id="summaryTotal">0 USDT</span>
                             </div>
                         </div>
 
@@ -2081,6 +2073,7 @@
         let contract;
         let userAccount;
         let selectedPlan = null;
+        let referralAddress = null;
 
         // DOM Elements
         const preloader = document.querySelector('.preloader');
@@ -2103,7 +2096,20 @@
             setupEventListeners();
             generateInvestmentPlans();
             checkPreloader();
+            checkURLForReferral();
         });
+
+        // Check URL for referral parameter
+        function checkURLForReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refAddress = urlParams.get('ref');
+            
+            if (refAddress && web3 && web3.utils.isAddress(refAddress)) {
+                referralAddress = refAddress;
+                document.getElementById('referrerAddress').value = refAddress;
+                showNotification('Referral address detected from URL!', 'success');
+            }
+        }
 
         // Initialize Web3 and Contract
         async function initializeApp() {
@@ -2307,9 +2313,9 @@
                 const contractStats = await contract.methods.getContractStats().call();
                 
                 // Update home stats
-                document.getElementById('contractBalance').textContent = `${web3.utils.fromWei(contractBalance, 'ether')} USDT`;
-                document.getElementById('totalTVL').textContent = `$${parseFloat(web3.utils.fromWei(contractBalance, 'ether')).toLocaleString()}`;
-                document.getElementById('totalPaid').textContent = `$${parseFloat(web3.utils.fromWei(contractStats.totalWithdrawalFeesCollected, 'ether')).toLocaleString()}`;
+                document.getElementById('contractBalance').textContent = `${(parseFloat(web3.utils.fromWei(contractBalance, 'ether'))).toFixed(2)} USDT`;
+                document.getElementById('totalTVL').textContent = `$${(parseFloat(web3.utils.fromWei(contractBalance, 'ether'))).toLocaleString()}`;
+                document.getElementById('totalPaid').textContent = `$${(parseFloat(web3.utils.fromWei(contractStats.totalWithdrawalFeesCollected, 'ether'))).toLocaleString()}`;
 
                 // Load user-specific data if wallet is connected
                 if (userAccount) {
@@ -2329,16 +2335,16 @@
                 const availableEarnings = await contract.methods.calculateAvailableEarnings(userAccount).call();
 
                 // Update dashboard
-                document.getElementById('totalDeposits').textContent = `${parseFloat(web3.utils.fromWei(userInfo.totalDeposits, 'ether')).toFixed(2)} USDT`;
-                document.getElementById('availableEarnings').textContent = `${parseFloat(web3.utils.fromWei(availableEarnings, 'ether')).toFixed(2)} USDT`;
-                document.getElementById('referralBonus').textContent = `${parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether')).toFixed(2)} USDT`;
+                document.getElementById('totalDeposits').textContent = `${(parseFloat(web3.utils.fromWei(userInfo.totalDeposits, 'ether'))).toFixed(2)} USDT`;
+                document.getElementById('availableEarnings').textContent = `${(parseFloat(web3.utils.fromWei(availableEarnings, 'ether'))).toFixed(2)} USDT`;
+                document.getElementById('referralBonus').textContent = `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`;
                 document.getElementById('directReferrals').textContent = userInfo.directReferrals;
 
                 // Update referral section
                 document.getElementById('totalTeam').textContent = userInfo.directReferrals;
                 document.getElementById('referralDirectReferrals').textContent = userInfo.directReferrals;
-                document.getElementById('availableBonus').textContent = `${parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether')).toFixed(2)} USDT`;
-                document.getElementById('claimableBonus').textContent = `${parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether')).toFixed(2)} USDT`;
+                document.getElementById('availableBonus').textContent = `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`;
+                document.getElementById('claimableBonus').textContent = `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`;
 
                 // Update level counts
                 updateLevelCounts(userInfo.directReferrals);
@@ -2384,16 +2390,21 @@
             investmentsSection.style.display = 'block';
             noInvestmentsMessage.style.display = 'none';
 
-            tableBody.innerHTML = activeInvestments.map(investment => `
-                <tr>
-                    <td>Plan ${parseInt(investment.planId) + 1}</td>
-                    <td><strong>${parseFloat(web3.utils.fromWei(investment.amount, 'ether')).toFixed(2)} USDT</strong></td>
-                    <td>${new Date(parseInt(investment.startTime) * 1000).toLocaleDateString()}</td>
-                    <td>1% - 2% Daily</td>
-                    <td>${parseFloat(web3.utils.fromWei(investment.totalWithdrawn, 'ether')).toFixed(2)} USDT</td>
-                    <td><span class="status-badge status-active">Active</span></td>
-                </tr>
-            `).join('');
+            tableBody.innerHTML = activeInvestments.map(investment => {
+                const planId = parseInt(investment.planId);
+                const dailyROI = [1.00, 1.20, 1.50, 1.80, 2.00][planId];
+                
+                return `
+                    <tr>
+                        <td>Plan ${planId + 1}</td>
+                        <td><strong>${(parseFloat(web3.utils.fromWei(investment.amount, 'ether'))).toFixed(2)} USDT</strong></td>
+                        <td>${new Date(parseInt(investment.startTime) * 1000).toLocaleDateString()}</td>
+                        <td>${dailyROI}% Daily</td>
+                        <td>${(parseFloat(web3.utils.fromWei(investment.totalWithdrawn, 'ether'))).toFixed(2)} USDT</td>
+                        <td><span class="status-badge status-active">Active</span></td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function updateLevelCounts(directReferrals) {
@@ -2422,7 +2433,7 @@
                     id: 0,
                     name: 'Starter Plan',
                     roi: '1% Daily',
-                    dailyROI: 1,
+                    dailyROI: 1.00,
                     range: '20 - 499 USDT',
                     minAmount: 20,
                     maxAmount: 499,
@@ -2440,7 +2451,7 @@
                     id: 1,
                     name: 'Advanced Plan',
                     roi: '1.2% Daily',
-                    dailyROI: 1.2,
+                    dailyROI: 1.20,
                     range: '500 - 1,999 USDT',
                     minAmount: 500,
                     maxAmount: 1999,
@@ -2458,7 +2469,7 @@
                     id: 2,
                     name: 'Professional Plan',
                     roi: '1.5% Daily',
-                    dailyROI: 1.5,
+                    dailyROI: 1.50,
                     range: '2,000 - 4,999 USDT',
                     minAmount: 2000,
                     maxAmount: 4999,
@@ -2476,7 +2487,7 @@
                     id: 3,
                     name: 'Premium Plan',
                     roi: '1.8% Daily',
-                    dailyROI: 1.8,
+                    dailyROI: 1.80,
                     range: '5,000 - 9,999 USDT',
                     minAmount: 5000,
                     maxAmount: 9999,
@@ -2494,7 +2505,7 @@
                     id: 4,
                     name: 'VIP Plan',
                     roi: '2% Daily',
-                    dailyROI: 2,
+                    dailyROI: 2.00,
                     range: '10,000+ USDT',
                     minAmount: 10000,
                     maxAmount: 999999,
@@ -2536,11 +2547,11 @@
             }
 
             const plans = [
-                { id: 0, name: 'Starter Plan', roi: '1% Daily', dailyROI: 1, minAmount: 20, maxAmount: 499, totalROI: 150 },
-                { id: 1, name: 'Advanced Plan', roi: '1.2% Daily', dailyROI: 1.2, minAmount: 500, maxAmount: 1999, totalROI: 180 },
-                { id: 2, name: 'Professional Plan', roi: '1.5% Daily', dailyROI: 1.5, minAmount: 2000, maxAmount: 4999, totalROI: 225 },
-                { id: 3, name: 'Premium Plan', roi: '1.8% Daily', dailyROI: 1.8, minAmount: 5000, maxAmount: 9999, totalROI: 270 },
-                { id: 4, name: 'VIP Plan', roi: '2% Daily', dailyROI: 2, minAmount: 10000, maxAmount: 999999, totalROI: 300 }
+                { id: 0, name: 'Starter Plan', roi: '1% Daily', dailyROI: 1.00, minAmount: 20, maxAmount: 499, totalROI: 150 },
+                { id: 1, name: 'Advanced Plan', roi: '1.2% Daily', dailyROI: 1.20, minAmount: 500, maxAmount: 1999, totalROI: 180 },
+                { id: 2, name: 'Professional Plan', roi: '1.5% Daily', dailyROI: 1.50, minAmount: 2000, maxAmount: 4999, totalROI: 225 },
+                { id: 3, name: 'Premium Plan', roi: '1.8% Daily', dailyROI: 1.80, minAmount: 5000, maxAmount: 9999, totalROI: 270 },
+                { id: 4, name: 'VIP Plan', roi: '2% Daily', dailyROI: 2.00, minAmount: 10000, maxAmount: 999999, totalROI: 300 }
             ];
 
             selectedPlan = plans.find(plan => plan.id === planId);
@@ -2602,14 +2613,12 @@
             if (!amountInput || !selectedPlan) return;
 
             const amount = parseFloat(amountInput.value) || 0;
-            const platformFee = amount * 0.10;
-            const netInvestment = amount - platformFee;
+            const platformFee = amount * 0.10; // 10% platform fee
+            const totalToPay = amount; // User pays the full amount, fee is deducted from it
 
             document.getElementById('summaryAmount').textContent = `${amount.toFixed(2)} USDT`;
             document.getElementById('summaryFee').textContent = `${platformFee.toFixed(2)} USDT`;
-            document.getElementById('summaryROI').textContent = `${selectedPlan.dailyROI}% Daily`;
-            document.getElementById('summaryTotalROI').textContent = `${selectedPlan.totalROI}% Total`;
-            document.getElementById('summaryNet').textContent = `${netInvestment.toFixed(2)} USDT`;
+            document.getElementById('summaryTotal').textContent = `${totalToPay.toFixed(2)} USDT`;
         }
 
         async function confirmInvestment() {
@@ -2637,7 +2646,17 @@
                 return;
             }
 
-            const referrerAddress = document.getElementById('referrerAddress').value || '0x0000000000000000000000000000000000000000';
+            // Get referrer address from input or use the one from URL
+            let referrerAddress = document.getElementById('referrerAddress').value;
+            if (!referrerAddress || referrerAddress === '') {
+                referrerAddress = referralAddress || '0x0000000000000000000000000000000000000000';
+            }
+
+            // Validate referrer address
+            if (referrerAddress !== '0x0000000000000000000000000000000000000000' && !web3.utils.isAddress(referrerAddress)) {
+                showNotification('Invalid referrer address', 'error');
+                return;
+            }
 
             try {
                 const confirmBtn = document.getElementById('confirmInvestment');
@@ -2647,7 +2666,7 @@
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 confirmBtn.disabled = true;
 
-                // Convert amount to wei (USDT has 6 decimals, but the contract uses 18)
+                // Convert amount to wei (USDT has 6 decimals, but contract uses 18 for consistency)
                 const amountWei = web3.utils.toWei(amount.toString(), 'ether');
 
                 // Execute the investment
@@ -2672,6 +2691,8 @@
                     errorMessage = 'Insufficient USDT balance';
                 } else if (error.message.includes('transfer failed')) {
                     errorMessage = 'Token transfer failed. Please check your USDT balance and approval.';
+                } else if (error.message.includes('Deposit below minimum')) {
+                    errorMessage = `Minimum deposit is 20 USDT`;
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
@@ -2716,7 +2737,9 @@
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
                 } else if (error.message.includes('Below minimum withdrawal')) {
-                    errorMessage = 'Available earnings below minimum withdrawal amount';
+                    errorMessage = 'Available earnings below minimum withdrawal amount (1 USDT)';
+                } else if (error.message.includes('Withdrawal too soon')) {
+                    errorMessage = 'You can only withdraw once per day';
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
@@ -2744,8 +2767,8 @@
                 claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 claimBtn.disabled = true;
 
-                // Note: The contract doesn't have a separate claimReferralBonus function
                 // Referral bonuses are automatically included in available earnings
+                // So we use the withdraw function to claim them
                 await contract.methods.withdraw().send({
                     from: userAccount,
                     gas: 300000
@@ -2758,7 +2781,17 @@
 
             } catch (error) {
                 console.error('Error claiming bonus:', error);
-                showNotification('Failed to claim bonus', 'error');
+                
+                let errorMessage = 'Failed to claim bonus';
+                if (error.code === 4001) {
+                    errorMessage = 'Transaction rejected by user';
+                } else if (error.message.includes('Below minimum withdrawal')) {
+                    errorMessage = 'Available bonus below minimum withdrawal amount (1 USDT)';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+
+                showNotification(errorMessage, 'error');
             } finally {
                 // Reset button state
                 const claimBtn = document.getElementById('claimBonus');
@@ -2783,7 +2816,7 @@
             if (!referralLink) return;
 
             const link = referralLink.value;
-            const text = 'Join Aurion Finance and start earning daily returns with secure USDT investments!';
+            const text = 'Join Aurion Finance and start earning daily returns with secure USDT investments! Use my referral link to get started.';
             
             let url = '';
             
