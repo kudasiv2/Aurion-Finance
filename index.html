@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* CSS Styles tetap sama seperti sebelumnya */
         :root {
             --primary-black: #0A0A0A;
             --secondary-black: #1A1A1A;
@@ -1653,6 +1654,87 @@
             font-size: var(--font-size-sm);
             color: var(--gray-400);
         }
+
+        /* New Network Indicator */
+        .network-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10B981;
+            border-radius: var(--radius-md);
+            color: #10B981;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            margin-left: var(--spacing-md);
+        }
+
+        .network-indicator.wrong-network {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #EF4444;
+            color: #EF4444;
+        }
+
+        /* Enhanced Transaction History */
+        .transaction-history {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            margin-top: var(--spacing-2xl);
+        }
+
+        .transaction-history table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-history th,
+        .transaction-history td {
+            padding: var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .transaction-history th {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .transaction-history td {
+            color: var(--gray-300);
+            font-size: var(--font-size-sm);
+        }
+
+        .transaction-type {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+        }
+
+        .type-deposit {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+
+        .type-withdraw {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+        }
+
+        .type-bonus {
+            background: rgba(168, 85, 247, 0.1);
+            color: #A855F7;
+        }
     </style>
 </head>
 <body>
@@ -1695,6 +1777,7 @@
                         <i class="fas fa-wallet"></i>
                         Connect Wallet
                     </button>
+                    <div class="network-indicator" id="networkIndicator" style="display: none;"></div>
                 </div>
             </div>
 
@@ -1720,7 +1803,7 @@
                     <p class="hero__description">
                         Aurion Finance offers professional investment opportunities with 
                         guaranteed daily ROI, multi-level referral system, and secure 
-                        smart contract technology on the blockchain.
+                        smart contract technology on the Binance Smart Chain.
                     </p>
                     <div class="hero__buttons">
                         <button class="btn btn--primary" data-section="invest">
@@ -1883,6 +1966,24 @@
                         <i class="fas fa-rocket"></i>
                         Start Investing
                     </button>
+                </div>
+
+                <!-- Transaction History -->
+                <div class="transaction-history" id="transactionHistory" style="display: none;">
+                    <h3 style="padding: var(--spacing-lg); margin: 0; color: var(--white);">Transaction History</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionHistoryBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -2241,7 +2342,7 @@
                         <span>AURION FINANCE</span>
                     </div>
                     <p class="footer__description">
-                        Professional USDT investment platform with secure smart contract technology and guaranteed returns.
+                        Professional USDT investment platform with secure smart contract technology and guaranteed returns on Binance Smart Chain.
                     </p>
                     <div class="footer__social">
                         <a href="#" class="social__link">
@@ -2289,9 +2390,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
-        // Enhanced Contract Configuration
+        // BSC Configuration
+        const BSC_MAINNET_CHAIN_ID = '0x38'; // 56 in decimal
+        const BSC_TESTNET_CHAIN_ID = '0x61'; // 97 in decimal
+        
+        // Contract Configuration for BSC
         const CONTRACT_ADDRESS = '0xaDb78631123CD4B4686365423B80C344E438b7d6';
-        const USDT_ADDRESS = '0xdAC17F958D2ee523a2206206994597C13D831ec7'; // Mainnet USDT
+        
+        // USDT on BSC (BEP-20)
+        const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955';
+        
+        // Enhanced Contract ABI
         const CONTRACT_ABI = [
             {
                 "inputs": [{"internalType": "address", "name": "_usdtToken", "type": "address"}],
@@ -2321,10 +2430,11 @@
             {
                 "anonymous": false,
                 "inputs": [
-                    {"indexed": true, "internalType": "address", "name": "owner", "type": "address"},
-                    {"indexed": false, "internalType": "uint256", "name": "totalBalance", "type": "uint256"}
+                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+                    {"indexed": false, "internalType": "uint256", "name": "fee", "type": "uint256"}
                 ],
-                "name": "PoolWithdrawn",
+                "name": "Withdraw",
                 "type": "event"
             },
             {
@@ -2337,40 +2447,6 @@
                 ],
                 "name": "ReferralBonus",
                 "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {"indexed": true, "internalType": "address", "name": "referral", "type": "address"},
-                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
-                    {"indexed": false, "internalType": "address", "name": "owner", "type": "address"}
-                ],
-                "name": "ReferralBonusExpired",
-                "type": "event"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
-                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
-                    {"indexed": false, "internalType": "uint256", "name": "fee", "type": "uint256"}
-                ],
-                "name": "Withdraw",
-                "type": "event"
-            },
-            {
-                "inputs": [],
-                "name": "DAILY_WITHDRAWAL_LIMIT",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "MIN_ACTIVE_INVESTMENT",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
             },
             {
                 "inputs": [],
@@ -2395,13 +2471,6 @@
             },
             {
                 "inputs": [],
-                "name": "TIME_STEP",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
                 "name": "WITHDRAWAL_FEE_PERCENT",
                 "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                 "stateMutability": "view",
@@ -2410,13 +2479,6 @@
             {
                 "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
                 "name": "calculateAvailableEarnings",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [{"internalType": "address", "name": "", "type": "address"}, {"internalType": "uint256", "name": "", "type": "uint256"}],
-                "name": "dailyWithdrawals",
                 "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                 "stateMutability": "view",
                 "type": "function"
@@ -2634,6 +2696,7 @@
         let isInitialized = false;
         let selectedGasOption = 'standard';
         let isUSDTApproved = false;
+        let currentNetwork = null;
 
         // DOM Elements
         const preloader = document.querySelector('.preloader');
@@ -2641,6 +2704,7 @@
         const navToggle = document.getElementById('nav-toggle');
         const connectWalletBtn = document.getElementById('connectWallet');
         const notification = document.getElementById('notification');
+        const networkIndicator = document.getElementById('networkIndicator');
 
         // Section Elements
         const sections = {
@@ -2707,8 +2771,13 @@
             if (typeof window.ethereum !== 'undefined') {
                 try {
                     web3 = new Web3(window.ethereum);
+                    
+                    // Check network first
+                    await checkNetwork();
+                    
                     contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
                     usdtContract = new web3.eth.Contract(USDT_ABI, USDT_ADDRESS);
+                    
                     console.log('Web3 and contracts initialized successfully');
                     isInitialized = true;
 
@@ -2729,6 +2798,75 @@
                 // Disable wallet-related functionality
                 connectWalletBtn.disabled = true;
                 connectWalletBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Install MetaMask';
+            }
+        }
+
+        // Check Network
+        async function checkNetwork() {
+            if (!web3) return;
+
+            try {
+                const chainId = await web3.eth.getChainId();
+                currentNetwork = chainId;
+                
+                // BSC Mainnet = 56
+                if (chainId == 56) {
+                    networkIndicator.textContent = 'BSC Mainnet';
+                    networkIndicator.className = 'network-indicator';
+                    networkIndicator.style.display = 'inline-flex';
+                } 
+                // BSC Testnet = 97
+                else if (chainId == 97) {
+                    networkIndicator.textContent = 'BSC Testnet';
+                    networkIndicator.className = 'network-indicator';
+                    networkIndicator.style.display = 'inline-flex';
+                }
+                else {
+                    networkIndicator.textContent = 'Wrong Network';
+                    networkIndicator.className = 'network-indicator wrong-network';
+                    networkIndicator.style.display = 'inline-flex';
+                    showNotification('Please switch to BSC Mainnet', 'error');
+                }
+            } catch (error) {
+                console.error('Error checking network:', error);
+            }
+        }
+
+        // Switch to BSC Network
+        async function switchToBSC() {
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: BSC_MAINNET_CHAIN_ID }],
+                });
+            } catch (switchError) {
+                // This error code indicates that the chain has not been added to MetaMask.
+                if (switchError.code === 4902) {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [
+                                {
+                                    chainId: BSC_MAINNET_CHAIN_ID,
+                                    chainName: 'Binance Smart Chain Mainnet',
+                                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                    blockExplorerUrls: ['https://bscscan.com/'],
+                                    nativeCurrency: {
+                                        name: 'BNB',
+                                        symbol: 'BNB',
+                                        decimals: 18
+                                    },
+                                },
+                            ],
+                        });
+                    } catch (addError) {
+                        console.error('Error adding BSC network:', addError);
+                        showNotification('Error adding BSC network to MetaMask', 'error');
+                    }
+                } else {
+                    console.error('Error switching to BSC:', switchError);
+                    showNotification('Error switching to BSC network', 'error');
+                }
             }
         }
 
@@ -2827,8 +2965,16 @@
                     }
                 });
 
-                window.ethereum.on('chainChanged', () => {
-                    window.location.reload();
+                window.ethereum.on('chainChanged', async (chainId) => {
+                    currentNetwork = parseInt(chainId);
+                    await checkNetwork();
+                    if (currentNetwork === 56 || currentNetwork === 97) {
+                        // Reinitialize contracts if on correct network
+                        contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+                        usdtContract = new web3.eth.Contract(USDT_ABI, USDT_ADDRESS);
+                        await loadContractData();
+                        await checkUSDTApproval();
+                    }
                 });
             }
 
@@ -2891,6 +3037,16 @@
             }
 
             try {
+                // Check network first
+                await checkNetwork();
+                if (currentNetwork !== 56 && currentNetwork !== 97) {
+                    const shouldSwitch = confirm('This dApp works on BSC Mainnet. Would you like to switch to BSC Mainnet?');
+                    if (shouldSwitch) {
+                        await switchToBSC();
+                        return;
+                    }
+                }
+
                 const accounts = await window.ethereum.request({
                     method: 'eth_requestAccounts'
                 });
@@ -2942,7 +3098,8 @@
                 'referralStats',
                 'referralLinkSection',
                 'bonusClaimSection',
-                'usdtApprovalSection'
+                'usdtApprovalSection',
+                'transactionHistory'
             ];
 
             alerts.forEach(alertId => {
@@ -3039,6 +3196,11 @@
                 // Generate referral link
                 generateReferralLink();
 
+                // Show transaction history if user has activity
+                if (parseFloat(userInfo.totalDeposits) > 0 || parseFloat(userInfo.totalWithdrawn) > 0) {
+                    showTransactionHistory(userInfo);
+                }
+
             } catch (error) {
                 console.error('Error loading user data:', error);
             }
@@ -3086,6 +3248,74 @@
                         <td>${dailyROI}% Daily</td>
                         <td>${(parseFloat(web3.utils.fromWei(investment.totalWithdrawn, 'ether'))).toFixed(2)} USDT</td>
                         <td><span class="status-badge status-active">Active</span></td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function showTransactionHistory(userInfo) {
+            const transactionHistory = document.getElementById('transactionHistory');
+            const transactionHistoryBody = document.getElementById('transactionHistoryBody');
+            
+            if (!transactionHistory || !transactionHistoryBody) return;
+
+            transactionHistory.style.display = 'block';
+            
+            let transactions = [];
+            
+            // Add deposit transaction if exists
+            if (parseFloat(userInfo.totalDeposits) > 0) {
+                transactions.push({
+                    type: 'deposit',
+                    amount: userInfo.totalDeposits,
+                    date: new Date().toLocaleDateString(),
+                    status: 'Completed'
+                });
+            }
+            
+            // Add withdrawal transaction if exists
+            if (parseFloat(userInfo.totalWithdrawn) > 0) {
+                transactions.push({
+                    type: 'withdraw',
+                    amount: userInfo.totalWithdrawn,
+                    date: new Date().toLocaleDateString(),
+                    status: 'Completed'
+                });
+            }
+            
+            // Add referral bonus transaction if exists
+            if (parseFloat(userInfo.referralBonus) > 0) {
+                transactions.push({
+                    type: 'bonus',
+                    amount: userInfo.referralBonus,
+                    date: new Date().toLocaleDateString(),
+                    status: 'Available'
+                });
+            }
+
+            if (transactions.length === 0) {
+                transactionHistory.style.display = 'none';
+                return;
+            }
+
+            transactionHistoryBody.innerHTML = transactions.map(transaction => {
+                const typeClass = `type-${transaction.type}`;
+                const typeIcon = transaction.type === 'deposit' ? 'fa-arrow-down' : 
+                               transaction.type === 'withdraw' ? 'fa-arrow-up' : 'fa-gift';
+                const typeText = transaction.type === 'deposit' ? 'Deposit' : 
+                               transaction.type === 'withdraw' ? 'Withdrawal' : 'Referral Bonus';
+                
+                return `
+                    <tr>
+                        <td>
+                            <span class="transaction-type ${typeClass}">
+                                <i class="fas ${typeIcon}"></i>
+                                ${typeText}
+                            </span>
+                        </td>
+                        <td>${(parseFloat(web3.utils.fromWei(transaction.amount, 'ether'))).toFixed(2)} USDT</td>
+                        <td>${transaction.date}</td>
+                        <td>${transaction.status}</td>
                     </tr>
                 `;
             }).join('');
@@ -3230,6 +3460,11 @@
                 return;
             }
 
+            if (currentNetwork !== 56 && currentNetwork !== 97) {
+                showNotification('Please switch to BSC Network', 'error');
+                return;
+            }
+
             if (!isUSDTApproved) {
                 showNotification('Please approve USDT first', 'error');
                 return;
@@ -3335,6 +3570,11 @@
                 return;
             }
 
+            if (currentNetwork !== 56 && currentNetwork !== 97) {
+                showNotification('Please switch to BSC Network', 'error');
+                return;
+            }
+
             try {
                 const approveBtn = document.getElementById('approveUSDT');
                 const originalText = approveBtn.innerHTML;
@@ -3403,6 +3643,11 @@
         async function confirmInvestment() {
             if (!contract || !userAccount) {
                 showNotification('Please connect your wallet first', 'error');
+                return;
+            }
+
+            if (currentNetwork !== 56 && currentNetwork !== 97) {
+                showNotification('Please switch to BSC Network', 'error');
                 return;
             }
 
@@ -3520,13 +3765,19 @@
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
                 } else if (error.message.includes('insufficient funds')) {
-                    errorMessage = 'Insufficient USDT balance';
+                    errorMessage = 'Insufficient BNB for gas fees';
                 } else if (error.message.includes('transfer failed')) {
                     errorMessage = 'Token transfer failed. Please check your USDT balance and approval.';
                 } else if (error.message.includes('Deposit below minimum')) {
                     errorMessage = `Minimum deposit is 20 USDT`;
                 } else if (error.message.includes('execution reverted')) {
-                    errorMessage = 'Smart contract execution failed';
+                    // Try to extract the revert reason
+                    try {
+                        const revertReason = error.message.match(/reverted with reason string '(.+)'/);
+                        errorMessage = revertReason ? revertReason[1] : 'Smart contract execution failed';
+                    } catch {
+                        errorMessage = 'Smart contract execution failed';
+                    }
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
@@ -3571,6 +3822,11 @@
                 return;
             }
 
+            if (currentNetwork !== 56 && currentNetwork !== 97) {
+                showNotification('Please switch to BSC Network', 'error');
+                return;
+            }
+
             try {
                 const withdrawBtn = document.getElementById('withdrawEarnings');
                 const originalText = withdrawBtn.innerHTML;
@@ -3597,9 +3853,16 @@
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
                 } else if (error.message.includes('Below minimum withdrawal')) {
-                    errorMessage = 'Available earnings below minimum withdrawal amount (1 USDT)';
+                    errorMessage = 'Available earnings below minimum withdrawal amount';
                 } else if (error.message.includes('Withdrawal too soon')) {
                     errorMessage = 'You can only withdraw once per day';
+                } else if (error.message.includes('execution reverted')) {
+                    try {
+                        const revertReason = error.message.match(/reverted with reason string '(.+)'/);
+                        errorMessage = revertReason ? revertReason[1] : 'Smart contract execution failed';
+                    } catch {
+                        errorMessage = 'Smart contract execution failed';
+                    }
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
@@ -3617,6 +3880,11 @@
         async function claimReferralBonus() {
             if (!contract || !userAccount) {
                 showNotification('Please connect your wallet first', 'error');
+                return;
+            }
+
+            if (currentNetwork !== 56 && currentNetwork !== 97) {
+                showNotification('Please switch to BSC Network', 'error');
                 return;
             }
 
@@ -3647,7 +3915,14 @@
                 if (error.code === 4001) {
                     errorMessage = 'Transaction rejected by user';
                 } else if (error.message.includes('Below minimum withdrawal')) {
-                    errorMessage = 'Available bonus below minimum withdrawal amount (1 USDT)';
+                    errorMessage = 'Available bonus below minimum withdrawal amount';
+                } else if (error.message.includes('execution reverted')) {
+                    try {
+                        const revertReason = error.message.match(/reverted with reason string '(.+)'/);
+                        errorMessage = revertReason ? revertReason[1] : 'Smart contract execution failed';
+                    } catch {
+                        errorMessage = 'Smart contract execution failed';
+                    }
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
@@ -3690,7 +3965,7 @@
             if (!referralLink) return;
 
             const link = referralLink.value;
-            const text = 'Join Aurion Finance and start earning daily returns with secure USDT investments! Use my referral link to get started.';
+            const text = 'Join Aurion Finance and start earning daily returns with secure USDT investments on BSC! Use my referral link to get started.';
             
             let url = '';
             
