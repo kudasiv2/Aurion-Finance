@@ -7,200 +7,1462 @@
     <link rel="icon" type="image/png" href="https://files.catbox.moe/3o41t1.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Reset & Base Styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f172a; color: #e2e8f0; line-height: 1.6; }
-        
+        /* CSS styles tetap sama seperti sebelumnya */
+        :root {
+            --primary-black: #0A0A0A;
+            --secondary-black: #1A1A1A;
+            --tertiary-black: #2A2A2A;
+            --primary-gold: #D4AF37;
+            --secondary-gold: #FFD700;
+            --accent-gold: #F5D76E;
+            --light-gold: #FFF9E6;
+            --white: #FFFFFF;
+            --gray-100: #F5F5F5;
+            --gray-200: #E5E5E5;
+            --gray-300: #D4D4D3;
+            --gray-400: #A3A3A3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+
+            --gradient-gold: linear-gradient(135deg, var(--primary-gold) 0%, var(--secondary-gold) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
+            --gradient-card: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.3);
+
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            --font-size-4xl: 2.25rem;
+            --font-size-5xl: 3rem;
+
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+        }
+
         /* Preloader */
-        .preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .loader { display: flex; gap: 8px; }
-        .gold-bar { width: 12px; height: 40px; background: linear-gradient(45deg, #f59e0b, #fbbf24); animation: loader 1.2s infinite ease-in-out; }
-        .gold-bar:nth-child(1) { animation-delay: -0.32s; }
-        .gold-bar:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes loader { 0%, 80%, 100% { transform: scaleY(0.6); } 40% { transform: scaleY(1); } }
-        .preloader.fade-out { opacity: 0; transition: opacity 0.5s ease; }
-        
-        /* Header & Navigation */
-        .header { position: fixed; top: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid #1e293b; }
-        .nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
-        .nav__logo { display: flex; align-items: center; gap: 12px; }
-        .logo { width: 40px; height: 40px; }
-        .logo__text { font-size: 1.5rem; font-weight: 700; background: linear-gradient(45deg, #f59e0b, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav__menu { display: flex; align-items: center; gap: 2rem; }
-        .nav__list { display: flex; list-style: none; gap: 2rem; }
-        .nav__link { color: #cbd5e1; text-decoration: none; font-weight: 500; transition: color 0.3s; padding: 0.5rem 1rem; border-radius: 8px; }
-        .nav__link:hover, .nav__link.active { color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
-        .nav__buttons { display: flex; gap: 1rem; }
-        .nav__toggle { display: none; font-size: 1.5rem; cursor: pointer; }
-        
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity var(--transition-slow);
+        }
+
+        .preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .gold-bar {
+            width: 4px;
+            height: 20px;
+            background: var(--gradient-gold);
+            animation: loader 1.2s ease-in-out infinite;
+        }
+
+        .gold-bar:nth-child(2) { animation-delay: 0.1s; }
+        .gold-bar:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes loader {
+            0%, 40%, 100% { transform: scaleY(1); }
+            20% { transform: scaleY(2); }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            z-index: 1000;
+            transition: all var(--transition-normal);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+        }
+
+        .nav__logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo__text {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav__menu {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2xl);
+        }
+
+        .nav__list {
+            display: flex;
+            gap: var(--spacing-xl);
+            list-style: none;
+        }
+
+        .nav__link {
+            color: var(--gray-300);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav__link:hover,
+        .nav__link.active {
+            color: var(--primary-gold);
+        }
+
+        .nav__link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-gold);
+        }
+
+        .nav__toggle {
+            display: none;
+            font-size: var(--font-size-xl);
+            cursor: pointer;
+            color: var(--primary-gold);
+        }
+
         /* Buttons */
-        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
-        .btn--primary { background: linear-gradient(45deg, #f59e0b, #fbbf24); color: #0f172a; }
-        .btn--primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3); }
-        .btn--outline { background: transparent; border: 2px solid #fbbf24; color: #fbbf24; }
-        .btn--outline:hover { background: rgba(251, 191, 36, 0.1); transform: translateY(-2px); }
-        .btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
-        .btn-lg { padding: 1rem 2rem; font-size: 1.125rem; }
-        
-        /* Main Content */
-        .main { margin-top: 80px; }
-        .section { padding: 4rem 2rem; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn--primary {
+            background: var(--gradient-gold);
+            color: var(--primary-black);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .btn--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn--outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--primary-gold);
+        }
+
+        .btn--outline:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn--secondary {
+            background: var(--tertiary-black);
+            color: var(--white);
+            border: 1px solid var(--gray-600);
+        }
+
+        .btn--secondary:hover {
+            background: var(--gray-700);
+            transform: translateY(-2px);
+        }
+
+        .btn i {
+            font-size: var(--font-size-lg);
+        }
+
+        .btn-sm {
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-size: var(--font-size-sm);
+        }
+
+        .btn-lg {
+            padding: var(--spacing-lg) var(--spacing-2xl);
+            font-size: var(--font-size-lg);
+        }
+
+        /* Sections */
+        .section {
+            padding: var(--spacing-3xl) 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section__title {
+            font-size: var(--font-size-4xl);
+            text-align: center;
+            margin-bottom: var(--spacing-md);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section__subtitle {
+            font-size: var(--font-size-lg);
+            text-align: center;
+            color: var(--gray-400);
+            margin-bottom: var(--spacing-2xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gradient-text {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         /* Hero Section */
-        .hero { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
-        .hero__container { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        .hero__badge { margin-bottom: 1rem; }
-        .badge { background: rgba(251, 191, 36, 0.1); color: #fbbf24; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.875rem; font-weight: 600; }
-        .hero__title { font-size: 3.5rem; font-weight: 700; line-height: 1.2; margin-bottom: 1.5rem; }
-        .gradient-text { background: linear-gradient(45deg, #f59e0b, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero__description { font-size: 1.25rem; color: #94a3b8; margin-bottom: 2rem; }
-        .hero__buttons { display: flex; gap: 1rem; margin-bottom: 3rem; }
-        .hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-        .stat { text-align: center; }
-        .stat__value { font-size: 2rem; font-weight: 700; color: #fbbf24; margin-bottom: 0.5rem; }
-        .stat__label { color: #94a3b8; font-size: 0.875rem; }
-        
-        /* Floating Card */
-        .floating-card { background: #1e293b; border-radius: 16px; padding: 2rem; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); border: 1px solid #334155; }
-        .card__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .card__header h3 { font-size: 1.25rem; font-weight: 600; }
-        .live-indicator { display: flex; align-items: center; gap: 8px; font-size: 0.875rem; color: #10b981; }
-        .dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        .card__content { display: flex; flex-direction: column; gap: 1rem; }
-        .stat-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #334155; }
-        .stat-item:last-child { border-bottom: none; }
-        .stat-item .value { font-weight: 600; color: #fbbf24; }
-        
-        /* Section Headers */
-        .section__header { text-align: center; margin-bottom: 3rem; }
-        .section__title { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
-        .section__subtitle { font-size: 1.125rem; color: #94a3b8; max-width: 600px; margin: 0 auto; }
-        
-        /* Alerts */
-        .alert { display: flex; align-items: center; gap: 12px; padding: 1rem 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; }
-        .alert-warning { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; }
-        
-        /* Dashboard & Stats */
-        .quick-stats, .referral-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; border: 1px solid #334155; }
-        .stat-icon { width: 50px; height: 50px; background: rgba(251, 191, 36, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fbbf24; font-size: 1.25rem; }
-        .stat-value { font-size: 1.5rem; font-weight: 700; color: #fbbf24; }
-        .stat-label { color: #94a3b8; font-size: 0.875rem; }
-        
-        /* Action Buttons */
-        .action-buttons { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        
-        /* Tables */
-        .investments-table { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 12px; overflow: hidden; }
-        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #334155; }
-        th { background: rgba(251, 191, 36, 0.1); color: #fbbf24; font-weight: 600; }
-        tr:last-child td { border-bottom: none; }
-        
-        /* Empty State */
-        .empty-state { text-align: center; padding: 3rem; }
-        .empty-icon { font-size: 4rem; color: #475569; margin-bottom: 1rem; }
-        
-        /* Investment Plans */
-        .investment-plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
-        .plan-card { background: #1e293b; border-radius: 16px; padding: 2rem; border: 1px solid #334155; transition: all 0.3s; position: relative; cursor: pointer; }
-        .plan-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border-color: #fbbf24; }
-        .plan-card.featured { border: 2px solid #fbbf24; transform: scale(1.05); }
-        .plan-badge { position: absolute; top: -10px; right: 20px; background: #f59e0b; color: #0f172a; padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
-        .plan-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .plan-roi { font-size: 1.75rem; font-weight: 700; color: #fbbf24; margin-bottom: 0.5rem; }
-        .plan-range { color: #94a3b8; margin-bottom: 1rem; }
-        .plan-duration, .plan-total { margin-bottom: 0.5rem; }
-        .plan-features { list-style: none; margin: 1.5rem 0; }
-        .plan-features li { display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; }
-        .plan-features li i { color: #10b981; }
-        
-        /* Investment Form */
-        .investment-form-container { display: none; background: #1e293b; border-radius: 16px; padding: 2rem; border: 1px solid #334155; }
-        .investment-form-container.active { display: block; }
-        .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
-        .form-group { margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-        .form-input { width: 100%; padding: 0.75rem 1rem; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; font-size: 1rem; }
-        .form-input:focus { outline: none; border-color: #fbbf24; }
-        .amount-range { color: #94a3b8; font-size: 0.875rem; margin-top: 0.5rem; }
-        .plan-summary { background: rgba(251, 191, 36, 0.1); padding: 1rem; border-radius: 8px; }
-        .investment-summary { background: #0f172a; padding: 1.5rem; border-radius: 12px; margin: 2rem 0; }
-        .investment-summary h3 { margin-bottom: 1rem; }
-        .summary-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #334155; }
-        .summary-item.total { font-weight: 700; font-size: 1.125rem; border-bottom: none; color: #fbbf24; }
-        
-        /* Success State */
-        .investment-success { display: none; text-align: center; padding: 3rem; }
-        .investment-success.active { display: block; }
-        .success-icon { font-size: 4rem; color: #10b981; margin-bottom: 1rem; }
-        .success-actions { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
-        
+        .hero {
+            padding-top: 120px;
+            background: var(--gradient-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+        }
+
+        .hero__container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-3xl);
+            align-items: center;
+        }
+
+        .hero__badge {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--primary-gold);
+            border-radius: var(--radius-lg);
+            color: var(--primary-gold);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+        }
+
+        .hero__title {
+            font-size: var(--font-size-5xl);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.1;
+        }
+
+        .hero__description {
+            font-size: var(--font-size-lg);
+            color: var(--gray-300);
+            margin-bottom: var(--spacing-2xl);
+            max-width: 500px;
+        }
+
+        .hero__buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .hero__stats {
+            display: flex;
+            gap: var(--spacing-2xl);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat__value {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat__label {
+            font-size: var(--font-size-sm);
+            color: var(--gray-400);
+        }
+
+        .hero__image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .floating-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-lg);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .card__header h3 {
+            margin: 0;
+            color: var(--white);
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: var(--font-size-sm);
+            color: var(--primary-gold);
+            font-weight: 600;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-gold);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-item .value {
+            color: var(--primary-gold);
+            font-weight: 600;
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            background: var(--secondary-black);
+        }
+
+        .dashboard-content {
+            display: none;
+        }
+
+        .dashboard-content.active {
+            display: block;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .stat-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            transition: all var(--transition-normal);
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-2xl);
+            color: var(--primary-black);
+        }
+
+        .stat-value {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-label {
+            color: var(--gray-400);
+            font-size: var(--font-size-sm);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-3xl);
+            flex-wrap: wrap;
+        }
+
+        .investments-table {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .investments-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .investments-table th,
+        .investments-table td {
+            padding: var(--spacing-lg);
+            text-align: left;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .investments-table th {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .investments-table td {
+            color: var(--gray-300);
+        }
+
+        .investments-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .investments-table tr:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+        }
+
+        .status-completed {
+            background: rgba(156, 163, 175, 0.1);
+            color: #9CA3AF;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-3xl);
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-3xl);
+            color: var(--primary-black);
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        .empty-state h3 {
+            margin-bottom: var(--spacing-md);
+            color: var(--white);
+        }
+
+        .empty-state p {
+            color: var(--gray-400);
+            margin-bottom: var(--spacing-xl);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Invest Section */
+        .invest-section {
+            background: var(--primary-black);
+        }
+
+        .investment-plans {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-2xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .plan-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            text-align: center;
+            transition: all var(--transition-normal);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .plan-card:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .plan-card.featured {
+            border-color: var(--primary-gold);
+            box-shadow: var(--shadow-gold);
+            transform: scale(1.05);
+        }
+
+        .plan-card.featured::before {
+            content: 'RECOMMENDED';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-gold);
+            color: var(--primary-black);
+            padding: var(--spacing-xs) var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-sm);
+            font-weight: 700;
+        }
+
+        .plan-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+        }
+
+        .plan-name {
+            font-size: var(--font-size-xl);
+            margin-bottom: var(--spacing-md);
+            color: var(--white);
+        }
+
+        .plan-roi {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .plan-range {
+            background: rgba(212, 175, 55, 0.1);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            margin: var(--spacing-lg) 0;
+            font-weight: 600;
+            color: var(--primary-gold);
+        }
+
+        .plan-duration {
+            color: var(--gray-400);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .plan-total {
+            font-size: var(--font-size-lg);
+            color: var(--light-gold);
+            margin-bottom: var(--spacing-xl);
+            font-weight: 600;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: var(--spacing-lg) 0;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: var(--spacing-sm) 0;
+            color: var(--gray-300);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features li i {
+            color: var(--primary-gold);
+            margin-right: var(--spacing-sm);
+        }
+
+        .investment-form-container {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-3xl);
+            display: none;
+        }
+
+        .investment-form-container.active {
+            display: block;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-2xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .form-header h2 {
+            margin: 0;
+            color: var(--white);
+        }
+
+        .investment-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-sm);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: var(--radius-lg);
+            color: var(--white);
+            font-size: var(--font-size-base);
+            transition: all var(--transition-normal);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .amount-range {
+            margin-top: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+            color: var(--gray-400);
+        }
+
+        .plan-summary {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            color: var(--white);
+        }
+
+        .plan-summary .plan-name {
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .plan-summary .plan-roi {
+            font-size: var(--font-size-xl);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .investment-summary {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin: var(--spacing-2xl) 0;
+        }
+
+        .investment-summary h3 {
+            margin-bottom: var(--spacing-lg);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md) 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            color: var(--gray-300);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item.total {
+            font-weight: 700;
+            color: var(--primary-gold);
+            font-size: var(--font-size-lg);
+        }
+
+        .investment-success {
+            text-align: center;
+            padding: var(--spacing-3xl);
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            display: none;
+        }
+
+        .investment-success.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-4xl);
+            color: var(--primary-black);
+            margin: 0 auto var(--spacing-xl);
+        }
+
+        .investment-success h2 {
+            margin-bottom: var(--spacing-lg);
+            color: var(--white);
+        }
+
+        .investment-success p {
+            color: var(--gray-400);
+            margin-bottom: var(--spacing-2xl);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         /* Referral Section */
-        .referral-link-container { margin-bottom: 3rem; }
-        .link-display { display: flex; gap: 1rem; margin: 1.5rem 0; }
-        .link-input { flex: 1; padding: 0.75rem 1rem; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; }
-        .social-share { display: flex; gap: 1rem; justify-content: center; }
-        .social-btn { width: 50px; height: 50px; border-radius: 50%; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; font-size: 1.25rem; cursor: pointer; transition: all 0.3s; }
-        .social-btn:hover { background: #334155; transform: translateY(-2px); }
-        
-        /* Levels Grid */
-        .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
-        .level-card { background: #1e293b; border-radius: 12px; padding: 1.5rem; border: 1px solid #334155; }
-        .level-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .level-number { width: 40px; height: 40px; background: linear-gradient(45deg, #f59e0b, #fbbf24); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #0f172a; }
-        .level-commission { font-weight: 600; color: #fbbf24; }
-        .level-requirements { margin-bottom: 1rem; }
-        .requirement { display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem; font-size: 0.875rem; }
-        .requirement i { color: #10b981; }
-        .level-stats .stat { display: flex; justify-content: space-between; font-size: 0.875rem; }
-        
-        /* Bonus Claim */
-        .bonus-claim-section { margin-bottom: 3rem; }
-        .claim-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 16px; padding: 2rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid #fbbf24; }
-        .bonus-amount { font-size: 2rem; font-weight: 700; color: #fbbf24; margin-top: 0.5rem; }
-        
-        /* Steps Grid */
-        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
-        .step-card { text-align: center; padding: 2rem 1rem; }
-        .step-number { width: 60px; height: 60px; background: rgba(251, 191, 36, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; color: #fbbf24; margin: 0 auto 1rem; }
-        
-        /* Footer */
-        .footer { background: #0a0f1c; padding: 4rem 0 2rem; border-top: 1px solid #1e293b; }
-        .footer__content { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; margin-bottom: 3rem; }
-        .footer__logo { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
-        .footer__logo img { width: 40px; height: 40px; }
-        .footer__logo span { font-size: 1.25rem; font-weight: 700; color: #fbbf24; }
-        .footer__description { color: #94a3b8; margin-bottom: 1.5rem; max-width: 300px; }
-        .footer__social { display: flex; gap: 1rem; }
-        .social__link { width: 40px; height: 40px; background: #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #e2e8f0; transition: all 0.3s; }
-        .social__link:hover { background: #fbbf24; color: #0f172a; transform: translateY(-2px); }
-        .footer__links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-        .footer__column h4 { color: #fbbf24; margin-bottom: 1rem; font-size: 1.125rem; }
-        .footer__column a { display: block; color: #94a3b8; text-decoration: none; margin-bottom: 0.5rem; transition: color 0.3s; }
-        .footer__column a:hover { color: #fbbf24; }
-        .footer__bottom { text-align: center; padding-top: 2rem; border-top: 1px solid #1e293b; color: #64748b; }
-        
+        .referral-section {
+            background: var(--secondary-black);
+        }
+
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .referral-link-container {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .link-display {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .link-input {
+            flex: 1;
+            padding: var(--spacing-md);
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: var(--radius-lg);
+            color: var(--white);
+            font-size: var(--font-size-base);
+        }
+
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-md);
+        }
+
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-lg);
+            color: var(--primary-gold);
+            font-size: var(--font-size-lg);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .social-btn:hover {
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            transform: translateY(-2px);
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-2xl);
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .level-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+
+        .level-card:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .level-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-black);
+            font-weight: 700;
+            font-size: var(--font-size-lg);
+        }
+
+        .level-commission {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--primary-gold);
+        }
+
+        .level-requirements {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            color: var(--gray-300);
+            font-size: var(--font-size-sm);
+        }
+
+        .requirement i {
+            color: var(--primary-gold);
+        }
+
+        .level-stats {
+            background: rgba(10, 10, 10, 0.8);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+        }
+
+        .level-stats .stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray-300);
+            font-size: var(--font-size-sm);
+        }
+
+        .bonus-claim-section {
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .claim-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-2xl);
+        }
+
+        .claim-info h3 {
+            margin-bottom: var(--spacing-sm);
+            color: var(--white);
+        }
+
+        .claim-info p {
+            color: var(--gray-400);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .bonus-amount {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--primary-gold);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-2xl);
+        }
+
+        .step-card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            text-align: center;
+            transition: all var(--transition-normal);
+        }
+
+        .step-card:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-black);
+            font-weight: 700;
+            font-size: var(--font-size-xl);
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        .step-card h3 {
+            margin-bottom: var(--spacing-md);
+            color: var(--white);
+        }
+
+        .step-card p {
+            color: var(--gray-300);
+            line-height: 1.6;
+        }
+
+        /* Wallet Connection */
+        .wallet-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .connected {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .connected.active {
+            display: flex;
+        }
+
+        .connected-status {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            color: var(--primary-gold);
+        }
+
+        .wallet-address {
+            background: rgba(2, 12, 27, 0.7);
+            border: 1px solid var(--primary-gold);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            font-family: monospace;
+            color: var(--white);
+            font-size: var(--font-size-sm);
+        }
+
+        /* Alert */
+        .alert {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-2xl);
+            border: 1px solid;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: #F59E0B;
+            color: #F59E0B;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: #10B981;
+            color: #10B981;
+        }
+
         /* Notification */
-        .notification { position: fixed; top: 100px; right: 20px; padding: 1rem 1.5rem; border-radius: 8px; background: #1e293b; border: 1px solid #334155; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); transform: translateX(400px); transition: transform 0.3s; z-index: 1001; }
-        .notification.show { transform: translateX(0); }
-        .notification.success { border-left: 4px solid #10b981; }
-        .notification.error { border-left: 4px solid #ef4444; }
-        .notification.info { border-left: 4px solid #3b82f6; }
-        
-        /* Responsive */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: var(--spacing-lg) var(--spacing-xl);
+            background: var(--secondary-black);
+            border: 1px solid var(--primary-gold);
+            border-radius: var(--radius-lg);
+            color: var(--white);
+            box-shadow: var(--shadow-lg);
+            transform: translateX(150%);
+            transition: transform var(--transition-normal);
+            z-index: 3000;
+            max-width: 400px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-color: #10B981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .notification.error {
+            border-color: #EF4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-black);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding: var(--spacing-3xl) 0 var(--spacing-xl);
+        }
+
+        .footer__content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--spacing-3xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .footer__brand {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .footer__logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--primary-gold);
+        }
+
+        .footer__logo img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .footer__description {
+            color: var(--gray-400);
+            line-height: 1.6;
+        }
+
+        .footer__social {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .social__link {
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--primary-gold);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-gold);
+            text-decoration: none;
+            transition: all var(--transition-normal);
+        }
+
+        .social__link:hover {
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            transform: translateY(-2px);
+        }
+
+        .footer__links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-2xl);
+        }
+
+        .footer__column h4 {
+            color: var(--white);
+            margin-bottom: var(--spacing-lg);
+            font-size: var(--font-size-lg);
+        }
+
+        .footer__column a {
+            display: block;
+            color: var(--gray-400);
+            text-decoration: none;
+            margin-bottom: var(--spacing-sm);
+            transition: color var(--transition-fast);
+        }
+
+        .footer__column a:hover {
+            color: var(--primary-gold);
+        }
+
+        .footer__bottom {
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            padding-top: var(--spacing-lg);
+            text-align: center;
+            color: var(--gray-500);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero__container {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-2xl);
+                text-align: center;
+            }
+
+            .hero__buttons {
+                justify-content: center;
+            }
+
+            .hero__stats {
+                justify-content: center;
+            }
+
+            .footer__content {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-2xl);
+            }
+        }
+
         @media (max-width: 768px) {
-            .nav__menu { position: fixed; top: 80px; left: -100%; width: 80%; height: calc(100vh - 80px); background: #0f172a; flex-direction: column; padding: 2rem; transition: left 0.3s; }
-            .nav__menu.active { left: 0; }
-            .nav__list { flex-direction: column; }
-            .nav__toggle { display: block; }
-            .hero__container { grid-template-columns: 1fr; }
-            .hero__title { font-size: 2.5rem; }
-            .footer__content { grid-template-columns: 1fr; }
-            .footer__links { grid-template-columns: 1fr; }
-            .link-display { flex-direction: column; }
+            .nav__menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background: var(--secondary-black);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                padding: var(--spacing-2xl);
+                transition: left var(--transition-normal);
+                border-right: 1px solid rgba(212, 175, 55, 0.1);
+            }
+
+            .nav__menu.active {
+                left: 0;
+            }
+
+            .nav__list {
+                flex-direction: column;
+                gap: var(--spacing-lg);
+                width: 100%;
+            }
+
+            .nav__buttons {
+                width: 100%;
+                margin-top: var(--spacing-xl);
+            }
+
+            .nav__toggle {
+                display: block;
+            }
+
+            .hero__title {
+                font-size: var(--font-size-4xl);
+            }
+
+            .hero__buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero__stats {
+                flex-direction: column;
+                gap: var(--spacing-lg);
+            }
+
+            .investment-plans {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-card.featured {
+                transform: none;
+            }
+
+            .plan-card.featured:hover {
+                transform: translateY(-5px);
+            }
+
+            .form-header {
+                flex-direction: column;
+                gap: var(--spacing-md);
+                align-items: flex-start;
+            }
+
+            .success-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .referral-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .levels-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .link-display {
+                flex-direction: column;
+            }
+
+            .claim-card {
+                flex-direction: column;
+                text-align: center;
+                gap: var(--spacing-lg);
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer__links {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-xl);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 var(--spacing-md);
+            }
+
+            .hero__title {
+                font-size: var(--font-size-3xl);
+            }
+
+            .section__title {
+                font-size: var(--font-size-3xl);
+            }
+
+            .btn {
+                padding: var(--spacing-md) var(--spacing-lg);
+                font-size: var(--font-size-sm);
+            }
+
+            .referral-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .referral-header h1 {
+                font-size: var(--font-size-3xl);
+            }
+
+            .section-header h2 {
+                font-size: var(--font-size-2xl);
+            }
         }
     </style>
 </head>
@@ -214,27 +1476,41 @@
         </div>
     </div>
 
-    <!-- Header & Navigation -->
+    <!-- Header -->
     <header class="header">
         <nav class="nav container">
             <div class="nav__logo">
                 <img src="https://files.catbox.moe/3o41t1.png" alt="Aurion Finance" class="logo">
                 <div class="logo__text">AURION FINANCE</div>
             </div>
+
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
-                    <li class="nav__item"><a class="nav__link active" data-section="home">Home</a></li>
-                    <li class="nav__item"><a class="nav__link" data-section="dashboard">Dashboard</a></li>
-                    <li class="nav__item"><a class="nav__link" data-section="invest">Invest</a></li>
-                    <li class="nav__item"><a class="nav__link" data-section="referral">Referral</a></li>
+                    <li class="nav__item">
+                        <a class="nav__link active" data-section="home">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a class="nav__link" data-section="dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav__item">
+                        <a class="nav__link" data-section="invest">Invest</a>
+                    </li>
+                    <li class="nav__item">
+                        <a class="nav__link" data-section="referral">Referral</a>
+                    </li>
                 </ul>
+
                 <div class="nav__buttons">
                     <button class="btn btn--outline" id="connectWallet">
-                        <i class="fas fa-wallet"></i> Connect Wallet
+                        <i class="fas fa-wallet"></i>
+                        Connect Wallet
                     </button>
                 </div>
             </div>
-            <div class="nav__toggle" id="nav-toggle"><i class="fas fa-bars"></i></div>
+
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
         </nav>
     </header>
 
@@ -244,30 +1520,69 @@
         <section class="hero section" id="home">
             <div class="hero__container container">
                 <div class="hero__content">
-                    <div class="hero__badge"><span class="badge">PROFESSIONAL INVESTMENT PLATFORM</span></div>
-                    <h1 class="hero__title">Secure <span class="gradient-text">USDT Investments</span> with Daily Returns</h1>
-                    <p class="hero__description">Aurion Finance offers professional investment opportunities with guaranteed daily ROI, multi-level referral system, and secure smart contract technology.</p>
+                    <div class="hero__badge">
+                        <span class="badge">PROFESSIONAL INVESTMENT PLATFORM</span>
+                    </div>
+                    <h1 class="hero__title">
+                        Secure <span class="gradient-text">USDT Investments</span> 
+                        with Daily Returns
+                    </h1>
+                    <p class="hero__description">
+                        Aurion Finance offers professional investment opportunities with 
+                        guaranteed daily ROI, multi-level referral system, and secure 
+                        smart contract technology.
+                    </p>
                     <div class="hero__buttons">
-                        <button class="btn btn--primary" data-section="invest"><i class="fas fa-rocket"></i> Start Investing</button>
-                        <button class="btn btn--outline" data-section="dashboard"><i class="fas fa-chart-line"></i> View Dashboard</button>
+                        <button class="btn btn--primary" data-section="invest">
+                            <i class="fas fa-rocket"></i>
+                            Start Investing
+                        </button>
+                        <button class="btn btn--outline" data-section="dashboard">
+                            <i class="fas fa-chart-line"></i>
+                            View Dashboard
+                        </button>
                     </div>
                     <div class="hero__stats">
-                        <div class="stat"><div class="stat__value" id="totalTVL">$0</div><div class="stat__label">Total Value Locked</div></div>
-                        <div class="stat"><div class="stat__value" id="totalUsers">0</div><div class="stat__label">Active Investors</div></div>
-                        <div class="stat"><div class="stat__value" id="totalPaid">$0</div><div class="stat__label">Total Paid Out</div></div>
+                        <div class="stat">
+                            <div class="stat__value" id="totalTVL">$0</div>
+                            <div class="stat__label">Total Value Locked</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat__value" id="totalUsers">0</div>
+                            <div class="stat__label">Active Investors</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat__value" id="totalPaid">$0</div>
+                            <div class="stat__label">Total Paid Out</div>
+                        </div>
                     </div>
                 </div>
                 <div class="hero__image">
                     <div class="floating-card">
                         <div class="card__header">
                             <h3>Live Contract Stats</h3>
-                            <div class="live-indicator"><span class="dot"></span> LIVE</div>
+                            <div class="live-indicator">
+                                <span class="dot"></span>
+                                LIVE
+                            </div>
                         </div>
                         <div class="card__content">
-                            <div class="stat-item"><span>Contract Balance</span><span class="value" id="contractBalance">0 USDT</span></div>
-                            <div class="stat-item"><span>Daily ROI Rate</span><span class="value">1% - 2%</span></div>
-                            <div class="stat-item"><span>Investment Plans</span><span class="value">5 Tiers</span></div>
-                            <div class="stat-item"><span>Referral Levels</span><span class="value">4 Levels</span></div>
+                            <div class="stat-item">
+                                <span>Contract Balance</span>
+                                <span class="value" id="contractBalance">0 USDT</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Daily ROI Rate</span>
+                                <span class="value">1% - 2%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Investment Plans</span>
+                                <span class="value">5 Tiers</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Referral Levels</span>
+                                <span class="value">4 Levels</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -281,24 +1596,99 @@
                     <h2 class="section__title">Your Dashboard</h2>
                     <p class="section__subtitle">Monitor your investments and earnings in real-time</p>
                 </div>
-                <div class="alert alert-warning" id="dashboardWalletAlert"><i class="fas fa-exclamation-triangle"></i><span>Please connect your wallet to view your dashboard</span></div>
+
+                <!-- Wallet Connection Alert -->
+                <div class="alert alert-warning" id="dashboardWalletAlert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Please connect your wallet to view your dashboard</span>
+                </div>
+
+                <!-- Quick Stats -->
                 <div class="quick-stats" id="quickStats" style="display: none;">
-                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-wallet"></i></div><div class="stat-info"><div class="stat-value" id="totalDeposits">0 USDT</div><div class="stat-label">Total Deposits</div></div></div>
-                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-chart-line"></i></div><div class="stat-info"><div class="stat-value" id="availableEarnings">0 USDT</div><div class="stat-label">Available Earnings</div></div></div>
-                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-gift"></i></div><div class="stat-info"><div class="stat-value" id="referralBonus">0 USDT</div><div class="stat-label">Referral Bonus</div></div></div>
-                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-info"><div class="stat-value" id="directReferrals">0</div><div class="stat-label">Direct Referrals</div></div></div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalDeposits">0 USDT</div>
+                            <div class="stat-label">Total Deposits</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="availableEarnings">0 USDT</div>
+                            <div class="stat-label">Available Earnings</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="referralBonus">0 USDT</div>
+                            <div class="stat-label">Referral Bonus</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="directReferrals">0</div>
+                            <div class="stat-label">Direct Referrals</div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Action Buttons -->
                 <div class="action-buttons" id="actionButtons" style="display: none;">
-                    <button class="btn btn--primary" data-section="invest"><i class="fas fa-plus"></i> New Investment</button>
-                    <button class="btn btn--outline" id="withdrawEarnings"><i class="fas fa-download"></i> Withdraw Earnings</button>
-                    <button class="btn btn--outline" data-section="referral"><i class="fas fa-share"></i> Referral Program</button>
+                    <button class="btn btn--primary" data-section="invest">
+                        <i class="fas fa-plus"></i>
+                        New Investment
+                    </button>
+                    <button class="btn btn--outline" id="withdrawEarnings">
+                        <i class="fas fa-download"></i>
+                        Withdraw Earnings
+                    </button>
+                    <button class="btn btn--outline" data-section="referral">
+                        <i class="fas fa-share"></i>
+                        Referral Program
+                    </button>
                 </div>
+
+                <!-- Active Investments -->
                 <div class="investments-table" id="investmentsSection" style="display: none;">
-                    <table><thead><tr><th>Plan</th><th>Amount</th><th>Start Date</th><th>Daily ROI</th><th>Total Withdrawn</th><th>Status</th></tr></thead><tbody id="investmentsTableBody"></tbody></table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Plan</th>
+                                <th>Amount</th>
+                                <th>Start Date</th>
+                                <th>Daily ROI</th>
+                                <th>Total Withdrawn</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="investmentsTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
+
+                <!-- No Investments Message -->
                 <div class="empty-state" id="noInvestmentsMessage" style="display: none;">
-                    <div class="empty-icon"><i class="fas fa-chart-pie"></i></div><h3>No Active Investments</h3><p>Start your first investment to begin earning daily returns</p>
-                    <button class="btn btn--primary" data-section="invest"><i class="fas fa-rocket"></i> Start Investing</button>
+                    <div class="empty-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>No Active Investments</h3>
+                    <p>Start your first investment to begin earning daily returns</p>
+                    <button class="btn btn--primary" data-section="invest">
+                        <i class="fas fa-rocket"></i>
+                        Start Investing
+                    </button>
                 </div>
             </div>
         </section>
@@ -310,44 +1700,91 @@
                     <h2 class="section__title">Start Investing</h2>
                     <p class="section__subtitle">Choose your investment plan and start earning daily returns</p>
                 </div>
-                <div class="alert alert-warning" id="investWalletAlert"><i class="fas fa-exclamation-triangle"></i><span>Please connect your wallet to start investing</span></div>
-                <div class="investment-plans" id="investmentPlans"></div>
+
+                <!-- Wallet Connection Alert -->
+                <div class="alert alert-warning" id="investWalletAlert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Please connect your wallet to start investing</span>
+                </div>
+
+                <!-- Investment Plans -->
+                <div class="investment-plans" id="investmentPlans">
+                    <!-- Plans will be populated by JavaScript -->
+                </div>
+
+                <!-- Investment Form -->
                 <div class="investment-form-container" id="investmentForm">
                     <div class="form-header">
                         <h2>Complete Your Investment</h2>
-                        <button class="btn btn--outline btn-sm" id="backToPlans"><i class="fas fa-arrow-left"></i> Back to Plans</button>
+                        <button class="btn btn--outline btn-sm" id="backToPlans">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Plans
+                        </button>
                     </div>
+
                     <div class="investment-form">
                         <div class="form-group">
                             <label for="selectedPlan">Selected Plan</label>
-                            <div class="plan-summary" id="selectedPlanSummary"></div>
+                            <div class="plan-summary" id="selectedPlanSummary">
+                                <!-- Plan summary will be populated -->
+                            </div>
                         </div>
+
                         <div class="form-group">
                             <label for="investmentAmount">Investment Amount (USDT)</label>
-                            <input type="number" id="investmentAmount" class="form-input" placeholder="Enter amount in USDT" min="20" step="1">
-                            <div class="amount-range" id="amountRange"></div>
+                            <input type="number" id="investmentAmount" class="form-input" 
+                                   placeholder="Enter amount in USDT" min="20" step="1">
+                            <div class="amount-range" id="amountRange">
+                                <!-- Range will be populated -->
+                            </div>
                         </div>
+
                         <div class="form-group">
                             <label for="referrerAddress">Referrer Address (Optional)</label>
-                            <input type="text" id="referrerAddress" class="form-input" placeholder="Enter referrer wallet address">
+                            <input type="text" id="referrerAddress" class="form-input" 
+                                   placeholder="Enter referrer wallet address">
                             <small>If you were referred by someone, enter their wallet address here</small>
                         </div>
+
                         <div class="investment-summary">
                             <h3>Investment Summary</h3>
-                            <div class="summary-item"><span>Investment Amount:</span><span id="summaryAmount">0 USDT</span></div>
-                            <div class="summary-item"><span>Platform Fee (10%):</span><span id="summaryFee">0 USDT</span></div>
-                            <div class="summary-item total"><span>Total to Pay:</span><span id="summaryTotal">0 USDT</span></div>
+                            <div class="summary-item">
+                                <span>Investment Amount:</span>
+                                <span id="summaryAmount">0 USDT</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Platform Fee (10%):</span>
+                                <span id="summaryFee">0 USDT</span>
+                            </div>
+                            <div class="summary-item total">
+                                <span>Total to Pay:</span>
+                                <span id="summaryTotal">0 USDT</span>
+                            </div>
                         </div>
-                        <button class="btn btn--primary btn-lg" id="confirmInvestment"><i class="fas fa-check-circle"></i> Confirm Investment</button>
+
+                        <button class="btn btn--primary btn-lg" id="confirmInvestment">
+                            <i class="fas fa-check-circle"></i>
+                            Confirm Investment
+                        </button>
                     </div>
                 </div>
+
+                <!-- Investment Success -->
                 <div class="investment-success" id="investmentSuccess">
-                    <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
                     <h2>Investment Successful!</h2>
                     <p>Your investment has been processed successfully. You can now monitor your earnings in the dashboard.</p>
                     <div class="success-actions">
-                        <button class="btn btn--primary" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Go to Dashboard</button>
-                        <button class="btn btn--outline" id="newInvestment"><i class="fas fa-plus"></i> New Investment</button>
+                        <button class="btn btn--primary" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Go to Dashboard
+                        </button>
+                        <button class="btn btn--outline" id="newInvestment">
+                            <i class="fas fa-plus"></i>
+                            New Investment
+                        </button>
                     </div>
                 </div>
             </div>
@@ -360,42 +1797,211 @@
                     <h2 class="section__title">Referral Program</h2>
                     <p class="section__subtitle">Earn commissions from 4 levels of your referral network</p>
                 </div>
-                <div class="alert alert-warning" id="referralWalletAlert"><i class="fas fa-exclamation-triangle"></i><span>Please connect your wallet to access referral program</span></div>
-                <div class="referral-stats" id="referralStats" style="display: none;">
-                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-info"><div class="stat-value" id="totalTeam">0</div><div class="stat-label">Total Team</div></div></div>
-                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-user-plus"></i></div><div class="stat-info"><div class="stat-value" id="referralDirectReferrals">0</div><div class="stat-label">Direct Referrals</div></div></div>
-                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-gift"></i></div><div class="stat-info"><div class="stat-value" id="totalBonus">0 USDT</div><div class="stat-label">Total Bonus Earned</div></div></div>
-                    <div class="stat-card"><div class="stat-icon"><i class="fas fa-wallet"></i></div><div class="stat-info"><div class="stat-value" id="availableBonus">0 USDT</div><div class="stat-label">Available Bonus</div></div></div>
+
+                <!-- Wallet Connection Alert -->
+                <div class="alert alert-warning" id="referralWalletAlert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Please connect your wallet to access referral program</span>
                 </div>
+
+                <!-- Referral Stats -->
+                <div class="referral-stats" id="referralStats" style="display: none;">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalTeam">0</div>
+                            <div class="stat-label">Total Team</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="referralDirectReferrals">0</div>
+                            <div class="stat-label">Direct Referrals</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="totalBonus">0 USDT</div>
+                            <div class="stat-label">Total Bonus Earned</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="availableBonus">0 USDT</div>
+                            <div class="stat-label">Available Bonus</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referral Link Section -->
                 <div class="referral-link-container" id="referralLinkSection" style="display: none;">
-                    <div class="section-header"><h2>Your Referral Link</h2><p>Share this link with your friends and earn commissions from their investments</p></div>
+                    <div class="section-header">
+                        <h2>Your Referral Link</h2>
+                        <p>Share this link with your friends and earn commissions from their investments</p>
+                    </div>
                     <div class="link-display">
                         <input type="text" id="referralLink" class="link-input" readonly>
-                        <button class="btn btn--primary" id="copyLink"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="btn btn--primary" id="copyLink">
+                            <i class="fas fa-copy"></i>
+                            Copy
+                        </button>
                     </div>
                     <div class="social-share">
-                        <button class="social-btn" id="shareTelegram"><i class="fab fa-telegram"></i></button>
-                        <button class="social-btn" id="shareTwitter"><i class="fab fa-twitter"></i></button>
-                        <button class="social-btn" id="shareWhatsapp"><i class="fab fa-whatsapp"></i></button>
+                        <button class="social-btn" id="shareTelegram">
+                            <i class="fab fa-telegram"></i>
+                        </button>
+                        <button class="social-btn" id="shareTwitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="social-btn" id="shareWhatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
                     </div>
                 </div>
+
+                <!-- Referral Levels -->
                 <div class="levels-grid">
-                    <div class="level-card"><div class="level-header"><div class="level-number">1</div><div class="level-commission">5% Commission</div></div><div class="level-requirements"><div class="requirement"><i class="fas fa-check"></i><span>No minimum referrals required</span></div><div class="requirement"><i class="fas fa-check"></i><span>Active investment required</span></div></div><div class="level-stats"><div class="stat"><span>Your Referrals:</span><span id="level1Count">0</span></div></div></div>
-                    <div class="level-card"><div class="level-header"><div class="level-number">2</div><div class="level-commission">3% Commission</div></div><div class="level-requirements"><div class="requirement"><i class="fas fa-check"></i><span>10+ direct referrals</span></div><div class="requirement"><i class="fas fa-check"></i><span>Active investment required</span></div></div><div class="level-stats"><div class="stat"><span>Your Referrals:</span><span id="level2Count">0</span></div></div></div>
-                    <div class="level-card"><div class="level-header"><div class="level-number">3</div><div class="level-commission">1% Commission</div></div><div class="level-requirements"><div class="requirement"><i class="fas fa-check"></i><span>15+ direct referrals</span></div><div class="requirement"><i class="fas fa-check"></i><span>Active investment required</span></div></div><div class="level-stats"><div class="stat"><span>Your Referrals:</span><span id="level3Count">0</span></div></div></div>
-                    <div class="level-card"><div class="level-header"><div class="level-number">4</div><div class="level-commission">1% Commission</div></div><div class="level-requirements"><div class="requirement"><i class="fas fa-check"></i><span>20+ direct referrals</span></div><div class="requirement"><i class="fas fa-check"></i><span>Active investment required</span></div></div><div class="level-stats"><div class="stat"><span>Your Referrals:</span><span id="level4Count">0</span></div></div></div>
+                    <div class="level-card">
+                        <div class="level-header">
+                            <div class="level-number">1</div>
+                            <div class="level-commission">5% Commission</div>
+                        </div>
+                        <div class="level-requirements">
+                            <div class="requirement">
+                                <i class="fas fa-check"></i>
+                                <span>No minimum referrals required</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-check"></i>
+                                <span>Active investment required</span>
+                            </div>
+                        </div>
+                        <div class="level-stats">
+                            <div class="stat">
+                                <span>Your Referrals:</span>
+                                <span id="level1Count">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="level-card">
+                        <div class="level-header">
+                            <div class="level-number">2</div>
+                            <div class="level-commission">3% Commission</div>
+                        </div>
+                        <div class="level-requirements">
+                            <div class="requirement">
+                                <i class="fas fa-check"></i>
+                                <span>10+ direct referrals</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-check"></i>
+                                <span>Active investment required</span>
+                            </div>
+                        </div>
+                        <div class="level-stats">
+                            <div class="stat">
+                                <span>Your Referrals:</span>
+                                <span id="level2Count">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="level-card">
+                        <div class="level-header">
+                            <div class="level-number">3</div>
+                            <div class="level-commission">1% Commission</div>
+                        </div>
+                        <div class="level-requirements">
+                            <div class="requirement">
+                                <i class="fas fa-check"></i>
+                                <span>15+ direct referrals</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-check"></i>
+                                <span>Active investment required</span>
+                            </div>
+                        </div>
+                        <div class="level-stats">
+                            <div class="stat">
+                                <span>Your Referrals:</span>
+                                <span id="level3Count">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="level-card">
+                        <div class="level-header">
+                            <div class="level-number">4</div>
+                            <div class="level-commission">1% Commission</div>
+                        </div>
+                        <div class="level-requirements">
+                            <div class="requirement">
+                                <i class="fas fa-check"></i>
+                                <span>20+ direct referrals</span>
+                            </div>
+                            <div class="requirement">
+                                <i class="fas fa-check"></i>
+                                <span>Active investment required</span>
+                            </div>
+                        </div>
+                        <div class="level-stats">
+                            <div class="stat">
+                                <span>Your Referrals:</span>
+                                <span id="level4Count">0</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Bonus Claim Section -->
                 <div class="bonus-claim-section" id="bonusClaimSection" style="display: none;">
                     <div class="claim-card">
-                        <div class="claim-info"><h3>Available Referral Bonus</h3><p>You have unclaimed referral commissions ready for withdrawal</p><div class="bonus-amount" id="claimableBonus">0 USDT</div></div>
-                        <button class="btn btn--primary" id="claimBonus"><i class="fas fa-gift"></i> Claim Bonus</button>
+                        <div class="claim-info">
+                            <h3>Available Referral Bonus</h3>
+                            <p>You have unclaimed referral commissions ready for withdrawal</p>
+                            <div class="bonus-amount" id="claimableBonus">0 USDT</div>
+                        </div>
+                        <button class="btn btn--primary" id="claimBonus">
+                            <i class="fas fa-gift"></i>
+                            Claim Bonus
+                        </button>
                     </div>
                 </div>
+
+                <!-- How It Works -->
                 <div class="steps-grid">
-                    <div class="step-card"><div class="step-number">1</div><h3>Share Your Link</h3><p>Share your unique referral link with friends and community members</p></div>
-                    <div class="step-card"><div class="step-number">2</div><h3>They Invest</h3><p>When someone invests using your link, they become part of your team</p></div>
-                    <div class="step-card"><div class="step-number">3</div><h3>Earn Commissions</h3><p>Earn commissions from their investments across 4 different levels</p></div>
-                    <div class="step-card"><div class="step-number">4</div><h3>Claim Rewards</h3><p>Withdraw your referral bonuses anytime to your wallet</p></div>
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Share Your Link</h3>
+                        <p>Share your unique referral link with friends and community members</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>They Invest</h3>
+                        <p>When someone invests using your link, they become part of your team</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Earn Commissions</h3>
+                        <p>Earn commissions from their investments across 4 different levels</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>Claim Rewards</h3>
+                        <p>Withdraw your referral bonuses anytime to your wallet</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -406,21 +2012,51 @@
         <div class="container">
             <div class="footer__content">
                 <div class="footer__brand">
-                    <div class="footer__logo"><img src="https://files.catbox.moe/3o41t1.png" alt="Aurion Finance"><span>AURION FINANCE</span></div>
-                    <p class="footer__description">Professional USDT investment platform with secure smart contract technology and guaranteed returns.</p>
+                    <div class="footer__logo">
+                        <img src="https://files.catbox.moe/3o41t1.png" alt="Aurion Finance">
+                        <span>AURION FINANCE</span>
+                    </div>
+                    <p class="footer__description">
+                        Professional USDT investment platform with secure smart contract technology and guaranteed returns.
+                    </p>
                     <div class="footer__social">
-                        <a href="#" class="social__link"><i class="fab fa-telegram"></i></a>
-                        <a href="#" class="social__link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social__link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social__link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="social__link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social__link">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="footer__links">
-                    <div class="footer__column"><h4>Platform</h4><a class="footer-link" data-section="home">Home</a><a class="footer-link" data-section="invest">Invest</a><a class="footer-link" data-section="referral">Referral</a><a class="footer-link" data-section="dashboard">Dashboard</a></div>
-                    <div class="footer__column"><h4>Resources</h4><a href="#">Whitepaper</a><a href="#">Audit Report</a><a href="#">Documentation</a><a href="#">FAQ</a></div>
-                    <div class="footer__column"><h4>Legal</h4><a href="#">Terms of Service</a><a href="#">Privacy Policy</a><a href="#">Risk Disclosure</a></div>
+                    <div class="footer__column">
+                        <h4>Platform</h4>
+                        <a class="footer-link" data-section="home">Home</a>
+                        <a class="footer-link" data-section="invest">Invest</a>
+                        <a class="footer-link" data-section="referral">Referral</a>
+                        <a class="footer-link" data-section="dashboard">Dashboard</a>
+                    </div>
+                    <div class="footer__column">
+                        <h4>Resources</h4>
+                        <a href="#">Whitepaper</a>
+                        <a href="#">Audit Report</a>
+                        <a href="#">Documentation</a>
+                        <a href="#">FAQ</a>
+                    </div>
+                    <div class="footer__column">
+                        <h4>Legal</h4>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Risk Disclosure</a>
+                    </div>
                 </div>
             </div>
-            <div class="footer__bottom"><p>&copy; 2024 Aurion Finance. All rights reserved.</p></div>
+            <div class="footer__bottom">
+                <p>&copy; 2024 Aurion Finance. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
@@ -429,15 +2065,20 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
-        // Contract Configuration
+        // Contract Configuration - REAL CONTRACT
         const CONTRACT_ADDRESS = '0xaDb78631123CD4B4686365423B80C344E438b7d6';
+        
+        // USDT Token Address on BSC
         const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955';
         
-        // USDT ABI (Simplified)
+        // USDT ABI (simplified)
         const USDT_ABI = [
             {
                 "constant": false,
-                "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}],
+                "inputs": [
+                    {"name": "_spender", "type": "address"},
+                    {"name": "_value", "type": "uint256"}
+                ],
                 "name": "approve",
                 "outputs": [{"name": "", "type": "bool"}],
                 "type": "function"
@@ -451,7 +2092,10 @@
             },
             {
                 "constant": true,
-                "inputs": [{"name": "_owner", "type": "address"}, {"name": "_spender", "type": "address"}],
+                "inputs": [
+                    {"name": "_owner", "type": "address"},
+                    {"name": "_spender", "type": "address"}
+                ],
                 "name": "allowance",
                 "outputs": [{"name": "", "type": "uint256"}],
                 "type": "function"
@@ -465,8 +2109,138 @@
             }
         ];
 
-        // Main Contract ABI (Fixed untuk menghindari error)
+        // Main Contract ABI - SESUAI DENGAN CONTRACT YANG DIBERIKAN
         const CONTRACT_ABI = [
+            {
+                "inputs": [
+                    {"internalType": "address", "name": "_usdtToken", "type": "address"}
+                ],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+                    {"indexed": false, "internalType": "uint256", "name": "planId", "type": "uint256"},
+                    {"indexed": false, "internalType": "address", "name": "upline", "type": "address"}
+                ],
+                "name": "Deposit",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "previousOwner", "type": "address"},
+                    {"indexed": true, "internalType": "address", "name": "newOwner", "type": "address"}
+                ],
+                "name": "OwnershipTransferred",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "owner", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "totalBalance", "type": "uint256"}
+                ],
+                "name": "PoolWithdrawn",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+                    {"indexed": true, "internalType": "address", "name": "referral", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "level", "type": "uint256"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+                ],
+                "name": "ReferralBonus",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "referral", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+                    {"indexed": false, "internalType": "address", "name": "owner", "type": "address"}
+                ],
+                "name": "ReferralBonusExpired",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+                    {"indexed": false, "internalType": "uint256", "name": "fee", "type": "uint256"}
+                ],
+                "name": "Withdraw",
+                "type": "event"
+            },
+            {
+                "inputs": [],
+                "name": "DAILY_WITHDRAWAL_LIMIT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "MIN_ACTIVE_INVESTMENT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "MIN_DEPOSIT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "MIN_WITHDRAWAL",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "OWNER_FEE_PERCENT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "TIME_STEP",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "WITHDRAWAL_FEE_PERCENT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
+                "name": "calculateAvailableEarnings",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "", "type": "address"}, {"internalType": "uint256", "name": "", "type": "uint256"}],
+                "name": "dailyWithdrawals",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
             {
                 "inputs": [{"internalType": "uint256", "name": "_amount", "type": "uint256"}, {"internalType": "uint256", "name": "_planId", "type": "uint256"}, {"internalType": "address", "name": "_upline", "type": "address"}],
                 "name": "deposit",
@@ -475,10 +2249,36 @@
                 "type": "function"
             },
             {
+                "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
+                "name": "getActiveInvestmentStatus",
+                "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
                 "inputs": [],
-                "name": "withdraw",
-                "outputs": [],
-                "stateMutability": "nonpayable",
+                "name": "getContractBalance",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getContractStats",
+                "outputs": [
+                    {"internalType": "uint256", "name": "totalExpiredBonuses", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalWithdrawalFeesCollected", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalReferralBonusesPaid", "type": "uint256"},
+                    {"internalType": "uint256", "name": "currentContractBalance", "type": "uint256"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getPlansCount",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
                 "type": "function"
             },
             {
@@ -497,24 +2297,111 @@
                 "type": "function"
             },
             {
-                "inputs": [],
-                "name": "getContractBalance",
-                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
                 "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
-                "name": "calculateAvailableEarnings",
+                "name": "getUserInvestments",
+                "outputs": [
+                    {
+                        "components": [
+                            {"internalType": "uint256", "name": "amount", "type": "uint256"},
+                            {"internalType": "uint256", "name": "planId", "type": "uint256"},
+                            {"internalType": "uint256", "name": "startTime", "type": "uint256"},
+                            {"internalType": "uint256", "name": "lastWithdrawalTime", "type": "uint256"},
+                            {"internalType": "uint256", "name": "totalWithdrawn", "type": "uint256"},
+                            {"internalType": "bool", "name": "active", "type": "bool"}
+                        ],
+                        "internalType": "struct Aurion.UserInvestment[]",
+                        "name": "",
+                        "type": "tuple[]"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "name": "investmentPlans",
+                "outputs": [
+                    {"internalType": "uint256", "name": "minAmount", "type": "uint256"},
+                    {"internalType": "uint256", "name": "maxAmount", "type": "uint256"},
+                    {"internalType": "uint256", "name": "dailyROI", "type": "uint256"},
+                    {"internalType": "uint256", "name": "duration", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalROI", "type": "uint256"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "owner",
+                "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "name": "referralLevels",
+                "outputs": [
+                    {"internalType": "uint256", "name": "percentage", "type": "uint256"},
+                    {"internalType": "uint256", "name": "minDirectReferrals", "type": "uint256"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalExpiredReferralBonuses",
                 "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                 "stateMutability": "view",
                 "type": "function"
             },
             {
                 "inputs": [],
-                "name": "MIN_DEPOSIT",
+                "name": "totalReferralBonuses",
                 "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
                 "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalWithdrawalFees",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "usdtToken",
+                "outputs": [{"internalType": "contract IERC20", "name": "", "type": "address"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "name": "users",
+                "outputs": [
+                    {"internalType": "address", "name": "upline", "type": "address"},
+                    {"internalType": "uint256", "name": "totalDeposits", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalWithdrawn", "type": "uint256"},
+                    {"internalType": "uint256", "name": "directReferrals", "type": "uint256"},
+                    {"internalType": "uint256", "name": "referralBonus", "type": "uint256"},
+                    {"internalType": "uint256", "name": "lastWithdrawal", "type": "uint256"},
+                    {"internalType": "bool", "name": "exists", "type": "bool"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "withdraw",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "withdrawExpiredBonuses",
+                "outputs": [],
+                "stateMutability": "nonpayable",
                 "type": "function"
             }
         ];
@@ -525,7 +2412,22 @@
         let usdtContract;
         let userAccount;
         let selectedPlan = null;
-        let usdtDecimals = 6;
+        let referralAddress = null;
+
+        // DOM Elements
+        const preloader = document.querySelector('.preloader');
+        const navMenu = document.getElementById('nav-menu');
+        const navToggle = document.getElementById('nav-toggle');
+        const connectWalletBtn = document.getElementById('connectWallet');
+        const notification = document.getElementById('notification');
+
+        // Section Elements
+        const sections = {
+            home: document.getElementById('home'),
+            dashboard: document.getElementById('dashboard'),
+            invest: document.getElementById('invest'),
+            referral: document.getElementById('referral')
+        };
 
         // Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
@@ -533,33 +2435,39 @@
             setupEventListeners();
             generateInvestmentPlans();
             checkPreloader();
+            checkURLForReferral();
         });
+
+        // Check URL for referral parameter
+        function checkURLForReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refAddress = urlParams.get('ref');
+            
+            if (refAddress) {
+                referralAddress = refAddress;
+                document.getElementById('referrerAddress').value = refAddress;
+                showNotification('Referral address detected from URL!', 'success');
+            }
+        }
 
         // Initialize Web3 and Contract
         async function initializeApp() {
             if (typeof window.ethereum !== 'undefined') {
                 try {
                     web3 = new Web3(window.ethereum);
+                    
+                    // Initialize contracts
                     contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
                     usdtContract = new web3.eth.Contract(USDT_ABI, USDT_ADDRESS);
                     
-                    console.log('Web3 initialized successfully');
-                    
-                    // Get USDT decimals
-                    try {
-                        const decimals = await usdtContract.methods.decimals().call();
-                        usdtDecimals = parseInt(decimals);
-                        console.log('USDT Decimals:', usdtDecimals);
-                    } catch (error) {
-                        console.log('Using default USDT decimals: 6');
-                        usdtDecimals = 6;
-                    }
-                    
+                    console.log('Web3 and contracts initialized successfully');
+
+                    // Check if wallet is already connected
                     const accounts = await web3.eth.getAccounts();
                     if (accounts.length > 0) {
                         userAccount = accounts[0];
                         updateWalletUI();
-                        await loadContractData();
+                        loadContractData();
                     }
                 } catch (error) {
                     console.error('Error initializing Web3:', error);
@@ -573,24 +2481,38 @@
         // Setup Event Listeners
         function setupEventListeners() {
             // Navigation
-            document.getElementById('nav-toggle').addEventListener('click', () => {
-                document.getElementById('nav-menu').classList.toggle('active');
-            });
+            navToggle.addEventListener('click', toggleNavMenu);
             
             // Navigation links
-            document.querySelectorAll('.nav__link, .footer-link, [data-section]').forEach(element => {
-                if (!element.classList.contains('nav__link') || element.classList.contains('nav__link')) {
-                    element.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const section = e.target.getAttribute('data-section');
-                        showSection(section);
-                        document.getElementById('nav-menu').classList.remove('active');
-                    });
-                }
+            document.querySelectorAll('.nav__link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = e.target.getAttribute('data-section');
+                    showSection(section);
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // Footer links
+            document.querySelectorAll('.footer-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = e.target.getAttribute('data-section');
+                    showSection(section);
+                });
+            });
+
+            // Buttons with data-section
+            document.querySelectorAll('[data-section]').forEach(button => {
+                if (button.classList.contains('nav__link')) return;
+                button.addEventListener('click', (e) => {
+                    const section = e.target.getAttribute('data-section');
+                    showSection(section);
+                });
             });
 
             // Wallet connection
-            document.getElementById('connectWallet').addEventListener('click', connectWallet);
+            connectWalletBtn.addEventListener('click', connectWallet);
 
             // Investment related
             document.getElementById('backToPlans').addEventListener('click', showPlans);
@@ -603,33 +2525,59 @@
 
             // Referral related
             document.getElementById('copyLink').addEventListener('click', copyReferralLink);
+            document.getElementById('shareTelegram').addEventListener('click', () => shareOnSocial('telegram'));
+            document.getElementById('shareTwitter').addEventListener('click', () => shareOnSocial('twitter'));
+            document.getElementById('shareWhatsapp').addEventListener('click', () => shareOnSocial('whatsapp'));
             document.getElementById('claimBonus').addEventListener('click', claimReferralBonus);
 
             // Wallet account changes
             if (window.ethereum) {
                 window.ethereum.on('accountsChanged', (accounts) => {
-                    userAccount = accounts.length > 0 ? accounts[0] : null;
-                    updateWalletUI();
-                    if (userAccount) loadContractData();
+                    if (accounts.length === 0) {
+                        userAccount = null;
+                        updateWalletUI();
+                        showWalletAlerts();
+                    } else {
+                        userAccount = accounts[0];
+                        updateWalletUI();
+                        loadContractData();
+                    }
+                });
+
+                window.ethereum.on('chainChanged', () => {
+                    window.location.reload();
                 });
             }
         }
 
         // Navigation Functions
+        function toggleNavMenu() {
+            navMenu.classList.toggle('active');
+        }
+
         function showSection(sectionName) {
-            document.querySelectorAll('.section').forEach(section => {
+            // Hide all sections
+            Object.values(sections).forEach(section => {
                 section.style.display = 'none';
             });
+
+            // Remove active class from all nav links
             document.querySelectorAll('.nav__link').forEach(link => {
                 link.classList.remove('active');
             });
-            
-            if (document.getElementById(sectionName)) {
-                document.getElementById(sectionName).style.display = 'block';
+
+            // Show selected section
+            if (sections[sectionName]) {
+                sections[sectionName].style.display = 'block';
+                
+                // Add active class to corresponding nav link
                 document.querySelector(`.nav__link[data-section="${sectionName}"]`).classList.add('active');
                 
-                if (sectionName === 'dashboard' || sectionName === 'referral') {
-                    loadUserData();
+                // Load section-specific data
+                if (sectionName === 'dashboard') {
+                    loadDashboardData();
+                } else if (sectionName === 'referral') {
+                    loadReferralData();
                 }
             }
         }
@@ -642,11 +2590,45 @@
             }
 
             try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                userAccount = accounts[0];
-                updateWalletUI();
-                await loadContractData();
-                showNotification('Wallet connected successfully!', 'success');
+                // Check if we're on BSC
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (chainId !== '0x38') { // BSC Mainnet
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0x38' }],
+                        });
+                    } catch (switchError) {
+                        // If BSC is not added, add it
+                        if (switchError.code === 4902) {
+                            await window.ethereum.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [{
+                                    chainId: '0x38',
+                                    chainName: 'Binance Smart Chain',
+                                    nativeCurrency: {
+                                        name: 'BNB',
+                                        symbol: 'BNB',
+                                        decimals: 18
+                                    },
+                                    rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                                    blockExplorerUrls: ['https://bscscan.com/']
+                                }]
+                            });
+                        }
+                    }
+                }
+
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+
+                if (accounts.length > 0) {
+                    userAccount = accounts[0];
+                    updateWalletUI();
+                    loadContractData();
+                    showNotification('Wallet connected successfully!', 'success');
+                }
             } catch (error) {
                 console.error('Error connecting wallet:', error);
                 showNotification('Failed to connect wallet', 'error');
@@ -654,36 +2636,63 @@
         }
 
         function updateWalletUI() {
-            const connectBtn = document.getElementById('connectWallet');
             if (userAccount) {
-                connectBtn.innerHTML = `<i class="fas fa-wallet"></i> ${userAccount.substring(0, 6)}...${userAccount.substring(38)}`;
-                document.querySelectorAll('.alert-warning').forEach(alert => alert.style.display = 'none');
-                document.getElementById('quickStats').style.display = 'grid';
-                document.getElementById('actionButtons').style.display = 'flex';
-                document.getElementById('referralStats').style.display = 'grid';
-                document.getElementById('referralLinkSection').style.display = 'block';
-                document.getElementById('bonusClaimSection').style.display = 'block';
+                connectWalletBtn.innerHTML = `
+                    <i class="fas fa-wallet"></i>
+                    ${userAccount.substring(0, 6)}...${userAccount.substring(userAccount.length - 4)}
+                `;
+                hideWalletAlerts();
             } else {
-                connectBtn.innerHTML = '<i class="fas fa-wallet"></i> Connect Wallet';
-                document.querySelectorAll('.alert-warning').forEach(alert => alert.style.display = 'flex');
-                document.getElementById('quickStats').style.display = 'none';
-                document.getElementById('actionButtons').style.display = 'none';
-                document.getElementById('referralStats').style.display = 'none';
-                document.getElementById('referralLinkSection').style.display = 'none';
-                document.getElementById('bonusClaimSection').style.display = 'none';
+                connectWalletBtn.innerHTML = `
+                    <i class="fas fa-wallet"></i>
+                    Connect Wallet
+                `;
+                showWalletAlerts();
             }
+        }
+
+        function showWalletAlerts() {
+            document.getElementById('dashboardWalletAlert').style.display = 'flex';
+            document.getElementById('investWalletAlert').style.display = 'flex';
+            document.getElementById('referralWalletAlert').style.display = 'flex';
+            
+            document.getElementById('quickStats').style.display = 'none';
+            document.getElementById('actionButtons').style.display = 'none';
+            document.getElementById('referralStats').style.display = 'none';
+            document.getElementById('referralLinkSection').style.display = 'none';
+            document.getElementById('bonusClaimSection').style.display = 'none';
+        }
+
+        function hideWalletAlerts() {
+            document.getElementById('dashboardWalletAlert').style.display = 'none';
+            document.getElementById('investWalletAlert').style.display = 'none';
+            document.getElementById('referralWalletAlert').style.display = 'none';
+            
+            document.getElementById('quickStats').style.display = 'grid';
+            document.getElementById('actionButtons').style.display = 'flex';
+            document.getElementById('referralStats').style.display = 'grid';
+            document.getElementById('referralLinkSection').style.display = 'block';
+            document.getElementById('bonusClaimSection').style.display = 'block';
         }
 
         // Contract Data Functions
         async function loadContractData() {
-            if (!contract || !userAccount) return;
+            if (!contract) return;
 
             try {
+                // Load contract stats
                 const contractBalance = await contract.methods.getContractBalance().call();
-                document.getElementById('contractBalance').textContent = `${formatUSDT(contractBalance)} USDT`;
-                document.getElementById('totalTVL').textContent = `$${formatUSDT(contractBalance)}`;
                 
-                await loadUserData();
+                // Update home stats
+                const contractBalanceFormatted = web3.utils.fromWei(contractBalance, 'ether');
+                document.getElementById('contractBalance').textContent = `${parseFloat(contractBalanceFormatted).toFixed(2)} USDT`;
+                document.getElementById('totalTVL').textContent = `$${parseFloat(contractBalanceFormatted).toLocaleString()}`;
+
+                // Load user-specific data if wallet is connected
+                if (userAccount) {
+                    await loadUserData();
+                }
+
             } catch (error) {
                 console.error('Error loading contract data:', error);
             }
@@ -697,26 +2706,22 @@
                 const availableEarnings = await contract.methods.calculateAvailableEarnings(userAccount).call();
 
                 // Update dashboard
-                document.getElementById('totalDeposits').textContent = `${formatUSDT(userInfo.totalDeposits)} USDT`;
-                document.getElementById('availableEarnings').textContent = `${formatUSDT(availableEarnings)} USDT`;
-                document.getElementById('referralBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
+                document.getElementById('totalDeposits').textContent = `${web3.utils.fromWei(userInfo.totalDeposits, 'ether')} USDT`;
+                document.getElementById('availableEarnings').textContent = `${web3.utils.fromWei(availableEarnings, 'ether')} USDT`;
+                document.getElementById('referralBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
                 document.getElementById('directReferrals').textContent = userInfo.directReferrals;
 
                 // Update referral section
                 document.getElementById('totalTeam').textContent = userInfo.directReferrals;
                 document.getElementById('referralDirectReferrals').textContent = userInfo.directReferrals;
-                document.getElementById('totalBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
-                document.getElementById('availableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
-                document.getElementById('claimableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
+                document.getElementById('availableBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
+                document.getElementById('claimableBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
 
-                // Show/hide investments table
-                if (userInfo.hasActiveInvestment) {
-                    document.getElementById('investmentsSection').style.display = 'block';
-                    document.getElementById('noInvestmentsMessage').style.display = 'none';
-                } else {
-                    document.getElementById('investmentsSection').style.display = 'none';
-                    document.getElementById('noInvestmentsMessage').style.display = 'block';
-                }
+                // Update level counts
+                updateLevelCounts(userInfo.directReferrals);
+
+                // Load user investments
+                await loadUserInvestments();
 
                 // Generate referral link
                 generateReferralLink();
@@ -726,35 +2731,188 @@
             }
         }
 
+        async function loadUserInvestments() {
+            if (!contract || !userAccount) return;
+
+            try {
+                const investments = await contract.methods.getUserInvestments(userAccount).call();
+                const tableBody = document.getElementById('investmentsTableBody');
+                const noInvestmentsMessage = document.getElementById('noInvestmentsMessage');
+                const investmentsSection = document.getElementById('investmentsSection');
+
+                if (investments.length === 0) {
+                    noInvestmentsMessage.style.display = 'block';
+                    investmentsSection.style.display = 'none';
+                    return;
+                }
+
+                noInvestmentsMessage.style.display = 'none';
+                investmentsSection.style.display = 'block';
+
+                tableBody.innerHTML = '';
+                const planNames = ['Starter Plan', 'Advanced Plan', 'Professional Plan', 'Premium Plan', 'VIP Plan'];
+
+                for (let i = 0; i < investments.length; i++) {
+                    const investment = investments[i];
+                    const amount = web3.utils.fromWei(investment.amount, 'ether');
+                    const planId = investment.planId;
+                    const startTime = new Date(investment.startTime * 1000);
+                    const totalWithdrawn = web3.utils.fromWei(investment.totalWithdrawn, 'ether');
+                    const isActive = investment.active;
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${planNames[planId] || `Plan ${planId}`}</td>
+                        <td>${parseFloat(amount).toFixed(2)} USDT</td>
+                        <td>${startTime.toLocaleDateString()}</td>
+                        <td>${getDailyROIForPlan(planId)}%</td>
+                        <td>${parseFloat(totalWithdrawn).toFixed(2)} USDT</td>
+                        <td><span class="status-badge ${isActive ? 'status-active' : 'status-completed'}">${isActive ? 'Active' : 'Completed'}</span></td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+
+            } catch (error) {
+                console.error('Error loading user investments:', error);
+                document.getElementById('noInvestmentsMessage').style.display = 'block';
+                document.getElementById('investmentsSection').style.display = 'none';
+            }
+        }
+
+        function getDailyROIForPlan(planId) {
+            const planROIs = [1.00, 1.20, 1.50, 1.80, 2.00];
+            return planROIs[planId] || 1.00;
+        }
+
+        function updateLevelCounts(directReferrals) {
+            document.getElementById('level1Count').textContent = directReferrals;
+            document.getElementById('level2Count').textContent = Math.max(0, directReferrals);
+            document.getElementById('level3Count').textContent = Math.max(0, directReferrals);
+            document.getElementById('level4Count').textContent = Math.max(0, directReferrals);
+        }
+
         function generateReferralLink() {
             const referralLink = document.getElementById('referralLink');
             if (referralLink && userAccount) {
                 const baseUrl = window.location.origin + window.location.pathname;
-                referralLink.value = `${baseUrl}?ref=${userAccount}`;
+                const link = `${baseUrl}?ref=${userAccount}`;
+                referralLink.value = link;
             }
         }
 
         // Investment Functions
         function generateInvestmentPlans() {
+            const plansContainer = document.getElementById('investmentPlans');
+            if (!plansContainer) return;
+
             const plans = [
-                { id: 0, name: 'Starter Plan', roi: '1% Daily', minAmount: 20, maxAmount: 499, duration: '150 Days', total: '150% Total ROI', features: ['1% Daily ROI', '150 Days Duration', '150% Total Returns', '4-Level Referral'], featured: false },
-                { id: 1, name: 'Advanced Plan', roi: '1.2% Daily', minAmount: 500, maxAmount: 1999, duration: '150 Days', total: '180% Total ROI', features: ['1.2% Daily ROI', '150 Days Duration', '180% Total Returns', '4-Level Referral'], featured: false },
-                { id: 2, name: 'Professional Plan', roi: '1.5% Daily', minAmount: 2000, maxAmount: 4999, duration: '150 Days', total: '225% Total ROI', features: ['1.5% Daily ROI', '150 Days Duration', '225% Total Returns', '4-Level Referral'], featured: true },
-                { id: 3, name: 'Premium Plan', roi: '1.8% Daily', minAmount: 5000, maxAmount: 9999, duration: '150 Days', total: '270% Total ROI', features: ['1.8% Daily ROI', '150 Days Duration', '270% Total Returns', '4-Level Referral'], featured: false },
-                { id: 4, name: 'VIP Plan', roi: '2% Daily', minAmount: 10000, maxAmount: 999999, duration: '150 Days', total: '300% Total ROI', features: ['2% Daily ROI', '150 Days Duration', '300% Total Returns', '4-Level Referral'], featured: false }
+                {
+                    id: 0,
+                    name: 'Starter Plan',
+                    roi: '1% Daily',
+                    dailyROI: 1.00,
+                    range: '20 - 499 USDT',
+                    minAmount: 20,
+                    maxAmount: 499,
+                    duration: '150 Days',
+                    total: '150% Total ROI',
+                    features: [
+                        '1% Daily ROI',
+                        '150 Days Duration',
+                        '150% Total Returns',
+                        '4-Level Referral'
+                    ],
+                    featured: false
+                },
+                {
+                    id: 1,
+                    name: 'Advanced Plan',
+                    roi: '1.2% Daily',
+                    dailyROI: 1.20,
+                    range: '500 - 1,999 USDT',
+                    minAmount: 500,
+                    maxAmount: 1999,
+                    duration: '150 Days',
+                    total: '180% Total ROI',
+                    features: [
+                        '1.2% Daily ROI',
+                        '150 Days Duration',
+                        '180% Total Returns',
+                        '4-Level Referral'
+                    ],
+                    featured: false
+                },
+                {
+                    id: 2,
+                    name: 'Professional Plan',
+                    roi: '1.5% Daily',
+                    dailyROI: 1.50,
+                    range: '2,000 - 4,999 USDT',
+                    minAmount: 2000,
+                    maxAmount: 4999,
+                    duration: '150 Days',
+                    total: '225% Total ROI',
+                    features: [
+                        '1.5% Daily ROI',
+                        '150 Days Duration',
+                        '225% Total Returns',
+                        '4-Level Referral'
+                    ],
+                    featured: true
+                },
+                {
+                    id: 3,
+                    name: 'Premium Plan',
+                    roi: '1.8% Daily',
+                    dailyROI: 1.80,
+                    range: '5,000 - 9,999 USDT',
+                    minAmount: 5000,
+                    maxAmount: 9999,
+                    duration: '150 Days',
+                    total: '270% Total ROI',
+                    features: [
+                        '1.8% Daily ROI',
+                        '150 Days Duration',
+                        '270% Total Returns',
+                        '4-Level Referral'
+                    ],
+                    featured: false
+                },
+                {
+                    id: 4,
+                    name: 'VIP Plan',
+                    roi: '2% Daily',
+                    dailyROI: 2.00,
+                    range: '10,000+ USDT',
+                    minAmount: 10000,
+                    maxAmount: 999999,
+                    duration: '150 Days',
+                    total: '300% Total ROI',
+                    features: [
+                        '2% Daily ROI',
+                        '150 Days Duration',
+                        '300% Total Returns',
+                        '4-Level Referral'
+                    ],
+                    featured: false
+                }
             ];
 
-            const container = document.getElementById('investmentPlans');
-            container.innerHTML = plans.map(plan => `
+            plansContainer.innerHTML = plans.map(plan => `
                 <div class="plan-card ${plan.featured ? 'featured' : ''}" onclick="selectPlan(${plan.id})">
                     ${plan.featured ? '<div class="plan-badge">Popular</div>' : ''}
                     <div class="plan-name">${plan.name}</div>
                     <div class="plan-roi">${plan.roi}</div>
-                    <div class="plan-range">${plan.minAmount} - ${plan.maxAmount === 999999 ? 'Unlimited' : plan.maxAmount} USDT</div>
+                    <div class="plan-range">${plan.range}</div>
                     <div class="plan-duration">${plan.duration}</div>
                     <div class="plan-total">${plan.total}</div>
-                    <ul class="plan-features">${plan.features.map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}</ul>
-                    <button class="btn btn--primary"><i class="fas fa-arrow-right"></i> Select Plan</button>
+                    <ul class="plan-features">
+                        ${plan.features.map(feature => `<li><i class="fas fa-check"></i> ${feature}</li>`).join('')}
+                    </ul>
+                    <button class="btn btn--primary">
+                        <i class="fas fa-arrow-right"></i>
+                        Select Plan
+                    </button>
                 </div>
             `).join('');
         }
@@ -766,14 +2924,15 @@
             }
 
             const plans = [
-                { id: 0, name: 'Starter Plan', roi: '1% Daily', minAmount: 20, maxAmount: 499 },
-                { id: 1, name: 'Advanced Plan', roi: '1.2% Daily', minAmount: 500, maxAmount: 1999 },
-                { id: 2, name: 'Professional Plan', roi: '1.5% Daily', minAmount: 2000, maxAmount: 4999 },
-                { id: 3, name: 'Premium Plan', roi: '1.8% Daily', minAmount: 5000, maxAmount: 9999 },
-                { id: 4, name: 'VIP Plan', roi: '2% Daily', minAmount: 10000, maxAmount: 999999 }
+                { id: 0, name: 'Starter Plan', roi: '1% Daily', dailyROI: 1.00, minAmount: 20, maxAmount: 499, totalROI: 150 },
+                { id: 1, name: 'Advanced Plan', roi: '1.2% Daily', dailyROI: 1.20, minAmount: 500, maxAmount: 1999, totalROI: 180 },
+                { id: 2, name: 'Professional Plan', roi: '1.5% Daily', dailyROI: 1.50, minAmount: 2000, maxAmount: 4999, totalROI: 225 },
+                { id: 3, name: 'Premium Plan', roi: '1.8% Daily', dailyROI: 1.80, minAmount: 5000, maxAmount: 9999, totalROI: 270 },
+                { id: 4, name: 'VIP Plan', roi: '2% Daily', dailyROI: 2.00, minAmount: 10000, maxAmount: 999999, totalROI: 300 }
             ];
 
             selectedPlan = plans.find(plan => plan.id === planId);
+            
             if (selectedPlan) {
                 showInvestmentForm();
                 updatePlanSummary();
@@ -785,6 +2944,7 @@
         function showInvestmentForm() {
             document.getElementById('investmentPlans').style.display = 'none';
             document.getElementById('investmentForm').classList.add('active');
+            document.getElementById('investWalletAlert').style.display = 'none';
         }
 
         function showPlans() {
@@ -795,42 +2955,49 @@
         }
 
         function showSuccess() {
+            document.getElementById('investmentPlans').style.display = 'none';
             document.getElementById('investmentForm').classList.remove('active');
             document.getElementById('investmentSuccess').classList.add('active');
         }
 
         function updatePlanSummary() {
-            const summary = document.getElementById('selectedPlanSummary');
-            if (selectedPlan) {
-                summary.innerHTML = `
-                    <div class="plan-name">${selectedPlan.name}</div>
-                    <div class="plan-roi">${selectedPlan.roi}</div>
-                    <div class="plan-range">${selectedPlan.minAmount} - ${selectedPlan.maxAmount === 999999 ? 'Unlimited' : selectedPlan.maxAmount} USDT</div>
-                `;
-            }
+            const summaryElement = document.getElementById('selectedPlanSummary');
+            if (!summaryElement || !selectedPlan) return;
+
+            summaryElement.innerHTML = `
+                <div class="plan-name">${selectedPlan.name}</div>
+                <div class="plan-roi">${selectedPlan.roi}</div>
+                <div class="plan-range">${selectedPlan.minAmount} - ${selectedPlan.maxAmount === 999999 ? 'Unlimited' : selectedPlan.maxAmount} USDT</div>
+            `;
         }
 
         function updateAmountRange() {
-            const range = document.getElementById('amountRange');
-            const input = document.getElementById('investmentAmount');
-            if (selectedPlan) {
-                range.textContent = `Minimum: ${selectedPlan.minAmount} USDT, Maximum: ${selectedPlan.maxAmount === 999999 ? 'Unlimited' : selectedPlan.maxAmount} USDT`;
-                input.min = selectedPlan.minAmount;
-                input.max = selectedPlan.maxAmount === 999999 ? '' : selectedPlan.maxAmount;
-                input.value = selectedPlan.minAmount;
-            }
+            const rangeElement = document.getElementById('amountRange');
+            const amountInput = document.getElementById('investmentAmount');
+
+            if (!rangeElement || !amountInput || !selectedPlan) return;
+
+            rangeElement.textContent = `Minimum: ${selectedPlan.minAmount} USDT, Maximum: ${selectedPlan.maxAmount === 999999 ? 'Unlimited' : selectedPlan.maxAmount} USDT`;
+            
+            amountInput.min = selectedPlan.minAmount;
+            amountInput.max = selectedPlan.maxAmount === 999999 ? '' : selectedPlan.maxAmount;
+            amountInput.placeholder = `Enter amount between ${selectedPlan.minAmount} and ${selectedPlan.maxAmount === 999999 ? 'Unlimited' : selectedPlan.maxAmount} USDT`;
+            amountInput.value = selectedPlan.minAmount;
         }
 
         function updateInvestmentSummary() {
-            const amount = parseFloat(document.getElementById('investmentAmount').value) || 0;
-            const fee = amount * 0.10;
-            
+            const amountInput = document.getElementById('investmentAmount');
+            if (!amountInput || !selectedPlan) return;
+
+            const amount = parseFloat(amountInput.value) || 0;
+            const platformFee = amount * 0.10;
+            const totalToPay = amount;
+
             document.getElementById('summaryAmount').textContent = `${amount.toFixed(2)} USDT`;
-            document.getElementById('summaryFee').textContent = `${fee.toFixed(2)} USDT`;
-            document.getElementById('summaryTotal').textContent = `${amount.toFixed(2)} USDT`;
+            document.getElementById('summaryFee').textContent = `${platformFee.toFixed(2)} USDT`;
+            document.getElementById('summaryTotal').textContent = `${totalToPay.toFixed(2)} USDT`;
         }
 
-        // FIXED INVESTMENT FUNCTION - SOLUSI UTAMA
         async function confirmInvestment() {
             if (!contract || !userAccount) {
                 showNotification('Please connect your wallet first', 'error');
@@ -847,12 +3014,24 @@
 
             // Validation
             if (amount < selectedPlan.minAmount) {
-                showNotification(`Minimum investment is ${selectedPlan.minAmount} USDT`, 'error');
+                showNotification(`Minimum investment for this plan is ${selectedPlan.minAmount} USDT`, 'error');
                 return;
             }
 
             if (selectedPlan.maxAmount !== 999999 && amount > selectedPlan.maxAmount) {
-                showNotification(`Maximum investment is ${selectedPlan.maxAmount} USDT`, 'error');
+                showNotification(`Maximum investment for this plan is ${selectedPlan.maxAmount} USDT`, 'error');
+                return;
+            }
+
+            // Get referrer address
+            let referrerAddress = document.getElementById('referrerAddress').value;
+            if (!referrerAddress || referrerAddress === '') {
+                referrerAddress = referralAddress || '0x0000000000000000000000000000000000000000';
+            }
+
+            // Validate referrer address
+            if (referrerAddress !== '0x0000000000000000000000000000000000000000' && !web3.utils.isAddress(referrerAddress)) {
+                showNotification('Invalid referrer address', 'error');
                 return;
             }
 
@@ -861,13 +3040,12 @@
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 confirmBtn.disabled = true;
 
-                // Convert amount to wei (USDT uses 6 decimals)
-                const amountWei = web3.utils.toWei(amount.toString(), 'mwei');
-                const amountWithBuffer = web3.utils.toWei((amount * 1.1).toString(), 'mwei'); // Buffer untuk fee
+                // Convert amount to wei
+                const amountWei = web3.utils.toWei(amount.toString(), 'ether');
 
                 // Check USDT balance
-                const balance = await usdtContract.methods.balanceOf(userAccount).call();
-                const balanceFormatted = parseFloat(web3.utils.fromWei(balance, 'mwei'));
+                const usdtBalance = await usdtContract.methods.balanceOf(userAccount).call();
+                const balanceFormatted = parseFloat(web3.utils.fromWei(usdtBalance, 'ether'));
                 
                 if (balanceFormatted < amount) {
                     showNotification(`Insufficient USDT balance. You have ${balanceFormatted.toFixed(2)} USDT`, 'error');
@@ -876,77 +3054,47 @@
                     return;
                 }
 
-                // Check allowance dengan buffer
+                // Check allowance
                 const allowance = await usdtContract.methods.allowance(userAccount, CONTRACT_ADDRESS).call();
-                const allowanceFormatted = parseFloat(web3.utils.fromWei(allowance, 'mwei'));
-                
+                const allowanceFormatted = parseFloat(web3.utils.fromWei(allowance, 'ether'));
+
                 if (allowanceFormatted < amount) {
                     showNotification('Approving USDT...', 'info');
-                    try {
-                        const approveResult = await usdtContract.methods.approve(CONTRACT_ADDRESS, amountWithBuffer).send({
-                            from: userAccount,
-                            gas: 100000
-                        });
-                        console.log('Approve result:', approveResult);
-                        showNotification('USDT approved successfully', 'success');
-                        await new Promise(resolve => setTimeout(resolve, 3000)); // Tunggu 3 detik
-                    } catch (approveError) {
-                        console.error('Approve error:', approveError);
-                        showNotification('USDT approval failed', 'error');
-                        throw approveError;
-                    }
+                    await usdtContract.methods.approve(CONTRACT_ADDRESS, amountWei).send({
+                        from: userAccount,
+                        gas: 100000
+                    });
+                    showNotification('USDT approved successfully!', 'success');
                 }
 
-                // Prepare parameters untuk deposit
-                const referrerAddress = document.getElementById('referrerAddress').value;
-                let finalReferrer = '0x0000000000000000000000000000000000000000';
-                
-                if (referrerAddress && web3.utils.isAddress(referrerAddress)) {
-                    finalReferrer = referrerAddress;
-                }
-
-                showNotification('Making investment...', 'info');
-
-                // Execute deposit dengan parameter yang lebih aman
-                console.log('Deposit Parameters:', {
-                    amountWei: amountWei,
-                    planId: selectedPlan.id,
-                    referrer: finalReferrer,
-                    user: userAccount
-                });
-
-                const depositResult = await contract.methods.deposit(
-                    amountWei,        // amount dalam wei (6 decimals)
-                    selectedPlan.id,  // planId
-                    finalReferrer     // referrer address
-                ).send({
+                // Execute deposit
+                showNotification('Processing investment...', 'info');
+                await contract.methods.deposit(amountWei, selectedPlan.id, referrerAddress).send({
                     from: userAccount,
-                    gas: 400000,      // Gas limit lebih tinggi
-                    gasPrice: web3.utils.toWei('10', 'gwei') // Gas price lebih tinggi
+                    gas: 300000
                 });
 
-                console.log('Deposit transaction:', depositResult);
                 showNotification('Investment successful!', 'success');
                 showSuccess();
+                
+                // Reload user data
                 await loadUserData();
 
             } catch (error) {
-                console.error('Investment error details:', error);
+                console.error('Investment error:', error);
+                let errorMessage = 'Investment failed';
                 
-                let errorMsg = 'Investment failed';
                 if (error.code === 4001) {
-                    errorMsg = 'Transaction rejected by user';
-                } else if (error.message?.includes('reverted')) {
-                    // Coba extract reason dari error
-                    const revertReason = extractRevertReason(error);
-                    errorMsg = `Contract reverted: ${revertReason || 'Unknown reason'}`;
-                } else if (error.message?.includes('insufficient allowance')) {
-                    errorMsg = 'Insufficient USDT allowance. Please try again.';
-                } else {
-                    errorMsg = error.message || 'Unknown error occurred';
+                    errorMessage = 'Transaction rejected by user';
+                } else if (error.message.includes('insufficient funds')) {
+                    errorMessage = 'Insufficient balance for transaction';
+                } else if (error.message.includes('User denied')) {
+                    errorMessage = 'Transaction was cancelled';
+                } else if (error.message) {
+                    errorMessage = error.message;
                 }
-                
-                showNotification(errorMsg, 'error');
+
+                showNotification(errorMessage, 'error');
             } finally {
                 const confirmBtn = document.getElementById('confirmInvestment');
                 confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm Investment';
@@ -954,108 +3102,122 @@
             }
         }
 
-        // Fungsi untuk extract revert reason dari error
-        function extractRevertReason(error) {
-            try {
-                const errorString = JSON.stringify(error);
-                const reasonMatch = errorString.match(/reason="([^"]*)"/);
-                if (reasonMatch) return reasonMatch[1];
-                
-                const messageMatch = errorString.match(/message":"([^"]*)"/);
-                if (messageMatch) return messageMatch[1];
-                
-                return null;
-            } catch {
-                return null;
-            }
-        }
-
         async function withdrawEarnings() {
-            if (!userAccount) {
-                showNotification('Please connect wallet first', 'error');
+            if (!contract || !userAccount) {
+                showNotification('Please connect your wallet first', 'error');
                 return;
             }
 
             try {
-                const btn = document.getElementById('withdrawEarnings');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                btn.disabled = true;
+                const withdrawBtn = document.getElementById('withdrawEarnings');
+                withdrawBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                withdrawBtn.disabled = true;
 
                 await contract.methods.withdraw().send({
                     from: userAccount,
-                    gas: 250000
+                    gas: 300000
                 });
 
                 showNotification('Withdrawal successful!', 'success');
                 await loadUserData();
+
             } catch (error) {
                 console.error('Withdrawal error:', error);
-                showNotification('Withdrawal failed: ' + (error.message || 'Unknown error'), 'error');
+                let errorMessage = 'Withdrawal failed';
+                
+                if (error.code === 4001) {
+                    errorMessage = 'Transaction rejected by user';
+                } else if (error.message.includes('insufficient funds')) {
+                    errorMessage = 'Insufficient balance for transaction';
+                } else {
+                    errorMessage = error.message;
+                }
+
+                showNotification(errorMessage, 'error');
             } finally {
-                const btn = document.getElementById('withdrawEarnings');
-                btn.innerHTML = '<i class="fas fa-download"></i> Withdraw Earnings';
-                btn.disabled = false;
+                const withdrawBtn = document.getElementById('withdrawEarnings');
+                withdrawBtn.innerHTML = '<i class="fas fa-download"></i> Withdraw Earnings';
+                withdrawBtn.disabled = false;
             }
         }
 
         async function claimReferralBonus() {
-            if (!userAccount) {
-                showNotification('Please connect wallet first', 'error');
-                return;
+            // For now, use the same withdraw function since bonuses are included in available earnings
+            await withdrawEarnings();
+        }
+
+        // Referral Functions
+        function copyReferralLink() {
+            const referralLink = document.getElementById('referralLink');
+            if (referralLink) {
+                referralLink.select();
+                referralLink.setSelectionRange(0, 99999);
+                navigator.clipboard.writeText(referralLink.value);
+                showNotification('Referral link copied!', 'success');
+            }
+        }
+
+        function shareOnSocial(platform) {
+            const referralLink = document.getElementById('referralLink');
+            if (!referralLink) return;
+
+            const link = referralLink.value;
+            const text = 'Join Aurion Finance and start earning daily returns with secure USDT investments!';
+            
+            let url = '';
+            
+            switch (platform) {
+                case 'telegram':
+                    url = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
+                    break;
+                case 'twitter':
+                    url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text + ' ' + link)}`;
+                    break;
+                case 'whatsapp':
+                    url = `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`;
+                    break;
             }
 
-            try {
-                const btn = document.getElementById('claimBonus');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                btn.disabled = true;
+            if (url) {
+                window.open(url, '_blank', 'width=600,height=400');
+            }
+        }
 
-                await contract.methods.withdraw().send({
-                    from: userAccount,
-                    gas: 250000
-                });
+        // Section Data Loading
+        function loadDashboardData() {
+            if (userAccount) {
+                loadUserData();
+            }
+        }
 
-                showNotification('Bonus claimed!', 'success');
-                await loadUserData();
-            } catch (error) {
-                console.error('Bonus claim error:', error);
-                showNotification('Claim failed: ' + (error.message || 'Unknown error'), 'error');
-            } finally {
-                const btn = document.getElementById('claimBonus');
-                btn.innerHTML = '<i class="fas fa-gift"></i> Claim Bonus';
-                btn.disabled = false;
+        function loadReferralData() {
+            if (userAccount) {
+                loadUserData();
             }
         }
 
         // Utility Functions
-        function formatUSDT(amount) {
-            if (!amount || !web3) return '0.00';
-            return parseFloat(web3.utils.fromWei(amount.toString(), 'mwei')).toFixed(2);
-        }
-
-        function copyReferralLink() {
-            const link = document.getElementById('referralLink');
-            link.select();
-            navigator.clipboard.writeText(link.value);
-            showNotification('Link copied!', 'success');
-        }
-
         function showNotification(message, type = 'info') {
-            const notif = document.getElementById('notification');
-            notif.textContent = message;
-            notif.className = `notification ${type} show`;
-            setTimeout(() => notif.classList.remove('show'), 5000);
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
         }
 
         function checkPreloader() {
             window.addEventListener('load', () => {
                 setTimeout(() => {
-                    document.querySelector('.preloader').classList.add('fade-out');
-                    setTimeout(() => document.querySelector('.preloader').remove(), 500);
+                    preloader.classList.add('fade-out');
+                    setTimeout(() => {
+                        preloader.remove();
+                    }, 500);
                 }, 1000);
             });
         }
 
-        // Global functions
+        // Make functions available globally
         window.selectPlan = selectPlan;
         window.showSection = showSection;
     </script>
