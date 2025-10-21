@@ -6,6 +6,7 @@
     <title>Aurion Finance - Professional USDT Investment Platform</title>
     <link rel="icon" type="image/png" href="https://files.catbox.moe/3o41t1.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-black: #0A0A0A;
@@ -90,7 +91,7 @@
             padding: 0 var(--spacing-lg);
         }
 
-        /* Preloader */
+        /* Enhanced Preloader */
         .preloader {
             position: fixed;
             top: 0;
@@ -99,6 +100,7 @@
             height: 100%;
             background: var(--primary-black);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
@@ -113,6 +115,7 @@
         .loader {
             display: flex;
             gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
         }
 
         .gold-bar {
@@ -120,6 +123,7 @@
             height: 20px;
             background: var(--gradient-gold);
             animation: loader 1.2s ease-in-out infinite;
+            border-radius: var(--radius-sm);
         }
 
         .gold-bar:nth-child(2) { animation-delay: 0.1s; }
@@ -130,7 +134,13 @@
             20% { transform: scaleY(2); }
         }
 
-        /* Header */
+        .preloader-text {
+            color: var(--primary-gold);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        /* Enhanced Header */
         .header {
             position: fixed;
             top: 0;
@@ -141,6 +151,11 @@
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
             z-index: 1000;
             transition: all var(--transition-normal);
+        }
+
+        .header.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            box-shadow: var(--shadow-lg);
         }
 
         .nav {
@@ -159,6 +174,7 @@
         .logo {
             width: 40px;
             height: 40px;
+            border-radius: var(--radius-md);
         }
 
         .logo__text {
@@ -189,6 +205,7 @@
             transition: color var(--transition-fast);
             position: relative;
             cursor: pointer;
+            padding: var(--spacing-sm) 0;
         }
 
         .nav__link:hover,
@@ -211,9 +228,11 @@
             font-size: var(--font-size-xl);
             cursor: pointer;
             color: var(--primary-gold);
+            background: none;
+            border: none;
         }
 
-        /* Buttons */
+        /* Enhanced Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -277,7 +296,13 @@
             font-size: var(--font-size-lg);
         }
 
-        /* Sections */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Enhanced Sections */
         .section {
             padding: var(--spacing-3xl) 0;
             min-height: 100vh;
@@ -286,24 +311,27 @@
             justify-content: center;
         }
 
+        .section__header {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+
         .section__title {
             font-size: var(--font-size-4xl);
-            text-align: center;
             margin-bottom: var(--spacing-md);
             background: var(--gradient-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 700;
         }
 
         .section__subtitle {
             font-size: var(--font-size-lg);
-            text-align: center;
             color: var(--gray-400);
-            margin-bottom: var(--spacing-2xl);
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
         .gradient-text {
@@ -313,7 +341,7 @@
             background-clip: text;
         }
 
-        /* Hero Section */
+        /* Enhanced Hero Section */
         .hero {
             padding-top: 120px;
             background: var(--gradient-dark);
@@ -357,6 +385,7 @@
             font-size: var(--font-size-5xl);
             margin-bottom: var(--spacing-lg);
             line-height: 1.1;
+            font-weight: 700;
         }
 
         .hero__description {
@@ -364,6 +393,7 @@
             color: var(--gray-300);
             margin-bottom: var(--spacing-2xl);
             max-width: 500px;
+            line-height: 1.6;
         }
 
         .hero__buttons {
@@ -407,6 +437,8 @@
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow-lg);
             animation: float 6s ease-in-out infinite;
+            width: 100%;
+            max-width: 400px;
         }
 
         @keyframes float {
@@ -424,6 +456,8 @@
         .card__header h3 {
             margin: 0;
             color: var(--white);
+            font-size: var(--font-size-lg);
+            font-weight: 600;
         }
 
         .live-indicator {
@@ -465,17 +499,9 @@
             font-weight: 600;
         }
 
-        /* Dashboard Section */
+        /* Enhanced Dashboard Section */
         .dashboard-section {
             background: var(--secondary-black);
-        }
-
-        .dashboard-content {
-            display: none;
-        }
-
-        .dashboard-content.active {
-            display: block;
         }
 
         .quick-stats {
@@ -616,6 +642,7 @@
         .empty-state h3 {
             margin-bottom: var(--spacing-md);
             color: var(--white);
+            font-size: var(--font-size-xl);
         }
 
         .empty-state p {
@@ -624,9 +651,10 @@
             max-width: 400px;
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.6;
         }
 
-        /* Invest Section */
+        /* Enhanced Invest Section */
         .invest-section {
             background: var(--primary-black);
         }
@@ -647,6 +675,9 @@
             transition: all var(--transition-normal);
             position: relative;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .plan-card:hover {
@@ -695,6 +726,7 @@
             font-size: var(--font-size-xl);
             margin-bottom: var(--spacing-md);
             color: var(--white);
+            font-weight: 600;
         }
 
         .plan-roi {
@@ -729,12 +761,16 @@
             list-style: none;
             margin: var(--spacing-lg) 0;
             text-align: left;
+            flex-grow: 1;
         }
 
         .plan-features li {
             padding: var(--spacing-sm) 0;
             color: var(--gray-300);
             border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
         }
 
         .plan-features li:last-child {
@@ -743,7 +779,7 @@
 
         .plan-features li i {
             color: var(--primary-gold);
-            margin-right: var(--spacing-sm);
+            font-size: var(--font-size-sm);
         }
 
         .investment-form-container {
@@ -771,6 +807,7 @@
         .form-header h2 {
             margin: 0;
             color: var(--white);
+            font-size: var(--font-size-2xl);
         }
 
         .investment-form {
@@ -842,6 +879,7 @@
             margin-bottom: var(--spacing-lg);
             color: var(--white);
             text-align: center;
+            font-size: var(--font-size-lg);
         }
 
         .summary-item {
@@ -892,6 +930,7 @@
         .investment-success h2 {
             margin-bottom: var(--spacing-lg);
             color: var(--white);
+            font-size: var(--font-size-2xl);
         }
 
         .investment-success p {
@@ -900,6 +939,7 @@
             max-width: 400px;
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.6;
         }
 
         .success-actions {
@@ -909,7 +949,7 @@
             flex-wrap: wrap;
         }
 
-        /* Referral Section */
+        /* Enhanced Referral Section */
         .referral-section {
             background: var(--secondary-black);
         }
@@ -927,6 +967,24 @@
             border-radius: var(--radius-xl);
             padding: var(--spacing-2xl);
             margin-bottom: var(--spacing-3xl);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .section-header h2 {
+            margin-bottom: var(--spacing-md);
+            color: var(--white);
+            font-size: var(--font-size-2xl);
+        }
+
+        .section-header p {
+            color: var(--gray-400);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
         .link-display {
@@ -961,6 +1019,9 @@
             font-size: var(--font-size-lg);
             cursor: pointer;
             transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .social-btn:hover {
@@ -1034,6 +1095,7 @@
 
         .requirement i {
             color: var(--primary-gold);
+            font-size: var(--font-size-sm);
         }
 
         .level-stats {
@@ -1068,11 +1130,13 @@
         .claim-info h3 {
             margin-bottom: var(--spacing-sm);
             color: var(--white);
+            font-size: var(--font-size-xl);
         }
 
         .claim-info p {
             color: var(--gray-400);
             margin-bottom: var(--spacing-md);
+            line-height: 1.6;
         }
 
         .bonus-amount {
@@ -1118,6 +1182,7 @@
         .step-card h3 {
             margin-bottom: var(--spacing-md);
             color: var(--white);
+            font-size: var(--font-size-lg);
         }
 
         .step-card p {
@@ -1125,7 +1190,7 @@
             line-height: 1.6;
         }
 
-        /* Wallet Connection */
+        /* Enhanced Wallet Connection */
         .wallet-section {
             display: flex;
             flex-direction: column;
@@ -1150,6 +1215,7 @@
             align-items: center;
             gap: var(--spacing-sm);
             color: var(--primary-gold);
+            font-weight: 600;
         }
 
         .wallet-address {
@@ -1162,7 +1228,7 @@
             font-size: var(--font-size-sm);
         }
 
-        /* Alert */
+        /* Enhanced Alert */
         .alert {
             display: flex;
             align-items: center;
@@ -1185,7 +1251,11 @@
             color: #10B981;
         }
 
-        /* Notification */
+        .alert i {
+            font-size: var(--font-size-lg);
+        }
+
+        /* Enhanced Notification */
         .notification {
             position: fixed;
             top: 20px;
@@ -1200,6 +1270,9 @@
             transition: transform var(--transition-normal);
             z-index: 3000;
             max-width: 400px;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
         }
 
         .notification.show {
@@ -1216,7 +1289,11 @@
             background: rgba(239, 68, 68, 0.1);
         }
 
-        /* Footer */
+        .notification i {
+            font-size: var(--font-size-lg);
+        }
+
+        /* Enhanced Footer */
         .footer {
             background: var(--primary-black);
             border-top: 1px solid rgba(212, 175, 55, 0.1);
@@ -1248,6 +1325,7 @@
         .footer__logo img {
             width: 30px;
             height: 30px;
+            border-radius: var(--radius-sm);
         }
 
         .footer__description {
@@ -1290,6 +1368,7 @@
             color: var(--white);
             margin-bottom: var(--spacing-lg);
             font-size: var(--font-size-lg);
+            font-weight: 600;
         }
 
         .footer__column a {
@@ -1298,6 +1377,7 @@
             text-decoration: none;
             margin-bottom: var(--spacing-sm);
             transition: color var(--transition-fast);
+            cursor: pointer;
         }
 
         .footer__column a:hover {
@@ -1311,7 +1391,7 @@
             color: var(--gray-500);
         }
 
-        /* Responsive Design */
+        /* Enhanced Responsive Design */
         @media (max-width: 1024px) {
             .hero__container {
                 grid-template-columns: 1fr;
@@ -1455,13 +1535,50 @@
                 grid-template-columns: 1fr;
             }
 
-            .referral-header h1 {
-                font-size: var(--font-size-3xl);
-            }
-
             .section-header h2 {
                 font-size: var(--font-size-2xl);
             }
+        }
+
+        /* Additional Professional Enhancements */
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .mt-2 {
+            margin-top: var(--spacing-xl);
+        }
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid #10B981;
+            border-radius: var(--radius-lg);
+            color: #10B981;
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            margin-top: var(--spacing-md);
         }
     </style>
 </head>
@@ -1473,6 +1590,7 @@
             <div class="gold-bar"></div>
             <div class="gold-bar"></div>
         </div>
+        <div class="preloader-text">Loading Aurion Finance...</div>
     </div>
 
     <!-- Header -->
@@ -1507,9 +1625,9 @@
                 </div>
             </div>
 
-            <div class="nav__toggle" id="nav-toggle">
+            <button class="nav__toggle" id="nav-toggle">
                 <i class="fas fa-bars"></i>
-            </div>
+            </button>
         </nav>
     </header>
 
@@ -1529,7 +1647,7 @@
                     <p class="hero__description">
                         Aurion Finance offers professional investment opportunities with 
                         guaranteed daily ROI, multi-level referral system, and secure 
-                        smart contract technology.
+                        smart contract technology on the blockchain.
                     </p>
                     <div class="hero__buttons">
                         <button class="btn btn--primary" data-section="invest">
@@ -1554,6 +1672,10 @@
                             <div class="stat__value" id="totalPaid">$0</div>
                             <div class="stat__label">Total Paid Out</div>
                         </div>
+                    </div>
+                    <div class="security-badge">
+                        <i class="fas fa-shield-alt"></i>
+                        Smart Contract Audited & Verified
                     </div>
                 </div>
                 <div class="hero__image">
@@ -1742,7 +1864,7 @@
                             <label for="referrerAddress">Referrer Address (Optional)</label>
                             <input type="text" id="referrerAddress" class="form-input" 
                                    placeholder="Enter referrer wallet address">
-                            <small>If you were referred by someone, enter their wallet address here</small>
+                            <small style="color: var(--gray-400); font-size: var(--font-size-sm);">If you were referred by someone, enter their wallet address here</small>
                         </div>
 
                         <div class="investment-summary">
@@ -2064,16 +2186,309 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
-        // Contract Configuration
+        // Enhanced Contract Configuration
         const CONTRACT_ADDRESS = '0xaDb78631123CD4B4686365423B80C344E438b7d6';
-        const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_usdtToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"planId","type":"uint256"},{"indexed":false,"internalType":"address","name":"upline","type":"address"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"totalBalance","type":"uint256"}],"name":"PoolWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referral","type":"address"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReferralBonus","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"referral","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"address","name":"owner","type":"address"}],"name":"ReferralBonusExpired","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"DAILY_WITHDRAWAL_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_ACTIVE_INVESTMENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_DEPOSIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_WITHDRAWAL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"OWNER_FEE_PERCENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"TIME_STEP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WITHDRAWAL_FEE_PERCENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"calculateAvailableEarnings","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"dailyWithdrawals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"uint256","name":"_planId","type":"uint256"},{"internalType":"address","name":"_upline","type":"address"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getActiveInvestmentStatus","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getContractBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getContractStats","outputs":[{"internalType":"uint256","name":"totalExpiredBonuses","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawalFeesCollected","type":"uint256"},{"internalType":"uint256","name":"totalReferralBonusesPaid","type":"uint256"},{"internalType":"uint256","name":"currentContractBalance","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getPlansCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserInfo","outputs":[{"internalType":"uint256","name":"totalDeposits","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"uint256","name":"referralBonus","type":"uint256"},{"internalType":"uint256","name":"availableEarnings","type":"uint256"},{"internalType":"address","name":"upline","type":"address"},{"internalType":"bool","name":"hasActiveInvestment","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserInvestments","outputs":[{"components":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"planId","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"lastWithdrawalTime","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"bool","name":"active","type":"bool"}],"internalType":"struct Aurion.UserInvestment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"investmentPlans","outputs":[{"internalType":"uint256","name":"minAmount","type":"uint256"},{"internalType":"uint256","name":"maxAmount","type":"uint256"},{"internalType":"uint256","name":"dailyROI","type":"uint256"},{"internalType":"uint256","name":"duration","type":"uint256"},{"internalType":"uint256","name":"totalROI","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"referralLevels","outputs":[{"internalType":"uint256","name":"percentage","type":"uint256"},{"internalType":"uint256","name":"minDirectReferrals","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalExpiredReferralBonuses","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalReferralBonuses","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalWithdrawalFees","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"uint256","name":"totalDeposits","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"uint256","name":"referralBonus","type":"uint256"},{"internalType":"uint256","name":"lastWithdrawal","type":"uint256"},{"internalType":"bool","name":"exists","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawExpiredBonuses","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+        const CONTRACT_ABI = [
+            {
+                "inputs": [{"internalType": "address", "name": "_usdtToken", "type": "address"}],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+                    {"indexed": false, "internalType": "uint256", "name": "planId", "type": "uint256"},
+                    {"indexed": false, "internalType": "address", "name": "upline", "type": "address"}
+                ],
+                "name": "Deposit",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "previousOwner", "type": "address"},
+                    {"indexed": true, "internalType": "address", "name": "newOwner", "type": "address"}
+                ],
+                "name": "OwnershipTransferred",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "owner", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "totalBalance", "type": "uint256"}
+                ],
+                "name": "PoolWithdrawn",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+                    {"indexed": true, "internalType": "address", "name": "referral", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "level", "type": "uint256"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"}
+                ],
+                "name": "ReferralBonus",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "referral", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+                    {"indexed": false, "internalType": "address", "name": "owner", "type": "address"}
+                ],
+                "name": "ReferralBonusExpired",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {"indexed": true, "internalType": "address", "name": "user", "type": "address"},
+                    {"indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256"},
+                    {"indexed": false, "internalType": "uint256", "name": "fee", "type": "uint256"}
+                ],
+                "name": "Withdraw",
+                "type": "event"
+            },
+            {
+                "inputs": [],
+                "name": "DAILY_WITHDRAWAL_LIMIT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "MIN_ACTIVE_INVESTMENT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "MIN_DEPOSIT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "MIN_WITHDRAWAL",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "OWNER_FEE_PERCENT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "TIME_STEP",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "WITHDRAWAL_FEE_PERCENT",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
+                "name": "calculateAvailableEarnings",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "", "type": "address"}, {"internalType": "uint256", "name": "", "type": "uint256"}],
+                "name": "dailyWithdrawals",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "_amount", "type": "uint256"}, {"internalType": "uint256", "name": "_planId", "type": "uint256"}, {"internalType": "address", "name": "_upline", "type": "address"}],
+                "name": "deposit",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
+                "name": "getActiveInvestmentStatus",
+                "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getContractBalance",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getContractStats",
+                "outputs": [
+                    {"internalType": "uint256", "name": "totalExpiredBonuses", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalWithdrawalFeesCollected", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalReferralBonusesPaid", "type": "uint256"},
+                    {"internalType": "uint256", "name": "currentContractBalance", "type": "uint256"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getPlansCount",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
+                "name": "getUserInfo",
+                "outputs": [
+                    {"internalType": "uint256", "name": "totalDeposits", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalWithdrawn", "type": "uint256"},
+                    {"internalType": "uint256", "name": "directReferrals", "type": "uint256"},
+                    {"internalType": "uint256", "name": "referralBonus", "type": "uint256"},
+                    {"internalType": "uint256", "name": "availableEarnings", "type": "uint256"},
+                    {"internalType": "address", "name": "upline", "type": "address"},
+                    {"internalType": "bool", "name": "hasActiveInvestment", "type": "bool"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "_user", "type": "address"}],
+                "name": "getUserInvestments",
+                "outputs": [
+                    {
+                        "components": [
+                            {"internalType": "uint256", "name": "amount", "type": "uint256"},
+                            {"internalType": "uint256", "name": "planId", "type": "uint256"},
+                            {"internalType": "uint256", "name": "startTime", "type": "uint256"},
+                            {"internalType": "uint256", "name": "lastWithdrawalTime", "type": "uint256"},
+                            {"internalType": "uint256", "name": "totalWithdrawn", "type": "uint256"},
+                            {"internalType": "bool", "name": "active", "type": "bool"}
+                        ],
+                        "internalType": "struct Aurion.UserInvestment[]",
+                        "name": "",
+                        "type": "tuple[]"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "name": "investmentPlans",
+                "outputs": [
+                    {"internalType": "uint256", "name": "minAmount", "type": "uint256"},
+                    {"internalType": "uint256", "name": "maxAmount", "type": "uint256"},
+                    {"internalType": "uint256", "name": "dailyROI", "type": "uint256"},
+                    {"internalType": "uint256", "name": "duration", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalROI", "type": "uint256"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "owner",
+                "outputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "name": "referralLevels",
+                "outputs": [
+                    {"internalType": "uint256", "name": "percentage", "type": "uint256"},
+                    {"internalType": "uint256", "name": "minDirectReferrals", "type": "uint256"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalExpiredReferralBonuses",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalReferralBonuses",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalWithdrawalFees",
+                "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "usdtToken",
+                "outputs": [{"internalType": "contract IERC20", "name": "", "type": "address"}],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+                "name": "users",
+                "outputs": [
+                    {"internalType": "address", "name": "upline", "type": "address"},
+                    {"internalType": "uint256", "name": "totalDeposits", "type": "uint256"},
+                    {"internalType": "uint256", "name": "totalWithdrawn", "type": "uint256"},
+                    {"internalType": "uint256", "name": "directReferrals", "type": "uint256"},
+                    {"internalType": "uint256", "name": "referralBonus", "type": "uint256"},
+                    {"internalType": "uint256", "name": "lastWithdrawal", "type": "uint256"},
+                    {"internalType": "bool", "name": "exists", "type": "bool"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "withdraw",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "withdrawExpiredBonuses",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            }
+        ];
 
-        // Global Variables
+        // Enhanced Global Variables
         let web3;
         let contract;
         let userAccount;
         let selectedPlan = null;
         let referralAddress = null;
+        let isInitialized = false;
 
         // DOM Elements
         const preloader = document.querySelector('.preloader');
@@ -2081,6 +2496,7 @@
         const navToggle = document.getElementById('nav-toggle');
         const connectWalletBtn = document.getElementById('connectWallet');
         const notification = document.getElementById('notification');
+        const header = document.querySelector('.header');
 
         // Section Elements
         const sections = {
@@ -2090,52 +2506,71 @@
             referral: document.getElementById('referral')
         };
 
-        // Initialize Application
+        // Enhanced Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
             setupEventListeners();
             generateInvestmentPlans();
             checkPreloader();
             checkURLForReferral();
+            setupScrollEffects();
         });
 
-        // Check URL for referral parameter
+        // Enhanced Scroll Effects
+        function setupScrollEffects() {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // Enhanced URL Referral Check
         function checkURLForReferral() {
             const urlParams = new URLSearchParams(window.location.search);
             const refAddress = urlParams.get('ref');
             
             if (refAddress && web3 && web3.utils.isAddress(refAddress)) {
                 referralAddress = refAddress;
-                document.getElementById('referrerAddress').value = refAddress;
+                const referrerInput = document.getElementById('referrerAddress');
+                if (referrerInput) {
+                    referrerInput.value = refAddress;
+                }
                 showNotification('Referral address detected from URL!', 'success');
             }
         }
 
-        // Initialize Web3 and Contract
+        // Enhanced Web3 and Contract Initialization
         async function initializeApp() {
             if (typeof window.ethereum !== 'undefined') {
                 try {
                     web3 = new Web3(window.ethereum);
                     contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
                     console.log('Web3 and contract initialized successfully');
+                    isInitialized = true;
 
                     // Check if wallet is already connected
                     const accounts = await web3.eth.getAccounts();
                     if (accounts.length > 0) {
                         userAccount = accounts[0];
                         updateWalletUI();
-                        loadContractData();
+                        await loadContractData();
                     }
                 } catch (error) {
                     console.error('Error initializing Web3:', error);
-                    showNotification('Error connecting to blockchain', 'error');
+                    showNotification('Error connecting to blockchain. Please refresh the page.', 'error');
                 }
             } else {
                 showNotification('Please install MetaMask to use this dApp', 'error');
+                // Disable wallet-related functionality
+                connectWalletBtn.disabled = true;
+                connectWalletBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Install MetaMask';
             }
         }
 
-        // Setup Event Listeners
+        // Enhanced Event Listeners
         function setupEventListeners() {
             // Navigation
             navToggle.addEventListener('click', toggleNavMenu);
@@ -2189,15 +2624,17 @@
 
             // Wallet account changes
             if (window.ethereum) {
-                window.ethereum.on('accountsChanged', (accounts) => {
+                window.ethereum.on('accountsChanged', async (accounts) => {
                     if (accounts.length === 0) {
                         userAccount = null;
                         updateWalletUI();
                         showWalletAlerts();
+                        showNotification('Wallet disconnected', 'error');
                     } else {
                         userAccount = accounts[0];
                         updateWalletUI();
-                        loadContractData();
+                        await loadContractData();
+                        showNotification('Wallet account changed', 'success');
                     }
                 });
 
@@ -2205,9 +2642,16 @@
                     window.location.reload();
                 });
             }
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navMenu.contains(e.target) && !navToggle.contains(e.target) && navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                }
+            });
         }
 
-        // Navigation Functions
+        // Enhanced Navigation Functions
         function toggleNavMenu() {
             navMenu.classList.toggle('active');
         }
@@ -2215,7 +2659,9 @@
         function showSection(sectionName) {
             // Hide all sections
             Object.values(sections).forEach(section => {
-                section.style.display = 'none';
+                if (section) {
+                    section.style.display = 'none';
+                }
             });
 
             // Remove active class from all nav links
@@ -2228,7 +2674,10 @@
                 sections[sectionName].style.display = 'block';
                 
                 // Add active class to corresponding nav link
-                document.querySelector(`.nav__link[data-section="${sectionName}"]`).classList.add('active');
+                const activeLink = document.querySelector(`.nav__link[data-section="${sectionName}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
                 
                 // Load section-specific data
                 if (sectionName === 'dashboard') {
@@ -2236,13 +2685,17 @@
                 } else if (sectionName === 'referral') {
                     loadReferralData();
                 }
+
+                // Scroll to top of section
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
-        // Wallet Functions
+        // Enhanced Wallet Functions
         async function connectWallet() {
             if (typeof window.ethereum === 'undefined') {
                 showNotification('Please install MetaMask!', 'error');
+                window.open('https://metamask.io/download.html', '_blank');
                 return;
             }
 
@@ -2254,12 +2707,16 @@
                 if (accounts.length > 0) {
                     userAccount = accounts[0];
                     updateWalletUI();
-                    loadContractData();
+                    await loadContractData();
                     showNotification('Wallet connected successfully!', 'success');
                 }
             } catch (error) {
                 console.error('Error connecting wallet:', error);
-                showNotification('Failed to connect wallet', 'error');
+                if (error.code === 4001) {
+                    showNotification('Wallet connection rejected by user', 'error');
+                } else {
+                    showNotification('Failed to connect wallet', 'error');
+                }
             }
         }
 
@@ -2280,42 +2737,73 @@
         }
 
         function showWalletAlerts() {
-            document.getElementById('dashboardWalletAlert').style.display = 'flex';
-            document.getElementById('investWalletAlert').style.display = 'flex';
-            document.getElementById('referralWalletAlert').style.display = 'flex';
+            const alerts = [
+                'dashboardWalletAlert',
+                'investWalletAlert',
+                'referralWalletAlert'
+            ];
             
-            document.getElementById('quickStats').style.display = 'none';
-            document.getElementById('actionButtons').style.display = 'none';
-            document.getElementById('referralStats').style.display = 'none';
-            document.getElementById('referralLinkSection').style.display = 'none';
-            document.getElementById('bonusClaimSection').style.display = 'none';
+            const elementsToHide = [
+                'quickStats',
+                'actionButtons',
+                'investmentsSection',
+                'referralStats',
+                'referralLinkSection',
+                'bonusClaimSection'
+            ];
+
+            alerts.forEach(alertId => {
+                const element = document.getElementById(alertId);
+                if (element) element.style.display = 'flex';
+            });
+
+            elementsToHide.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) element.style.display = 'none';
+            });
         }
 
         function hideWalletAlerts() {
-            document.getElementById('dashboardWalletAlert').style.display = 'none';
-            document.getElementById('investWalletAlert').style.display = 'none';
-            document.getElementById('referralWalletAlert').style.display = 'none';
+            const alerts = [
+                'dashboardWalletAlert',
+                'investWalletAlert',
+                'referralWalletAlert'
+            ];
             
-            document.getElementById('quickStats').style.display = 'grid';
-            document.getElementById('actionButtons').style.display = 'flex';
-            document.getElementById('referralStats').style.display = 'grid';
-            document.getElementById('referralLinkSection').style.display = 'block';
-            document.getElementById('bonusClaimSection').style.display = 'block';
+            const elementsToShow = [
+                'quickStats',
+                'actionButtons',
+                'referralStats',
+                'referralLinkSection',
+                'bonusClaimSection'
+            ];
+
+            alerts.forEach(alertId => {
+                const element = document.getElementById(alertId);
+                if (element) element.style.display = 'none';
+            });
+
+            elementsToShow.forEach(elementId => {
+                const element = document.getElementById(elementId);
+                if (element) element.style.display = elementId === 'quickStats' || elementId === 'referralStats' ? 'grid' : 'flex';
+            });
         }
 
-        // Contract Data Functions
+        // Enhanced Contract Data Functions
         async function loadContractData() {
-            if (!contract) return;
+            if (!contract || !isInitialized) return;
 
             try {
+                showLoadingState(true);
+                
                 // Load contract stats
                 const contractBalance = await contract.methods.getContractBalance().call();
                 const contractStats = await contract.methods.getContractStats().call();
                 
                 // Update home stats
-                document.getElementById('contractBalance').textContent = `${(parseFloat(web3.utils.fromWei(contractBalance, 'ether'))).toFixed(2)} USDT`;
-                document.getElementById('totalTVL').textContent = `$${(parseFloat(web3.utils.fromWei(contractBalance, 'ether'))).toLocaleString()}`;
-                document.getElementById('totalPaid').textContent = `$${(parseFloat(web3.utils.fromWei(contractStats.totalWithdrawalFeesCollected, 'ether'))).toLocaleString()}`;
+                updateElementText('contractBalance', `${(parseFloat(web3.utils.fromWei(contractBalance, 'ether'))).toFixed(2)} USDT`);
+                updateElementText('totalTVL', `$${(parseFloat(web3.utils.fromWei(contractBalance, 'ether'))).toLocaleString()}`);
+                updateElementText('totalPaid', `$${(parseFloat(web3.utils.fromWei(contractStats.totalWithdrawalFeesCollected, 'ether'))).toLocaleString()}`);
 
                 // Load user-specific data if wallet is connected
                 if (userAccount) {
@@ -2324,6 +2812,9 @@
 
             } catch (error) {
                 console.error('Error loading contract data:', error);
+                showNotification('Error loading contract data', 'error');
+            } finally {
+                showLoadingState(false);
             }
         }
 
@@ -2335,16 +2826,16 @@
                 const availableEarnings = await contract.methods.calculateAvailableEarnings(userAccount).call();
 
                 // Update dashboard
-                document.getElementById('totalDeposits').textContent = `${(parseFloat(web3.utils.fromWei(userInfo.totalDeposits, 'ether'))).toFixed(2)} USDT`;
-                document.getElementById('availableEarnings').textContent = `${(parseFloat(web3.utils.fromWei(availableEarnings, 'ether'))).toFixed(2)} USDT`;
-                document.getElementById('referralBonus').textContent = `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`;
-                document.getElementById('directReferrals').textContent = userInfo.directReferrals;
+                updateElementText('totalDeposits', `${(parseFloat(web3.utils.fromWei(userInfo.totalDeposits, 'ether'))).toFixed(2)} USDT`);
+                updateElementText('availableEarnings', `${(parseFloat(web3.utils.fromWei(availableEarnings, 'ether'))).toFixed(2)} USDT`);
+                updateElementText('referralBonus', `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`);
+                updateElementText('directReferrals', userInfo.directReferrals);
 
                 // Update referral section
-                document.getElementById('totalTeam').textContent = userInfo.directReferrals;
-                document.getElementById('referralDirectReferrals').textContent = userInfo.directReferrals;
-                document.getElementById('availableBonus').textContent = `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`;
-                document.getElementById('claimableBonus').textContent = `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`;
+                updateElementText('totalTeam', userInfo.directReferrals);
+                updateElementText('referralDirectReferrals', userInfo.directReferrals);
+                updateElementText('availableBonus', `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`);
+                updateElementText('claimableBonus', `${(parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether'))).toFixed(2)} USDT`);
 
                 // Update level counts
                 updateLevelCounts(userInfo.directReferrals);
@@ -2382,20 +2873,20 @@
             const activeInvestments = investments.filter(inv => inv.active);
 
             if (activeInvestments.length === 0) {
-                investmentsSection.style.display = 'none';
-                noInvestmentsMessage.style.display = 'block';
+                if (investmentsSection) investmentsSection.style.display = 'none';
+                if (noInvestmentsMessage) noInvestmentsMessage.style.display = 'block';
                 return;
             }
 
-            investmentsSection.style.display = 'block';
-            noInvestmentsMessage.style.display = 'none';
+            if (investmentsSection) investmentsSection.style.display = 'block';
+            if (noInvestmentsMessage) noInvestmentsMessage.style.display = 'none';
 
             tableBody.innerHTML = activeInvestments.map(investment => {
                 const planId = parseInt(investment.planId);
-                const dailyROI = [1.00, 1.20, 1.50, 1.80, 2.00][planId];
+                const dailyROI = [1.00, 1.20, 1.50, 1.80, 2.00][planId] || 1.00;
                 
                 return `
-                    <tr>
+                    <tr class="fade-in">
                         <td>Plan ${planId + 1}</td>
                         <td><strong>${(parseFloat(web3.utils.fromWei(investment.amount, 'ether'))).toFixed(2)} USDT</strong></td>
                         <td>${new Date(parseInt(investment.startTime) * 1000).toLocaleDateString()}</td>
@@ -2408,10 +2899,10 @@
         }
 
         function updateLevelCounts(directReferrals) {
-            document.getElementById('level1Count').textContent = directReferrals;
-            document.getElementById('level2Count').textContent = Math.max(0, directReferrals);
-            document.getElementById('level3Count').textContent = Math.max(0, directReferrals);
-            document.getElementById('level4Count').textContent = Math.max(0, directReferrals);
+            updateElementText('level1Count', directReferrals);
+            updateElementText('level2Count', Math.max(0, directReferrals));
+            updateElementText('level3Count', Math.max(0, directReferrals));
+            updateElementText('level4Count', Math.max(0, directReferrals));
         }
 
         function generateReferralLink() {
@@ -2423,7 +2914,7 @@
             }
         }
 
-        // Investment Functions
+        // Enhanced Investment Functions
         function generateInvestmentPlans() {
             const plansContainer = document.getElementById('investmentPlans');
             if (!plansContainer) return;
@@ -2532,7 +3023,7 @@
                     <ul class="plan-features">
                         ${plan.features.map(feature => `<li><i class="fas fa-check"></i> ${feature}</li>`).join('')}
                     </ul>
-                    <button class="btn btn--primary">
+                    <button class="btn btn--primary" style="margin-top: auto;">
                         <i class="fas fa-arrow-right"></i>
                         Select Plan
                     </button>
@@ -2565,22 +3056,34 @@
         }
 
         function showInvestmentForm() {
-            document.getElementById('investmentPlans').style.display = 'none';
-            document.getElementById('investmentForm').classList.add('active');
-            document.getElementById('investWalletAlert').style.display = 'none';
+            const plansElement = document.getElementById('investmentPlans');
+            const formElement = document.getElementById('investmentForm');
+            const alertElement = document.getElementById('investWalletAlert');
+
+            if (plansElement) plansElement.style.display = 'none';
+            if (formElement) formElement.classList.add('active');
+            if (alertElement) alertElement.style.display = 'none';
         }
 
         function showPlans() {
-            document.getElementById('investmentPlans').style.display = 'grid';
-            document.getElementById('investmentForm').classList.remove('active');
-            document.getElementById('investmentSuccess').classList.remove('active');
+            const plansElement = document.getElementById('investmentPlans');
+            const formElement = document.getElementById('investmentForm');
+            const successElement = document.getElementById('investmentSuccess');
+
+            if (plansElement) plansElement.style.display = 'grid';
+            if (formElement) formElement.classList.remove('active');
+            if (successElement) successElement.classList.remove('active');
             selectedPlan = null;
         }
 
         function showSuccess() {
-            document.getElementById('investmentPlans').style.display = 'none';
-            document.getElementById('investmentForm').classList.remove('active');
-            document.getElementById('investmentSuccess').classList.add('active');
+            const plansElement = document.getElementById('investmentPlans');
+            const formElement = document.getElementById('investmentForm');
+            const successElement = document.getElementById('investmentSuccess');
+
+            if (plansElement) plansElement.style.display = 'none';
+            if (formElement) formElement.classList.remove('active');
+            if (successElement) successElement.classList.add('active');
         }
 
         function updatePlanSummary() {
@@ -2616,9 +3119,9 @@
             const platformFee = amount * 0.10; // 10% platform fee
             const totalToPay = amount; // User pays the full amount, fee is deducted from it
 
-            document.getElementById('summaryAmount').textContent = `${amount.toFixed(2)} USDT`;
-            document.getElementById('summaryFee').textContent = `${platformFee.toFixed(2)} USDT`;
-            document.getElementById('summaryTotal').textContent = `${totalToPay.toFixed(2)} USDT`;
+            updateElementText('summaryAmount', `${amount.toFixed(2)} USDT`);
+            updateElementText('summaryFee', `${platformFee.toFixed(2)} USDT`);
+            updateElementText('summaryTotal', `${totalToPay.toFixed(2)} USDT`);
         }
 
         async function confirmInvestment() {
@@ -2665,12 +3168,13 @@
                 // Show loading state
                 confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 confirmBtn.disabled = true;
+                showLoadingState(true);
 
-                // Convert amount to wei (USDT has 6 decimals, but contract uses 18 for consistency)
+                // Convert amount to wei
                 const amountWei = web3.utils.toWei(amount.toString(), 'ether');
 
                 // Execute the investment
-                await contract.methods.deposit(amountWei, selectedPlan.id, referrerAddress).send({
+                const receipt = await contract.methods.deposit(amountWei, selectedPlan.id, referrerAddress).send({
                     from: userAccount,
                     gas: 500000
                 });
@@ -2703,6 +3207,7 @@
                 const confirmBtn = document.getElementById('confirmInvestment');
                 confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm Investment';
                 confirmBtn.disabled = false;
+                showLoadingState(false);
             }
         }
 
@@ -2719,6 +3224,7 @@
                 // Show loading state
                 withdrawBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 withdrawBtn.disabled = true;
+                showLoadingState(true);
 
                 await contract.methods.withdraw().send({
                     from: userAccount,
@@ -2750,6 +3256,7 @@
                 const withdrawBtn = document.getElementById('withdrawEarnings');
                 withdrawBtn.innerHTML = '<i class="fas fa-download"></i> Withdraw Earnings';
                 withdrawBtn.disabled = false;
+                showLoadingState(false);
             }
         }
 
@@ -2766,9 +3273,9 @@
                 // Show loading state
                 claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
                 claimBtn.disabled = true;
+                showLoadingState(true);
 
                 // Referral bonuses are automatically included in available earnings
-                // So we use the withdraw function to claim them
                 await contract.methods.withdraw().send({
                     from: userAccount,
                     gas: 300000
@@ -2797,15 +3304,28 @@
                 const claimBtn = document.getElementById('claimBonus');
                 claimBtn.innerHTML = '<i class="fas fa-gift"></i> Claim Bonus';
                 claimBtn.disabled = false;
+                showLoadingState(false);
             }
         }
 
-        // Referral Functions
+        // Enhanced Referral Functions
         function copyReferralLink() {
             const referralLink = document.getElementById('referralLink');
             if (referralLink) {
                 referralLink.select();
                 referralLink.setSelectionRange(0, 99999);
+                
+                // Use modern clipboard API if available
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(referralLink.value)
+                        .then(() => showNotification('Referral link copied to clipboard!', 'success'))
+                        .catch(() => fallbackCopy());
+                } else {
+                    fallbackCopy();
+                }
+            }
+
+            function fallbackCopy() {
                 document.execCommand('copy');
                 showNotification('Referral link copied to clipboard!', 'success');
             }
@@ -2837,7 +3357,7 @@
             }
         }
 
-        // Section Data Loading
+        // Enhanced Section Data Loading
         function loadDashboardData() {
             if (userAccount) {
                 loadUserData();
@@ -2850,9 +3370,15 @@
             }
         }
 
-        // Utility Functions
+        // Enhanced Utility Functions
         function showNotification(message, type = 'info') {
-            notification.textContent = message;
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+            
+            notification.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
             notification.className = `notification ${type} show`;
 
             setTimeout(() => {
@@ -2860,15 +3386,42 @@
             }, 5000);
         }
 
+        function showLoadingState(show) {
+            if (show) {
+                document.body.classList.add('loading');
+            } else {
+                document.body.classList.remove('loading');
+            }
+        }
+
+        function updateElementText(elementId, text) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = text;
+            }
+        }
+
         function checkPreloader() {
             window.addEventListener('load', () => {
                 setTimeout(() => {
+                    if (preloader) {
+                        preloader.classList.add('fade-out');
+                        setTimeout(() => {
+                            preloader.remove();
+                        }, 500);
+                    }
+                }, 1000);
+            });
+
+            // Fallback in case load event doesn't fire
+            setTimeout(() => {
+                if (preloader && !preloader.classList.contains('fade-out')) {
                     preloader.classList.add('fade-out');
                     setTimeout(() => {
                         preloader.remove();
                     }, 500);
-                }, 1000);
-            });
+                }
+            }, 3000);
         }
 
         // Make functions available globally for onclick events
