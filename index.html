@@ -599,6 +599,80 @@
             flex-wrap: wrap;
         }
 
+        /* NEW: Active Investment Plans Section */
+        .active-plans-section {
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .active-plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .active-plan-card {
+            background: var(--gradient-elegant);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-xl);
+            transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-elegant);
+        }
+
+        .active-plan-card:hover {
+            border-color: var(--primary-gold);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-gold-lg);
+        }
+
+        .active-plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .active-plan-name {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .active-plan-status {
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .active-plan-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+
+        .active-plan-detail {
+            text-align: center;
+        }
+
+        .active-plan-label {
+            font-size: var(--font-size-sm);
+            color: var(--gray-400);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .active-plan-value {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--primary-gold);
+        }
+
         .investments-table {
             background: var(--gradient-elegant);
             border: 1px solid rgba(212, 175, 55, 0.2);
@@ -962,19 +1036,44 @@
             font-size: var(--font-size-lg);
         }
 
+        /* Enhanced Investment Success Popup */
+        .investment-success-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .investment-success-popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .investment-success {
-            text-align: center;
-            padding: var(--spacing-4xl);
             background: var(--gradient-elegant);
             border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: var(--radius-2xl);
-            display: none;
+            padding: var(--spacing-3xl);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow-elegant);
+            transform: scale(0.9);
+            transition: transform var(--transition-normal);
         }
 
-        .investment-success.active {
-            display: block;
+        .investment-success-popup.active .investment-success {
+            transform: scale(1);
         }
 
         .success-icon {
@@ -1001,9 +1100,6 @@
         .investment-success p {
             color: var(--gray-400);
             margin-bottom: var(--spacing-2xl);
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
             line-height: 1.6;
             font-size: var(--font-size-lg);
         }
@@ -1166,9 +1262,41 @@
             font-size: var(--font-size-sm);
         }
 
-        /* Hapus bonus claim section dari referral */
         .bonus-claim-section {
-            display: none;
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .claim-card {
+            background: var(--gradient-elegant);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-3xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-2xl);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-elegant);
+        }
+
+        .claim-info h3 {
+            margin-bottom: var(--spacing-sm);
+            color: var(--white);
+            font-family: var(--font-heading);
+            font-size: var(--font-size-2xl);
+        }
+
+        .claim-info p {
+            color: var(--gray-400);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.6;
+        }
+
+        .bonus-amount {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--primary-gold);
+            font-family: var(--font-heading);
         }
 
         .steps-grid {
@@ -2139,6 +2267,14 @@
                     </button>
                 </div>
 
+                <!-- NEW: Active Investment Plans Section -->
+                <div class="active-plans-section" id="activePlansSection" style="display: none;">
+                    <h3 style="margin-bottom: var(--spacing-xl); color: var(--white); font-family: var(--font-heading);">Active Investment Plans</h3>
+                    <div class="active-plans-grid" id="activePlansGrid">
+                        <!-- Active plans will be populated by JavaScript -->
+                    </div>
+                </div>
+
                 <!-- Active Investments -->
                 <div class="investments-table" id="investmentsSection" style="display: none;">
                     <table>
@@ -2249,22 +2385,24 @@
                     </div>
                 </div>
 
-                <!-- Investment Success -->
-                <div class="investment-success" id="investmentSuccess">
-                    <div class="success-icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <h2>Investment Successful!</h2>
-                    <p>Your investment has been processed successfully. You can now monitor your earnings in the dashboard.</p>
-                    <div class="success-actions">
-                        <button class="btn btn--primary" data-section="dashboard">
-                            <i class="fas fa-tachometer-alt"></i>
-                            Go to Dashboard
-                        </button>
-                        <button class="btn btn--outline" id="newInvestment">
-                            <i class="fas fa-plus"></i>
-                            New Investment
-                        </button>
+                <!-- Investment Success Popup -->
+                <div class="investment-success-popup" id="investmentSuccessPopup">
+                    <div class="investment-success">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h2>Investment Successful!</h2>
+                        <p>Your investment has been processed successfully. You can now monitor your earnings in the dashboard.</p>
+                        <div class="success-actions">
+                            <button class="btn btn--primary" data-section="dashboard">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Go to Dashboard
+                            </button>
+                            <button class="btn btn--outline" id="newInvestment">
+                                <i class="fas fa-plus"></i>
+                                New Investment
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3073,6 +3211,7 @@
         const navToggle = document.getElementById('nav-toggle');
         const connectWalletBtn = document.getElementById('connectWallet');
         const notification = document.getElementById('notification');
+        const investmentSuccessPopup = document.getElementById('investmentSuccessPopup');
 
         // Section Elements
         const sections = {
@@ -3206,7 +3345,6 @@
             document.getElementById('shareTelegram').addEventListener('click', () => shareOnSocial('telegram'));
             document.getElementById('shareTwitter').addEventListener('click', () => shareOnSocial('twitter'));
             document.getElementById('shareWhatsapp').addEventListener('click', () => shareOnSocial('whatsapp'));
-            document.getElementById('claimBonus').addEventListener('click', claimReferralBonus);
 
             // Wallet account changes
             if (window.ethereum) {
@@ -3351,7 +3489,6 @@
             document.getElementById('actionButtons').style.display = 'flex';
             document.getElementById('referralStats').style.display = 'grid';
             document.getElementById('referralLinkSection').style.display = 'block';
-            document.getElementById('bonusClaimSection').style.display = 'block';
         }
 
         // Contract Data Functions
@@ -3393,8 +3530,8 @@
                 // Update referral section
                 document.getElementById('totalTeam').textContent = userInfo.directReferrals;
                 document.getElementById('referralDirectReferrals').textContent = userInfo.directReferrals;
+                document.getElementById('totalBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
                 document.getElementById('availableBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
-                document.getElementById('claimableBonus').textContent = `${web3.utils.fromWei(userInfo.referralBonus, 'ether')} USDT`;
 
                 // Update level counts
                 updateLevelCounts(userInfo.directReferrals);
@@ -3418,18 +3555,27 @@
                 const tableBody = document.getElementById('investmentsTableBody');
                 const noInvestmentsMessage = document.getElementById('noInvestmentsMessage');
                 const investmentsSection = document.getElementById('investmentsSection');
+                const activePlansSection = document.getElementById('activePlansSection');
+                const activePlansGrid = document.getElementById('activePlansGrid');
 
                 if (investments.length === 0) {
                     noInvestmentsMessage.style.display = 'block';
                     investmentsSection.style.display = 'none';
+                    activePlansSection.style.display = 'none';
                     return;
                 }
 
                 noInvestmentsMessage.style.display = 'none';
                 investmentsSection.style.display = 'block';
+                activePlansSection.style.display = 'block';
 
                 tableBody.innerHTML = '';
+                activePlansGrid.innerHTML = '';
+                
                 const planNames = ['Starter Plan', 'Advanced Plan', 'Professional Plan', 'Premium Plan', 'VIP Plan'];
+                const planROIs = [1.00, 1.20, 1.50, 1.80, 2.00];
+                const planDurations = [150, 150, 150, 150, 150];
+                const planTotalROIs = [150, 180, 225, 270, 300];
 
                 for (let i = 0; i < investments.length; i++) {
                     const investment = investments[i];
@@ -3439,28 +3585,56 @@
                     const totalWithdrawn = web3.utils.fromWei(investment.totalWithdrawn, 'ether');
                     const isActive = investment.active;
 
+                    // Add to investments table
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${planNames[planId] || `Plan ${planId}`}</td>
                         <td>${parseFloat(amount).toFixed(2)} USDT</td>
                         <td>${startTime.toLocaleDateString()}</td>
-                        <td>${getDailyROIForPlan(planId)}%</td>
+                        <td>${planROIs[planId] || 1.00}%</td>
                         <td>${parseFloat(totalWithdrawn).toFixed(2)} USDT</td>
                         <td><span class="status-badge ${isActive ? 'status-active' : 'status-completed'}">${isActive ? 'Active' : 'Completed'}</span></td>
                     `;
                     tableBody.appendChild(row);
+
+                    // Add to active plans grid if active
+                    if (isActive) {
+                        const planCard = document.createElement('div');
+                        planCard.className = 'active-plan-card';
+                        planCard.innerHTML = `
+                            <div class="active-plan-header">
+                                <div class="active-plan-name">${planNames[planId] || `Plan ${planId}`}</div>
+                                <div class="active-plan-status">Active</div>
+                            </div>
+                            <div class="active-plan-details">
+                                <div class="active-plan-detail">
+                                    <div class="active-plan-label">Daily ROI</div>
+                                    <div class="active-plan-value">${planROIs[planId] || 1.00}%</div>
+                                </div>
+                                <div class="active-plan-detail">
+                                    <div class="active-plan-label">Days Duration</div>
+                                    <div class="active-plan-value">${planDurations[planId] || 150}</div>
+                                </div>
+                                <div class="active-plan-detail">
+                                    <div class="active-plan-label">Total Returns</div>
+                                    <div class="active-plan-value">${planTotalROIs[planId] || 150}%</div>
+                                </div>
+                                <div class="active-plan-detail">
+                                    <div class="active-plan-label">Invested</div>
+                                    <div class="active-plan-value">${parseFloat(amount).toFixed(2)} USDT</div>
+                                </div>
+                            </div>
+                        `;
+                        activePlansGrid.appendChild(planCard);
+                    }
                 }
 
             } catch (error) {
                 console.error('Error loading user investments:', error);
                 document.getElementById('noInvestmentsMessage').style.display = 'block';
                 document.getElementById('investmentsSection').style.display = 'none';
+                document.getElementById('activePlansSection').style.display = 'none';
             }
-        }
-
-        function getDailyROIForPlan(planId) {
-            const planROIs = [1.00, 1.20, 1.50, 1.80, 2.00];
-            return planROIs[planId] || 1.00;
         }
 
         function updateLevelCounts(directReferrals) {
@@ -3629,14 +3803,12 @@
         function showPlans() {
             document.getElementById('investmentPlans').style.display = 'grid';
             document.getElementById('investmentForm').classList.remove('active');
-            document.getElementById('investmentSuccess').classList.remove('active');
+            investmentSuccessPopup.classList.remove('active');
             selectedPlan = null;
         }
 
-        function showSuccess() {
-            document.getElementById('investmentPlans').style.display = 'none';
-            document.getElementById('investmentForm').classList.remove('active');
-            document.getElementById('investmentSuccess').classList.add('active');
+        function showSuccessPopup() {
+            investmentSuccessPopup.classList.add('active');
         }
 
         function updatePlanSummary() {
@@ -3766,7 +3938,7 @@
                 });
 
                 showNotification('Investment successful! 🎉', 'success');
-                showSuccess();
+                showSuccessPopup();
                 
                 // Reload user data
                 await loadUserData();
@@ -3832,11 +4004,6 @@
                 withdrawBtn.innerHTML = '<i class="fas fa-download"></i> Withdraw Earnings';
                 withdrawBtn.disabled = false;
             }
-        }
-
-        async function claimReferralBonus() {
-            // For now, use the same withdraw function since bonuses are included in available earnings
-            await withdrawEarnings();
         }
 
         // Referral Functions
