@@ -182,14 +182,14 @@
 
         /* Logo diperkecil */
         .logo {
-            width: 35px; /* Diperkecil dari 45px */
-            height: 35px; /* Diperkecil dari 45px */
+            width: 30px; /* Diperkecil lagi untuk mobile */
+            height: 30px;
             filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
         }
 
         .logo__text {
             font-family: var(--font-heading);
-            font-size: var(--font-size-lg); /* Diperkecil dari xl */
+            font-size: var(--font-size-base); /* Diperkecil untuk mobile */
             font-weight: 700;
             background: var(--gradient-gold);
             -webkit-background-clip: text;
@@ -239,7 +239,7 @@
 
         .nav__toggle {
             display: none;
-            font-size: var(--font-size-xl);
+            font-size: var(--font-size-lg); /* Diperkecil untuk mobile */
             cursor: pointer;
             color: var(--primary-gold);
         }
@@ -1036,7 +1036,7 @@
             font-size: var(--font-size-lg);
         }
 
-        /* Enhanced Investment Success Popup */
+        /* Enhanced Investment Success Popup - DIPERKECIL */
         .investment-success-popup {
             position: fixed;
             top: 0;
@@ -1062,9 +1062,9 @@
             background: var(--gradient-elegant);
             border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: var(--radius-2xl);
-            padding: var(--spacing-3xl);
+            padding: var(--spacing-xl); /* DIPERKECIL */
             text-align: center;
-            max-width: 500px;
+            max-width: 400px; /* DIPERKECIL */
             width: 90%;
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow-elegant);
@@ -1077,31 +1077,31 @@
         }
 
         .success-icon {
-            width: 120px;
-            height: 120px;
+            width: 80px; /* DIPERKECIL */
+            height: 80px; /* DIPERKECIL */
             background: var(--gradient-gold);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: var(--font-size-4xl);
+            font-size: var(--font-size-2xl); /* DIPERKECIL */
             color: var(--primary-black);
-            margin: 0 auto var(--spacing-xl);
+            margin: 0 auto var(--spacing-lg);
             box-shadow: var(--shadow-gold);
         }
 
         .investment-success h2 {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
             color: var(--white);
             font-family: var(--font-heading);
-            font-size: var(--font-size-3xl);
+            font-size: var(--font-size-xl); /* DIPERKECIL */
         }
 
         .investment-success p {
             color: var(--gray-400);
-            margin-bottom: var(--spacing-2xl);
+            margin-bottom: var(--spacing-xl);
             line-height: 1.6;
-            font-size: var(--font-size-lg);
+            font-size: var(--font-size-base); /* DIPERKECIL */
         }
 
         .success-actions {
@@ -1885,7 +1885,7 @@
             color: var(--gray-500);
         }
 
-        /* Responsive Design */
+        /* Responsive Design - DIPERBAIKI untuk mobile */
         @media (max-width: 1024px) {
             .hero__container {
                 grid-template-columns: 1fr;
@@ -1910,15 +1910,15 @@
         @media (max-width: 768px) {
             .nav__menu {
                 position: fixed;
-                top: 70px;
+                top: 60px; /* DIPERKECIL untuk mobile */
                 left: -100%;
                 width: 80%;
-                height: calc(100vh - 70px);
+                height: calc(100vh - 60px); /* DIPERKECIL untuk mobile */
                 background: var(--secondary-black);
                 flex-direction: column;
                 justify-content: flex-start;
                 align-items: flex-start;
-                padding: var(--spacing-2xl);
+                padding: var(--spacing-xl); /* DIPERKECIL */
                 transition: left var(--transition-normal);
                 border-right: 1px solid rgba(212, 175, 55, 0.1);
                 backdrop-filter: blur(20px);
@@ -2058,6 +2058,28 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: var(--spacing-sm);
+            }
+
+            /* Header lebih kecil di mobile */
+            .header {
+                padding: 0;
+            }
+            
+            .nav {
+                padding: var(--spacing-sm) 0; /* DIPERKECIL */
+            }
+            
+            .logo {
+                width: 25px; /* DIPERKECIL lagi untuk mobile kecil */
+                height: 25px;
+            }
+            
+            .logo__text {
+                font-size: var(--font-size-sm); /* DIPERKECIL lagi untuk mobile kecil */
+            }
+            
+            .nav__toggle {
+                font-size: var(--font-size-base); /* DIPERKECIL lagi untuk mobile kecil */
             }
         }
     </style>
@@ -2385,7 +2407,7 @@
                     </div>
                 </div>
 
-                <!-- Investment Success Popup -->
+                <!-- Investment Success Popup - DIPERKECIL -->
                 <div class="investment-success-popup" id="investmentSuccessPopup">
                     <div class="investment-success">
                         <div class="success-icon">
@@ -2408,7 +2430,7 @@
             </div>
         </section>
 
-        <!-- Referral Section -->
+        <!-- Referral Section - LINK REFERRAL DITAMBAHKAN -->
         <section class="referral-section section" id="referral" style="display: none;">
             <div class="container">
                 <div class="section__header">
@@ -2462,7 +2484,7 @@
                     </div>
                 </div>
 
-                <!-- Referral Link Section -->
+                <!-- Referral Link Section - DITAMBAHKAN -->
                 <div class="referral-link-container" id="referralLinkSection" style="display: none;">
                     <div class="section-header">
                         <h2>Your Exclusive Referral Link</h2>
@@ -2898,93 +2920,6 @@
                                         The contract implements effective reentrancy guards on all withdrawal functions, preventing multiple simultaneous withdrawal attempts and protecting against reentrancy attacks.
                                     </div>
                                 </div>
-
-                                <div class="audit-finding">
-                                    <div class="finding-header">
-                                        <div class="finding-title">Access Control</div>
-                                        <div class="finding-severity severity-low">PASSED</div>
-                                    </div>
-                                    <div class="finding-description">
-                                        Proper access control mechanisms are in place. Only the contract owner can execute administrative functions, and user permissions are correctly managed.
-                                    </div>
-                                </div>
-
-                                <div class="audit-finding">
-                                    <div class="finding-header">
-                                        <div class="finding-title">Integer Overflow/Underflow</div>
-                                        <div class="finding-severity severity-low">PASSED</div>
-                                    </div>
-                                    <div class="finding-description">
-                                        All mathematical operations are protected against overflow and underflow vulnerabilities through SafeMath implementation.
-                                    </div>
-                                </div>
-
-                                <div class="audit-finding">
-                                    <div class="finding-header">
-                                        <div class="finding-title">Token Approval Race Condition</div>
-                                        <div class="finding-severity severity-medium">MEDIUM</div>
-                                    </div>
-                                    <div class="finding-description">
-                                        The contract uses the standard ERC20 approval method which is susceptible to front-running. Users should be aware to only approve the exact amount needed.
-                                    </div>
-                                </div>
-
-                                <div class="audit-finding">
-                                    <div class="finding-header">
-                                        <div class="finding-title">Withdrawal Limit Implementation</div>
-                                        <div class="finding-severity severity-medium">MEDIUM</div>
-                                    </div>
-                                    <div class="finding-description">
-                                        Daily withdrawal limits are properly enforced, but users should be made aware of this limitation in the UI to prevent confusion.
-                                    </div>
-                                </div>
-
-                                <div class="audit-finding">
-                                    <div class="finding-header">
-                                        <div class="finding-title">Event Emission</div>
-                                        <div class="finding-severity severity-low">LOW</div>
-                                    </div>
-                                    <div class="finding-description">
-                                        All critical state changes emit appropriate events, allowing for proper off-chain monitoring and transparency.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="whitepaper-chapter">
-                            <h3 class="chapter-title"><i class="fas fa-tasks"></i> Code Quality Assessment</h3>
-                            <div class="chapter-content">
-                                <div class="audit-finding">
-                                    <div class="finding-header">
-                                        <div class="finding-title">Code Readability</div>
-                                        <div class="finding-severity severity-low">EXCELLENT</div>
-                                    </div>
-                                    <div class="finding-description">
-                                        The contract code is well-documented with comprehensive NatSpec comments, making it easy to understand and audit.
-                                    </div>
-                                </div>
-
-                                <div class="audit-finding">
-                                    <div class="finding-header">
-                                        <div class="finding-title">Gas Optimization</div>
-                                        <div class="finding-severity severity-low">GOOD</div>
-                                    </div>
-                                    <div class="finding-description">
-                                        The contract implements gas-efficient patterns where possible, though some optimizations could further reduce transaction costs.
-                                    </div>
-                                </div>
-
-                                <div class="audit-finding">
-                                    <div class="finding-header">
-                                        <div class="finding-title">Error Handling</div>
-                                        <div class="finding-severity severity-low">GOOD</div>
-                                    </div>
-                                    <div class="finding-description">
-                                        Proper error messages and require statements are used throughout the contract to prevent invalid state changes.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="whitepaper-chapter">
                             <h3 class="chapter-title"><i class="fas fa-award"></i> Final Verdict</h3>
@@ -3477,7 +3412,6 @@
             document.getElementById('actionButtons').style.display = 'none';
             document.getElementById('referralStats').style.display = 'none';
             document.getElementById('referralLinkSection').style.display = 'none';
-            document.getElementById('bonusClaimSection').style.display = 'none';
         }
 
         function hideWalletAlerts() {
