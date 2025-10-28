@@ -21,7 +21,7 @@
     --gradient-dark: linear-gradient(135deg, var(--primary-black) 0%, var(--secondary-black) 100%);
     --gradient-card: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
     --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    --gradient-elegant: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(255, 215, 0, 0.08) 100%);
+    --gradient-elegant: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
 
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -77,7 +77,9 @@ html {
 
 body {
     font-family: var(--font-primary);
-    background: var(--primary-black);
+    background-color: var(--primary-black);
+    background-image: radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.1), transparent 30%),
+                      radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.08), transparent 30%);
     color: var(--white);
     line-height: 1.6;
     overflow-x: hidden;
@@ -149,36 +151,41 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    background: rgba(10, 10, 10, 0.95);
+    background: rgba(10, 10, 10, 0.85);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
     z-index: 1000;
     transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
 }
 
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-md) 0;
+    height: 80px;
+    transition: all var(--transition-normal);
 }
 
 .nav__logo {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
 }
 
-/* Logo diperkecil */
 .logo {
-    width: 30px; /* Diperkecil lagi untuk mobile */
-    height: 30px;
-    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+    width: 40px; 
+    height: 40px;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+    transition: transform var(--transition-normal);
+}
+.nav__logo:hover .logo {
+    transform: rotate(-15deg);
 }
 
 .logo__text {
     font-family: var(--font-heading);
-    font-size: var(--font-size-base); /* Diperkecil untuk mobile */
+    font-size: var(--font-size-xl); 
     font-weight: 700;
     background: var(--gradient-gold);
     -webkit-background-clip: text;
@@ -203,32 +210,43 @@ body {
     color: var(--gray-300);
     text-decoration: none;
     font-weight: 500;
-    transition: color var(--transition-fast);
+    transition: all var(--transition-fast);
     position: relative;
     cursor: pointer;
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     letter-spacing: 0.5px;
+    padding: var(--spacing-sm) 0;
 }
 
-.nav__link:hover,
-.nav__link.active {
-    color: var(--primary-gold);
-}
-
-.nav__link.active::after {
+.nav__link::after {
     content: '';
     position: absolute;
-    bottom: -8px;
+    bottom: -2px;
     left: 0;
     width: 100%;
     height: 2px;
     background: var(--gradient-gold);
     box-shadow: var(--shadow-gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--transition-normal);
+}
+
+.nav__link:hover,
+.nav__link.active {
+    color: var(--primary-gold);
+    transform: translateY(-2px);
+}
+
+.nav__link:hover::after,
+.nav__link.active::after {
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
 .nav__toggle {
     display: none;
-    font-size: var(--font-size-lg); /* Diperkecil untuk mobile */
+    font-size: var(--font-size-xl);
     cursor: pointer;
     color: var(--primary-gold);
 }
@@ -237,7 +255,7 @@ body {
 .btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center; /* Center button content */
+    justify-content: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-md) var(--spacing-xl);
     border: none;
@@ -259,7 +277,7 @@ body {
 }
 
 .btn--primary:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.05);
     box-shadow: var(--shadow-gold-lg);
 }
 
@@ -271,7 +289,8 @@ body {
 
 .btn--outline:hover {
     background: rgba(212, 175, 55, 0.1);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    color: var(--primary-gold);
 }
 
 .btn--secondary {
@@ -282,7 +301,7 @@ body {
 
 .btn--secondary:hover {
     background: var(--gray-700);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 
 .btn i {
@@ -306,9 +325,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Center content horizontally */
+    align-items: center;
     position: relative;
-    text-align: center; /* Center text by default */
+    text-align: center;
 }
 
 .section .container {
@@ -347,6 +366,17 @@ body {
 }
 
 /* Enhanced Hero Section */
+@keyframes fadeIn-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .hero {
     padding-top: 120px;
     background: var(--gradient-dark);
@@ -381,13 +411,13 @@ body {
     align-items: center;
 }
 
-/* PERBAIKAN: Center hero content */
 .hero__content {
-    text-align: left; /* Revert to left align for grid layout */
+    text-align: left;
 }
 
 .hero__badge {
     margin-bottom: var(--spacing-lg);
+    animation: fadeIn-up 0.6s ease-out 0.2s backwards;
 }
 
 .badge {
@@ -409,6 +439,8 @@ body {
     line-height: 1.1;
     letter-spacing: 1px;
     font-weight: 800;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    animation: fadeIn-up 0.6s ease-out 0.4s backwards;
 }
 
 .hero__description {
@@ -417,36 +449,14 @@ body {
     margin-bottom: var(--spacing-2xl);
     max-width: 500px;
     line-height: 1.7;
+    animation: fadeIn-up 0.6s ease-out 0.6s backwards;
 }
 
 .hero__buttons {
     display: flex;
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-3xl);
-}
-
-.hero__stats {
-    display: flex;
-    gap: var(--spacing-2xl);
-    text-align: left; /* Revert for stats */
-}
-
-.stat {
-    text-align: center;
-}
-
-.stat__value {
-    font-size: var(--font-size-3xl);
-    font-weight: 700;
-    color: var(--primary-gold);
-    margin-bottom: var(--spacing-xs);
-    font-family: var(--font-heading);
-}
-
-.stat__label {
-    font-size: var(--font-size-sm);
-    color: var(--gray-400);
-    letter-spacing: 0.5px;
+    animation: fadeIn-up 0.6s ease-out 0.8s backwards;
 }
 
 .hero__image {
@@ -601,7 +611,7 @@ body {
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-3xl);
     flex-wrap: wrap;
-    justify-content: center; /* Center buttons */
+    justify-content: center;
 }
 
 .investments-table {
@@ -675,7 +685,7 @@ body {
     border-radius: var(--radius-2xl);
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-elegant);
-    display: flex; /* Flexbox for centering */
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -857,7 +867,7 @@ body {
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-elegant);
     width: 100%;
-    max-width: 600px; /* Consistent width for form */
+    max-width: 600px;
 }
 
 .investment-form-container.active {
@@ -974,7 +984,7 @@ body {
     font-size: var(--font-size-lg);
 }
 
-/* Enhanced Investment Success Popup - DIPERKECIL */
+/* Enhanced Investment Success Popup */
 .investment-success-popup {
     position: fixed;
     top: 0;
@@ -1000,9 +1010,9 @@ body {
     background: var(--gradient-elegant);
     border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: var(--radius-2xl);
-    padding: var(--spacing-xl); /* DIPERKECIL */
+    padding: var(--spacing-2xl);
     text-align: center;
-    max-width: 400px; /* DIPERKECIL */
+    max-width: 450px;
     width: 90%;
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-elegant);
@@ -1015,14 +1025,14 @@ body {
 }
 
 .success-icon {
-    width: 80px; /* DIPERKECIL */
-    height: 80px; /* DIPERKECIL */
+    width: 90px;
+    height: 90px;
     background: var(--gradient-gold);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--font-size-2xl); /* DIPERKECIL */
+    font-size: var(--font-size-3xl);
     color: var(--primary-black);
     margin: 0 auto var(--spacing-lg);
     box-shadow: var(--shadow-gold);
@@ -1032,14 +1042,14 @@ body {
     margin-bottom: var(--spacing-md);
     color: var(--white);
     font-family: var(--font-heading);
-    font-size: var(--font-size-xl); /* DIPERKECIL */
+    font-size: var(--font-size-2xl);
 }
 
 .investment-success p {
     color: var(--gray-400);
     margin-bottom: var(--spacing-xl);
     line-height: 1.6;
-    font-size: var(--font-size-base); /* DIPERKECIL */
+    font-size: var(--font-size-lg);
 }
 
 .success-actions {
@@ -1882,7 +1892,7 @@ body {
     color: var(--gray-500);
 }
 
-/* Responsive Design - DIPERBAIKI untuk mobile */
+/* Responsive Design */
 @media (max-width: 1024px) {
     .hero__container {
         grid-template-columns: 1fr;
@@ -1891,17 +1901,13 @@ body {
     }
 
     .hero__content {
-        text-align: center; /* Center content on smaller screens */
+        text-align: center;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
     .hero__buttons {
-        justify-content: center;
-    }
-
-    .hero__stats {
         justify-content: center;
     }
 
@@ -1916,17 +1922,21 @@ body {
 }
 
 @media (max-width: 768px) {
+    .nav {
+        height: 72px;
+    }
+
     .nav__menu {
         position: fixed;
-        top: 60px; /* DIPERKECIL untuk mobile */
+        top: 72px;
         left: -100%;
         width: 80%;
-        height: calc(100vh - 60px); /* DIPERKECIL untuk mobile */
+        height: calc(100vh - 72px);
         background: var(--secondary-black);
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
-        padding: var(--spacing-xl); /* DIPERKECIL */
+        padding: var(--spacing-xl);
         transition: left var(--transition-normal);
         border-right: 1px solid rgba(212, 175, 55, 0.1);
         backdrop-filter: blur(20px);
@@ -1949,8 +1959,18 @@ body {
 
     .nav__toggle {
         display: block;
+        font-size: var(--font-size-2xl);
     }
 
+    .logo {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .logo__text {
+        font-size: var(--font-size-lg);
+    }
+    
     .hero__title {
         font-size: var(--font-size-4xl);
     }
@@ -1963,11 +1983,6 @@ body {
     }
     .hero__buttons .btn {
         width: 100%;
-    }
-
-    .hero__stats {
-        flex-direction: column;
-        gap: var(--spacing-lg);
     }
 
     .investment-plans {
@@ -2033,7 +2048,6 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    /* PERBAIKAN: Padding untuk Whitepaper & Audit di mobile */
     .whitepaper-content, .audit-content {
         padding: var(--spacing-xl);
     }
@@ -2061,19 +2075,10 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .referral-header h1 {
-        font-size: var(--font-size-3xl);
-    }
-
-    .section-header h2 {
-        font-size: var(--font-size-2xl);
-    }
-
     .audit-summary {
         grid-template-columns: 1fr;
     }
 
-    /* PERBAIKAN TAMBAHAN: Padding lebih kecil untuk Audit Report di layar sangat kecil */
     .whitepaper-content, .audit-content {
         padding: var(--spacing-lg);
     }
@@ -2082,27 +2087,5 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--spacing-sm);
-    }
-
-    /* Header lebih kecil di mobile */
-    .header {
-        padding: 0;
-    }
-    
-    .nav {
-        padding: var(--spacing-sm) 0; /* DIPERKECIL */
-    }
-    
-    .logo {
-        width: 25px; /* DIPERKECIL lagi untuk mobile kecil */
-        height: 25px;
-    }
-    
-    .logo__text {
-        font-size: var(--font-size-sm); /* DIPERKECIL lagi untuk mobile kecil */
-    }
-    
-    .nav__toggle {
-        font-size: var(--font-size-base); /* DIPERKECIL lagi untuk mobile kecil */
     }
 }
