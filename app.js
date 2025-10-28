@@ -1,11 +1,7 @@
-// Contract Configuration - REAL CONTRACT
+// Contract Configuration
 const CONTRACT_ADDRESS = '0xAD81F7819465e3e4201C587c20C4b8E1Bb9920eb';
 const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955';
-
-// Stable Public RPC Node for initial loading
 const READ_ONLY_RPC = 'https://bsc-dataseed1.binance.org/';
-
-// ABIs remain the same...
 const USDT_ABI = [{"constant": false, "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}], "name": "approve", "outputs": [{"name": "", "type": "bool"}], "type": "function"}, {"constant": true, "inputs": [{"name": "_owner", "type": "address"}], "name": "balanceOf", "outputs": [{"name": "balance", "type": "uint256"}], "type": "function"}, {"constant": true, "inputs": [{"name": "_owner", "type": "address"}, {"name": "_spender", "type": "address"}], "name": "allowance", "outputs": [{"name": "", "type": "uint256"}], "type": "function"}, {"constant": true, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}], "type": "function"}];
 const CONTRACT_ABI = [{"inputs":[{"internalType":"address","name":"_usdtToken","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"planId","type":"uint256"},{"indexed":false,"internalType":"address","name":"upline","type":"address"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"totalBalance","type":"uint256"}],"name":"PoolWithdrawn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":true,"internalType":"address","name":"referral","type":"address"},{"indexed":false,"internalType":"uint256","name":"level","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"ReferralBonus","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"referral","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"address","name":"owner","type":"address"}],"name":"ReferralBonusExpired","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"fee","type":"uint256"}],"name":"Withdraw","type":"event"},{"inputs":[],"name":"DAILY_WITHDRAWAL_LIMIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_ACTIVE_INVESTMENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_DEPOSIT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MIN_WITHDRAWAL","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"OWNER_FEE_PERCENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"TIME_STEP","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"WITHDRAWAL_FEE_PERCENT","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"calculateAvailableEarnings","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"dailyWithdrawals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"},{"internalType":"uint256","name":"_planId","type":"uint256"},{"internalType":"address","name":"_upline","type":"address"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getActiveInvestmentStatus","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getContractBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getContractStats","outputs":[{"internalType":"uint256","name":"totalExpiredBonuses","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawalFeesCollected","type":"uint256"},{"internalType":"uint256","name":"totalReferralBonusesPaid","type":"uint256"},{"internalType":"uint256","name":"currentContractBalance","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getPlansCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserInfo","outputs":[{"internalType":"uint256","name":"totalDeposits","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"uint256","name":"referralBonus","type":"uint256"},{"internalType":"uint256","name":"availableEarnings","type":"uint256"},{"internalType":"address","name":"upline","type":"address"},{"internalType":"bool","name":"hasActiveInvestment","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"getUserInvestments","outputs":[{"components":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"planId","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"},{"internalType":"uint256","name":"lastWithdrawalTime","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"bool","name":"active","type":"bool"}],"internalType":"struct Aurion.UserInvestment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"investmentPlans","outputs":[{"internalType":"uint256","name":"minAmount","type":"uint256"},{"internalType":"uint256","name":"maxAmount","type":"uint256"},{"internalType":"uint256","name":"dailyROI","type":"uint256"},{"internalType":"uint256","name":"duration","type":"uint256"},{"internalType":"uint256","name":"totalROI","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"referralLevels","outputs":[{"internalType":"uint256","name":"percentage","type":"uint256"},{"internalType":"uint256","name":"minDirectReferrals","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalExpiredReferralBonuses","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalReferralBonuses","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalWithdrawalFees","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"usdtToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"users","outputs":[{"internalType":"address","name":"upline","type":"address"},{"internalType":"uint256","name":"totalDeposits","type":"uint256"},{"internalType":"uint256","name":"totalWithdrawn","type":"uint256"},{"internalType":"uint256","name":"directReferrals","type":"uint256"},{"internalType":"uint256","name":"referralBonus","type":"uint256"},{"internalType":"uint256","name":"lastWithdrawal","type":"uint256"},{"internalType":"bool","name":"exists","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"withdrawExpiredBonuses","outputs":[],"stateMutability":"nonpayable","type":"function"}];
 
@@ -25,7 +21,6 @@ const connectWalletBtn = document.getElementById('connectWallet');
 const notification = document.getElementById('notification');
 const investmentSuccessPopup = document.getElementById('investmentSuccessPopup');
 
-// Section Elements
 const sections = {
     home: document.getElementById('home'),
     dashboard: document.getElementById('dashboard'),
@@ -47,171 +42,119 @@ document.addEventListener('DOMContentLoaded', function() {
     setupFAQ();
 });
 
-// Setup FAQ functionality
 function setupFAQ() {
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
         question.addEventListener('click', () => {
-            faqItems.forEach(otherItem => {
-                if (otherItem !== item) otherItem.classList.remove('active');
-            });
-            item.classList.toggle('active');
+            const isActive = item.classList.contains('active');
+            faqItems.forEach(otherItem => otherItem.classList.remove('active'));
+            if (!isActive) item.classList.add('active');
         });
     });
 }
 
-// Check URL for referral parameter
 function checkURLForReferral() {
     const urlParams = new URLSearchParams(window.location.search);
     const refAddress = urlParams.get('ref');
-    if (refAddress) {
+    if (refAddress && Web3.utils.isAddress(refAddress)) {
         referralAddress = refAddress;
         document.getElementById('referrerAddress').value = refAddress;
         showNotification('Referral address detected from URL!', 'success');
     }
 }
 
-// Initialize Web3 and Contract with Fallback
 async function initializeApp() {
-    // Always start with a read-only provider for reliability
     try {
         web3 = new Web3(new Web3.providers.HttpProvider(READ_ONLY_RPC));
         contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-        console.log('Read-only Web3 initialized successfully');
-        loadContractData(); // Load initial data immediately
+        await loadContractData();
     } catch (error) {
         console.error('Error initializing read-only Web3:', error);
     }
-
-    // If MetaMask is present, we'll switch to it when user connects
+    
     if (typeof window.ethereum !== 'undefined') {
-         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-         if (accounts.length > 0) {
-             // Auto-connect if already authorized
-             connectWallet();
+         try {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                await connectWallet();
+            }
+         } catch (err) {
+            console.error("Could not check for connected accounts:", err);
          }
     }
 }
 
-// ===================================================================
-// MODIFIED SCRIPT: ROBUST DATA LOADING WITH AGGRESSIVE CHUNKING
-// ===================================================================
+// PERBAIKAN: Fungsi ini disederhanakan untuk hanya memuat TVL
 async function loadContractData() {
     if (!contract) return;
-
-    const DEPLOYMENT_BLOCK = 32865660; // Contract creation block
-
     try {
-        // 1. Get TVL (Fast call)
+        document.getElementById('contractBalance').textContent = 'Calculating...';
         const balance = await contract.methods.getContractBalance().call();
         const formattedBalance = parseFloat(web3.utils.fromWei(balance, 'ether')).toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
         document.getElementById('contractBalance').textContent = `${formattedBalance} USDT`;
-        // document.getElementById('totalTVL').textContent = `$${formattedBalance}`; // REMOVED
-
-        // Set loading state for elements that were removed
-        // document.getElementById('totalUsers').textContent = 'Calculating...'; // REMOVED
-        // document.getElementById('totalPaid').textContent = '$Calculating...'; // REMOVED
-
-        // 2. Robust Chunking for Events
-        const latestBlock = await web3.eth.getBlockNumber();
-        const CHUNK_SIZE = 3000; // Very safe chunk size for public nodes
-        
-        let allInvestors = new Set();
-        let totalPaidOutWei = new BigNumber(0);
-
-        // Process blocks in chunks
-        for (let i = DEPLOYMENT_BLOCK; i <= latestBlock; i += CHUNK_SIZE) {
-            const toBlock = Math.min(i + CHUNK_SIZE - 1, Number(latestBlock));
-            
-            // Fetch both event types in parallel for speed
-            try {
-                const [chunkDeposits, chunkWithdraws] = await Promise.all([
-                    contract.getPastEvents('Deposit', { fromBlock: i, toBlock: toBlock }),
-                    contract.getPastEvents('Withdraw', { fromBlock: i, toBlock: toBlock })
-                ]);
-
-                // Process this chunk's data immediately
-                chunkDeposits.forEach(event => allInvestors.add(event.returnValues.user));
-                chunkWithdraws.forEach(event => {
-                    totalPaidOutWei = totalPaidOutWei.plus(new BigNumber(event.returnValues.amount));
-                });
-
-            } catch (chunkError) {
-                console.warn(`Failed to fetch chunk ${i}-${toBlock}, retrying once...`);
-                // Simple one-time retry logic for a failed chunk
-                try {
-                     const [chunkDeposits, chunkWithdraws] = await Promise.all([
-                        contract.getPastEvents('Deposit', { fromBlock: i, toBlock: toBlock }),
-                        contract.getPastEvents('Withdraw', { fromBlock: i, toBlock: toBlock })
-                    ]);
-                    chunkDeposits.forEach(event => allInvestors.add(event.returnValues.user));
-                    chunkWithdraws.forEach(event => {
-                        totalPaidOutWei = totalPaidOutWei.plus(new BigNumber(event.returnValues.amount));
-                    });
-                } catch (retryError) {
-                     console.error(`Retry failed for chunk ${i}-${toBlock}. Data might be slightly incomplete.`);
-                }
-            }
-        }
-
-        // 3. Finalize and Display Data (for elements that were removed)
-        // document.getElementById('totalUsers').textContent = allInvestors.size; // REMOVED
-        
-        const formattedTotalPaidOut = parseFloat(web3.utils.fromWei(totalPaidOutWei.toFixed(), 'ether')).toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-        // document.getElementById('totalPaid').textContent = `$${formattedTotalPaidOut}`; // REMOVED
-
     } catch (error) {
-        console.error('Critical error loading contract data:', error);
-        // document.getElementById('totalUsers').textContent = 'Error'; // REMOVED
-        // document.getElementById('totalPaid').textContent = '$Error'; // REMOVED
+        console.error('Error loading contract data:', error);
+        document.getElementById('contractBalance').textContent = 'Error';
     }
 }
 
-// Wallet Functions
+// PERBAIKAN: Logika koneksi wallet yang lebih robust
 async function connectWallet() {
+    // Cek provider yang di-inject oleh wallet (standar untuk MetaMask, Trust Wallet, dll.)
     if (typeof window.ethereum === 'undefined') {
-        return showNotification('Please install MetaMask!', 'error');
+        return showNotification('Wallet not found. Please use a dApp browser (e.g., in Trust Wallet or MetaMask app).', 'error');
     }
     try {
-        // Switch to MetaMask provider
+        // Gunakan provider dari wallet
         web3 = new Web3(window.ethereum);
         contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
         usdtContract = new web3.eth.Contract(USDT_ABI, USDT_ADDRESS);
 
+        // Minta izin untuk terhubung dan dapatkan chain ID
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        
+        // Jika bukan di Binance Smart Chain (0x38), minta untuk switch chain
         if (chainId !== '0x38') {
              try {
-                await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
+                await window.ethereum.request({ 
+                    method: 'wallet_switchEthereumChain', 
+                    params: [{ chainId: '0x38' }] 
+                });
             } catch (switchError) {
+                // Jika chain belum ditambahkan di wallet, coba tambahkan
                 if (switchError.code === 4902) {
-                    await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId: '0x38', chainName: 'Binance Smart Chain', nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 }, rpcUrls: ['https://bsc-dataseed.binance.org/'], blockExplorerUrls: ['https://bscscan.com/'] }] });
+                    await window.ethereum.request({ 
+                        method: 'wallet_addEthereumChain', 
+                        params: [{ 
+                            chainId: '0x38', 
+                            chainName: 'Binance Smart Chain', 
+                            nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 }, 
+                            rpcUrls: ['https://bsc-dataseed.binance.org/'], 
+                            blockExplorerUrls: ['https://bscscan.com/'] 
+                        }] 
+                    });
                 } else { throw switchError; }
             }
         }
+        
+        // Minta akses ke akun pengguna
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         if (accounts.length > 0) {
             userAccount = accounts[0];
             updateWalletUI();
             loadUserData();
-            // Rerunning loadContractData here ensures we have the absolute latest data
-            // but might be redundant if read-only worked. Optional.
-            // loadContractData(); 
             showNotification('Wallet connected successfully!', 'success');
         }
     } catch (error) {
         console.error('Error connecting wallet:', error);
-        showNotification('Failed to connect wallet', 'error');
+        showNotification(error.message.includes("rejected") ? 'Connection rejected by user' : 'Failed to connect wallet', 'error');
     }
 }
 
-// Setup Event Listeners
 function setupEventListeners() {
     navToggle.addEventListener('click', toggleNavMenu);
     document.addEventListener('click', (e) => {
@@ -260,7 +203,6 @@ function setupEventListeners() {
     }
 }
 
-// Navigation Functions
 function toggleNavMenu() {
     navMenu.classList.toggle('active');
 }
@@ -271,13 +213,10 @@ function showSection(sectionName) {
     });
     document.querySelectorAll('.nav__link').forEach(link => link.classList.remove('active'));
     if (sections[sectionName]) {
-        sections[sectionName].style.display = 'flex'; // Use flex for centering
+        sections[sectionName].style.display = 'flex';
         window.scrollTo(0, 0);
         const navLink = document.querySelector(`.nav__link[data-section="${sectionName}"]`);
         if (navLink) navLink.classList.add('active');
-        if ((sectionName === 'dashboard' || sectionName === 'referral') && userAccount) {
-            loadUserData();
-        }
     }
 }
 
@@ -312,53 +251,25 @@ function hideWalletAlerts() {
 async function loadUserData() {
     if (!contract || !userAccount) return;
     try {
-        // Ensure we are using the connected wallet provider for user-specific data
-        if (window.ethereum && web3.currentProvider !== window.ethereum) {
-             web3 = new Web3(window.ethereum);
-             contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
-        }
-
         const userInfo = await contract.methods.getUserInfo(userAccount).call();
         const availableEarnings = await contract.methods.calculateAvailableEarnings(userAccount).call();
 
-        // Dashboard stats
-        document.getElementById('totalDeposits').textContent = `${parseFloat(web3.utils.fromWei(userInfo.totalDeposits, 'ether')).toFixed(2)} USDT`;
-        document.getElementById('availableEarnings').textContent = `${parseFloat(web3.utils.fromWei(availableEarnings, 'ether')).toFixed(2)} USDT`;
-        document.getElementById('totalWithdrawn').textContent = `${parseFloat(web3.utils.fromWei(userInfo.totalWithdrawn, 'ether')).toFixed(2)} USDT`;
-        document.getElementById('referralBonus').textContent = `${parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether')).toFixed(2)} USDT`;
-
-        // Referral stats
+        const formatUSDT = (weiValue) => parseFloat(web3.utils.fromWei(weiValue, 'ether')).toFixed(2);
+        
+        document.getElementById('totalDeposits').textContent = `${formatUSDT(userInfo.totalDeposits)} USDT`;
+        document.getElementById('availableEarnings').textContent = `${formatUSDT(availableEarnings)} USDT`;
+        document.getElementById('totalWithdrawn').textContent = `${formatUSDT(userInfo.totalWithdrawn)} USDT`;
+        document.getElementById('referralBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
         document.getElementById('totalTeam').textContent = userInfo.directReferrals;
         document.getElementById('referralDirectReferrals').textContent = userInfo.directReferrals;
-        document.getElementById('availableBonus').textContent = `${parseFloat(web3.utils.fromWei(userInfo.referralBonus, 'ether')).toFixed(2)} USDT`;
+        document.getElementById('availableBonus').textContent = `${formatUSDT(userInfo.referralBonus)} USDT`;
         
-        await loadUserInvestments();
+        const investments = await contract.methods.getUserInvestments(userAccount).call();
+        document.getElementById('noInvestmentsMessage').style.display = investments.length === 0 ? 'flex' : 'none';
+
         generateReferralLink();
     } catch (error) {
         console.error('Error loading user data:', error);
-    }
-}
-
-async function loadUserInvestments() {
-    if (!contract || !userAccount) return;
-
-    const noInvestmentsMessage = document.getElementById('noInvestmentsMessage');
-    noInvestmentsMessage.style.display = 'none';
-
-    try {
-        const investments = await contract.methods.getUserInvestments(userAccount).call();
-
-        if (investments.length === 0) {
-            noInvestmentsMessage.style.display = 'flex';
-        } else {
-            noInvestmentsMessage.style.display = 'none';
-        }
-
-    } catch (error) {
-        console.error('Failed to fetch user investments:', error);
-        noInvestmentsMessage.style.display = 'flex';
-        noInvestmentsMessage.querySelector('h3').textContent = 'Error Loading Data';
-        noInvestmentsMessage.querySelector('p').textContent = 'Could not fetch investment data from the blockchain.';
     }
 }
 
@@ -369,7 +280,6 @@ function generateReferralLink() {
     }
 }
 
-// Investment Functions
 function generateInvestmentPlans() {
     const plansContainer = document.getElementById('investmentPlans');
     if (!plansContainer) return;
@@ -465,7 +375,7 @@ async function confirmInvestment() {
         showNotification('Investment successful!', 'success');
         investmentSuccessPopup.classList.add('active');
         await loadUserData();
-        await loadContractData(); // Refresh global stats after deposit
+        await loadContractData();
     } catch (error) {
         console.error('Investment error:', error);
         showNotification(error.message.includes("rejected") ? 'Transaction rejected' : 'Investment failed', 'error');
@@ -484,7 +394,7 @@ async function withdrawEarnings() {
         await contract.methods.withdraw().send({ from: userAccount });
         showNotification('Withdrawal successful!', 'success');
         await loadUserData();
-        await loadContractData(); // Refresh global stats after withdrawal
+        await loadContractData();
     } catch (error) {
         console.error('Withdrawal error:', error);
         showNotification(error.message.includes("rejected") ? 'Transaction rejected' : 'Withdrawal failed', 'error');
@@ -494,7 +404,6 @@ async function withdrawEarnings() {
     }
 }
 
-// Referral & Utility Functions
 function copyReferralLink() {
     const linkInput = document.getElementById('referralLink');
     navigator.clipboard.writeText(linkInput.value).then(() => showNotification('Referral link copied!', 'success'));
