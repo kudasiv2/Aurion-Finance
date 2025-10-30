@@ -1,5 +1,5 @@
 // Contract Configuration
-const CONTRACT_ADDRESS = '0xAD81F7819465e3e4201C587c20C4b8E1Bb9920eb';
+const CONTRACT_ADDRESS = '0x6b29560b4ceD120ca82F1382b3676112a7B2b738';
 const USDT_ADDRESS = '0x55d398326f99059fF775485246999027B3197955';
 const READ_ONLY_RPC = 'https://bsc-dataseed1.binance.org/';
 const USDT_ABI = [{"constant": false, "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}], "name": "approve", "outputs": [{"name": "", "type": "bool"}], "type": "function"}, {"constant": true, "inputs": [{"name": "_owner", "type": "address"}], "name": "balanceOf", "outputs": [{"name": "balance", "type": "uint256"}], "type": "function"}, {"constant": true, "inputs": [{"name": "_owner", "type": "address"}, {"name": "_spender", "type": "address"}], "name": "allowance", "outputs": [{"name": "", "type": "uint256"}], "type": "function"}, {"constant": true, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint8"}], "type": "function"}];
