@@ -106,7 +106,7 @@ async function loadContractData() {
 async function connectWallet() {
     // Cek provider yang di-inject oleh wallet (standar untuk MetaMask, Trust Wallet, dll.)
     if (typeof window.ethereum === 'undefined') {
-        return showNotification('Wallet not found. Please use a dApp browser (e.g., in Trust Wallet or MetaMask app).', 'error');
+        return showNotification('Wallet not found! Please install Safepal or Metamask wallet!', 'error');
     }
     try {
         // Gunakan provider dari wallet
